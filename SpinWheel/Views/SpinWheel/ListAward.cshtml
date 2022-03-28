@@ -1,0 +1,92 @@
+﻿@model SpinWheel.ViewModel.ListAwardViewModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Danh sách giải thưởng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .box-color {
+        width: 100%;
+        height: 30px;
+        border: 1px solid;
+    }
+</style>
+
+@if (ViewBag.Result == "success")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Thêm mới giải thưởng thành công</strong></div>}
+@if (ViewBag.Result == "update")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật giải thưởng thành công</strong></div>}
+<a class="btn quick-link" href="@Url.Action("Award")"><i class="fal fa-plus-circle mr-1"></i>Thêm giải thưởng</a>
+<a class="btn quick-link" href="@Url.Action("UpdateAward")"><i class="fal fa-plus-circle mr-1"></i>Sửa giải thưởng</a>
+
+<div class="box_content">
+    <div class="form-search-list">
+        <form action="@Url.Action("ListAward")" method="get" style="margin-left: 0;">
+            <p>
+                Tìm giải thưởng @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
+                <button type="submit" class="btn-search">Tìm kiếm</button>
+            </p>
+        </form>
+    </div>
+    <p>Có tổng số <strong>@Model.Awards.TotalItemCount</strong> giải thưởng</p>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th style="width: 300px">Tên giải thưởng</th>
+                <th>Màu nền</th>
+                <th>Màu chữ</th>
+                <th>Phần trăm giải thưởng</th>
+                <th>Tổng số lượng</th>
+                <th>Tổng số giải đã trúng</th>
+                <th style="width: 150px"></th>
+            </tr>
+            @foreach (var award in Model.Awards)
+            {
+                <tr data-id="@award.Id">
+                    <td class="left">
+                        <strong>@award.AwardName</strong>
+                    </td>
+                    <td>
+                        <div class="box-color" style="background: @award.BgColor;"></div>
+                    </td>
+                    <td>
+                        <div class="box-color" style="background: @award.TextColor;"></div>
+                    </td>
+                    <td>@award.Percent</td>
+                    <td>@award.Quantity</td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
+                    </td>
+                </tr>
+            }
+            @if (Model.Awards.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="8">@Html.PagedListPager(Model.Awards, page => Url.Action("ListAward", new { page, name = Model.Name }))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function deleteAward(id) {
+            if (confirm("Bạn có chắc chắn xóa giải thưởng này không?")) {
+                $.post("/SpinWheel/DeleteAward", { awardId: id }, function (data) {
+                    if (data) {
+                        alert("Xóa giải thưởng thành công");
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        alert("Quá trình thực hiện không thành công");
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,9 @@
+﻿@if (Model == null)
+{
+    <div>NO PICTURE</div>  
+}
+else
+{
+    <img class="img-border" src="@Path.Combine("/images/ticketCategory/", Model)?w=180" alt="" 
+         style="height: 100px; object-fit: cover; width: 100px; background: #fff;" />
+}

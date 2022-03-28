@@ -1,0 +1,74 @@
+﻿@model SpinWheel.ViewModel.ListClientViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Danh sách trúng giải";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Danh sách trúng giải</h2>
+<a class="btn quick-link" href="@Url.Action("Index","Vcms")"><i class="fal fa-home mr-1"></i>Về trang chính</a>
+<div class="box_content">
+    <div class="form-search-list">
+        <form action="@Url.Action("ListClient")" method="get" class="ml-0">
+            <p>
+                Tìm tên người trúng giải @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
+                <button type="submit" class="btn-search">Tìm kiếm</button>
+            </p>
+        </form>
+    </div>
+    <p>Có tổng số <strong>@Model.Clients.TotalItemCount</strong> giải thưởng đã quay</p>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th>STT</th>
+                <th style="width: 150px">Họ và tên</th>
+                <th style="width: 300px">Số điện thoại</th>
+                <th style="width: 300px">Giải thưởng</th>
+                <th style="width: 300px">Ngày quay</th>
+                <th style="width: 100px"></th>
+            </tr>
+            @foreach (var client in Model.Clients)
+            {
+                <tr data-id="@client.Id">
+                    <td>@client.Id</td>
+                    <td>@client.Fullname</td>
+                    <td>@client.Mobile</td>
+                    <td>@client.AwardName</td>
+                    <td>@client.CreateDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><a href="javascript:;" onclick="deleteClient('@client.Id')">Xóa</a></td>
+                </tr>
+            }
+            @if (Model.Clients.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="12">@Html.PagedListPager(Model.Clients, page => Url.Action("ListClient", new { page, name = Model.Name }))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function deleteClient(id) {
+            if (confirm("Bạn có chắc chắn xóa người trúng giải này không?")) {
+                $.post("/SpinWheel/DeleteClient", { clientId: id }, function (data) {
+                    if (data) {
+                        $.toast({
+                            text: 'Xóa người trúng giải thành công',
+                            position: 'bottom-right',
+                            icon: 'success',
+                        })
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error',
+                        })
+                    }
+                });
+            }
+        }
+    </script>
+}

@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SpinWheel.Models.Event>
+<table class="list_table tablecenter mb-4" id="list-event">
+    <tr>
+        <th>STT</th>
+        <th>Tên sự kiện</th>
+        <th>Hình nền PC</th>
+        <th>Hình nền Mobile</th>
+        <th>Hoạt động</th>
+        <th style="width: 160px"></th>
+    </tr>
+    <tbody id="sortable-cat">
+        @foreach (var events in Model)
+        {
+            <tr data-id="@events.Id" style="background: #ededed;">
+                <td style="width: 120px;">
+                    <input type="number" name="Sort" value="@events.Sort" class="form_control" />
+                </td>
+                <td class="left"><strong>@events.EventName</strong></td>
+                <td>
+                    @if (!string.IsNullOrEmpty(events.BgPC))
+                    {
+                        <img src="@Path.Combine("/images/events/", events.BgPC)" style="width: 150px; height: 100px; object-fit: contain" />
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(events.BgMobile))
+                    {
+                        <img src="@Path.Combine("/images/events/", events.BgMobile)" style="width: 150px; height: 100px; object-fit: contain" />
+                    }
+                </td>
+                <td>@Html.EditorFor(a => events.Active, new { htmlAttributes = new { id = "Active" } })</td>
+                <td>
+                    <a href="javascript:;" onclick="updateEvent('@events.Id')">Cập nhật - </a>
+                    @Html.ActionLink("Sửa", "UpdateEvent", new { eventId = events.Id }) -
+                    <a href="javascript:;" onclick="deleteEvent('@events.Id')" style="color: red">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    function deleteEvent(id) {
+        if (confirm("Bạn có chắc chắn xóa sự kiện này không?")) {
+            $.post("/SpinWheel/DeleteEvent", { eventId: id }, function (data) {
+                if (data) {
+                    $.toast({
+                        text: 'Đang xóa sự kiện',
+                        position: 'bottom-right',
+                        icon: 'success',
+                    })
+                    $("tr[data-id='" + id + "']").fadeOut();
+                } else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error',
+                    })
+                }
+            });
+        }
+    }
+
+    function updateEvent(id) {
+        var divId = $("tr[data-id='" + id + "']");
+        var sort = divId.find("input[name=Sort]").val();
+        var active = divId.find("input#Active").prop("checked");
+
+        if (sort == "") {
+            alert("Bạn hãy nhập số thứ tự");
+        }
+
+        $.post("/SpinWheel/UpdateListEvent", { eventId: id, sort, active }, function (data) {
+            if (data) {
+                $.toast({
+                    text: 'Cập nhật thành công',
+                    position: 'bottom-right',
+                    icon: 'success',
+                })
+            } else {
+                $.toast({
+                    text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                    icon: 'error',
+                })
+            }
+        });
+    }</script>

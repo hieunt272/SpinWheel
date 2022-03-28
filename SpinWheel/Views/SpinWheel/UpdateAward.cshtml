@@ -1,0 +1,59 @@
+﻿@model SpinWheel.ViewModel.InsertAwardViewModel
+@{
+    ViewBag.Title = "Cập nhật giải thưởng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<a class="btn quick-link" href="@Url.Action("ListAward","SpinWheel")"><i class="far fa-list mr-1"></i> Danh sách giải thưởng</a>
+<div class="box_content">
+    @using (Html.BeginForm("UpdateAward", "SpinWheel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        <table class="form_table">
+            <tbody>
+                <tr>
+                    <th style="width: 300px;">@Html.LabelFor(model => model.Award.AwardName)</th>
+                    <th>@Html.LabelFor(model => model.Award.BgColor)</th>
+                    <th>@Html.LabelFor(model => model.Award.TextColor)</th>
+                    <th>@Html.LabelFor(model => model.Award.Percent)</th>
+                    <th>@Html.LabelFor(model => model.Award.Quantity)</th>
+                    <th style="width: 150px;"></th>
+                </tr>
+                @for (var i = 0; i < 12; i++)
+                {
+                    <tr>
+                        <td class="form_text">@Html.EditorFor(model => model.Award.AwardName)</td>
+                        <td class="form_text">
+                            @Html.TextBoxFor(model => model.Award.BgColor, new Dictionary<string, object>
+                                { { "data-jscolor",
+                                    "{required:true, " +
+                                    "closeButton:true, " +
+                                    "closeText:'Đóng', " +
+                                    "backgroundColor:'#333', " +
+                                    "buttonColor:'#FFF'}"
+                            } })
+                        </td>
+                        <td class="form_text">
+                            @Html.TextBoxFor(model => model.Award.TextColor, new Dictionary<string, object>
+                                { { "data-jscolor",
+                                    "{required:true, " +
+                                    "closeButton:true, " +
+                                    "closeText:'Đóng', " +
+                                    "backgroundColor:'#333', " +
+                                    "buttonColor:'#FFF'}"
+                            } })
+                        </td>
+                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Percent)</td>
+                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Quantity)</td>
+                        <td class="form_text">@Html.CheckBoxFor(model => model.Award.Limited) Không giới hạn</td>
+                    </tr>
+                }
+            </tbody>
+            <tr>
+                <td class="form_text">
+                    <input type="submit" class="btn quick-link" value="Cập nhật" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

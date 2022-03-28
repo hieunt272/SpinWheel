@@ -1,0 +1,16 @@
+﻿@if(Model == 0)
+{
+    <span style="color: #fff; background: #199DD9">Đang xử lý</span>
+}
+else if (Model == 1)
+{
+    <span style="color: #fff; background: #EF9139">Đang giao hàng</span>
+}
+else if (Model == 2)
+{
+    <span style="color: #fff; background: #28a745">Đã hoàn tất</span>
+}
+else
+{
+    <span>Hủy đơn</span>
+}
