@@ -1,8 +1,6 @@
 ﻿using SpinWheel.DAL;
 using SpinWheel.Models;
 using SpinWheel.ViewModel;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -15,7 +13,6 @@ namespace SpinWheel.Controllers
         private static string Email => WebConfigurationManager.AppSettings["email"];
         private static string Password => WebConfigurationManager.AppSettings["password"];
         public ConfigSite ConfigSite => (ConfigSite)HttpContext.Application["ConfigSite"];
-
 
         #region Home
         public ActionResult Index()
@@ -54,7 +51,13 @@ namespace SpinWheel.Controllers
         }
         public JsonResult GetAwardData()
         {
-            var awards = _unitOfWork.AwardRepository.Get();
+            var awards = _unitOfWork.AwardRepository.GetQuery().Select(a => new
+            {
+                percent = a.Percent,
+                name = a.AwardName,
+                bgColor = a.BgColor,
+                txtColor = a.TextColor
+            });
             return Json(awards, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetClientData()
@@ -69,7 +72,7 @@ namespace SpinWheel.Controllers
         }
 
         #endregion
-         
+
         protected override void Dispose(bool disposing)
         {
             _unitOfWork.Dispose();

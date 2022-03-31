@@ -2,22 +2,21 @@
 
 $.getJSON("/Home/GetAwardData", function (data) {
     $.each(data, function (key, val) {
-        console.log(data)
-        var percent = winwheelPercentToDegrees(val.Percent);
+        var percent = winwheelPercentToDegrees(val.percent);
         if (percent === 0) {
             theWheel.addSegment({
-                'text': val.AwardName,
-                'fillStyle': val.BgColor,
-                'textFillStyle': val.TextColor,
-            }, 1)
+                    'text': val.name,
+                    'fillStyle': val.bgColor,
+                'textFillStyle': val.txtColor
+                }, 1);
         }
         else {
             theWheel.addSegment({
-                'text': val.AwardName,
-                'fillStyle': val.BgColor,
-                'textFillStyle': val.TextColor,
-                'size': percent
-            }, 1)
+                    'text': val.name,
+                'fillStyle': val.bgColor,
+                'textFillStyle': val.txtColor,
+                    'size': percent
+                }, 1);
         }
     });
 });
