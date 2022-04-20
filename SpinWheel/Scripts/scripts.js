@@ -1,38 +1,43 @@
 ﻿var gifts = [];
 
-$.getJSON("/Home/GetAwardData", function (data) {
+var url = $("#Event_Url").val();
+$.getJSON("/Home/GetAwardData", { url: url }, function (data) {
     $.each(data, function (key, val) {
         var percent = winwheelPercentToDegrees(val.percent);
         if (percent === 0) {
             theWheel.addSegment({
-                    'text': val.name,
-                    'fillStyle': val.bgColor,
-                'textFillStyle': val.txtColor
-                }, 1);
+                'text': val.name,
+                'fillStyle': val.bgColor,
+                'textFillStyle': val.txtColor,
+                'quantity': val.quantity,
+                'totalwin': val.totalWin,
+            }, 1);
         }
         else {
             theWheel.addSegment({
-                    'text': val.name,
+                'text': val.name,
                 'fillStyle': val.bgColor,
                 'textFillStyle': val.txtColor,
-                    'size': percent
-                }, 1);
+                'size': percent,
+                'quantity': val.quantity,
+                'totalwin': val.totalWin,
+            }, 1);
         }
     });
 });
 
 function ChangeBackground(x) {
-        $.getJSON("/Home/GetEventData", function (data) {
-            $.each(data, function (key, val) {
-                if (x.matches) {
-                    $(".wrapper").css("background", "url(images/events/" + val.BgMobile + ") no-repeat top center / cover");
-                }
-                else {
-                    $(".wrapper").css("background", "url(images/events/" + val.BgPC + ") no-repeat top center / cover");
-                }
-            });
+    $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
+        $.each(data, function (key, val) {
+            if (x.matches) {
+                $(".wrapper").css("background", "url(images/events/" + val.bgMobile + ") no-repeat top center / cover");
+            }
+            else {
+                $(".wrapper").css("background", "url(images/events/" + val.bgPc + ") no-repeat top center / cover");
+            }
         });
-    }
+    });
+}
 
 var x = window.matchMedia("(max-width: 840px)");
 ChangeBackground(x);
@@ -106,46 +111,58 @@ function infoConfirm() {
 }
 
 function startSpin() {
-    var fullName = $("[name=fullname]").val();
     var phone = $("[name=phone]").val();
-    if (fullName != "" && phone != "") {
-        //$.getJSON("/Home/GetClientData/", function (data) {
-        //    $.each(data, function (key, value) {
-        //        console.log(value.CreateDate);
-        //        if (phone == value.Mobile) {
-        //            Swal.fire({
-        //                icon: 'error',
-        //                text: 'Số lượt quay trong ngày đã hết!!'
-        //            });
-        //        } else if (wheelSpinning == false) {
-        //            StatusButton(1);
-        //            theWheel.startAnimation();
-        //            wheelSpinning = true;
-        //            StatusButton(2);
-        //        }
-        //    });
-        //});
-        if (wheelSpinning == false) {
-            StatusButton(1);
-            theWheel.startAnimation();
-            wheelSpinning = true;
-            StatusButton(2);
-        }
+    var isPost = true;
+    if (phone == "") {
+        isPost = false;
+    }
+    if (isPost) {
+        $.getJSON("/Home/GetClientData", { phone: phone }, function (data) {
+            if (data == 1) {
+                if (wheelSpinning == false) {
+                    StatusButton(1);
+                    theWheel.startAnimation();
+                    wheelSpinning = true;
+                    StatusButton(2);
+                }
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    text: 'Số lượt quay trong ngày đã hết!!'
+                });
+            }
+        });
     }
 }
 
 function alertPrize() {
     //applause.play();
     let winningSegment = theWheel.getIndicatedSegment();
-    Swal.fire({
-        title: "Chúc mừng",
-        text: "Bạn đã trúng: " + winningSegment.text,
-        icon: "success",
-    });
-    var fullName = $("[name=fullname]").val();
-    var phone = $("[name=phone]").val();
-    $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text }, function (data) {
-    })
-    $("#info-form").trigger("reset");
-    StatusButton(3);
+    const quantity = parseInt(winningSegment.quantity);
+    const totalWin = parseInt(winningSegment.totalwin);
+    if (quantity <= totalWin) {
+        Swal.fire({
+            title: "Số lượng giải <span>" + winningSegment.text + "</span> đã hết",
+            text: "Bạn có 1 lượt quay mới",
+            icon: "warning",
+            confirmButtonText: "Xác nhận",
+            confirmButtonColor: "#218838",
+        }).then((result) => {
+            StatusButton(3);
+        });
+    }
+    else {
+        Swal.fire({
+            title: "Chúc mừng",
+            text: "Bạn đã trúng: " + winningSegment.text,
+            icon: "success",
+        });
+        var fullName = $("[name=fullname]").val();
+        var phone = $("[name=phone]").val();
+        $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text }, function (data) {
+        })
+        $("#info-form").trigger("reset");
+        StatusButton(3);
+    }
 }

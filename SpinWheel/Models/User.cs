@@ -16,6 +16,7 @@ namespace SpinWheel.Models
         public string Password { get; set; }
         [Display(Name = "Hoạt động", Description = "Hoạt động")]
         public bool Active { get; set; }
+        public IEnumerable<Event> Events { get; set; }
         public User()
         {
             Active = true;

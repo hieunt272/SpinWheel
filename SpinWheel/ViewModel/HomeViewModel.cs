@@ -10,8 +10,13 @@ namespace SpinWheel.ViewModel
 {
     public class HomeViewModel
     {
-        public IEnumerable<Award> Awards { get; set; }
         public IEnumerable<Event> Events { get; set; }
+    }
+
+    public class EventViewModel
+    {
+        public IEnumerable<Award> Awards { get; set; }
+        public Event Event { get; set; }
         public IEnumerable<Client> Clients { get; set; }
     }
 }

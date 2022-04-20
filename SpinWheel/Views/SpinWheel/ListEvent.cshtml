@@ -6,6 +6,7 @@
         <th>Hình nền PC</th>
         <th>Hình nền Mobile</th>
         <th>Hoạt động</th>
+        <th>Đường dẫn</th>
         <th style="width: 160px"></th>
     </tr>
     <tbody id="sortable-cat">
@@ -29,6 +30,9 @@
                     }
                 </td>
                 <td>@Html.EditorFor(a => events.Active, new { htmlAttributes = new { id = "Active" } })</td>
+                <td>
+                    <a href="@Url.Action("Event", "Home", new { url = events.Url })" class="btn btn-success" target="_blank">Link Vòng quay</a>
+                </td>
                 <td>
                     <a href="javascript:;" onclick="updateEvent('@events.Id')">Cập nhật - </a>
                     @Html.ActionLink("Sửa", "UpdateEvent", new { eventId = events.Id }) -

@@ -53,38 +53,17 @@
                         <div class="sub hidden">
                             <div>@Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Vcms", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Quản lý admin", "CreateAdmin", "Vcms", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Cập nhật admin", "EditAdmin", "Vcms", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Thông tin chung", "ConfigSite", "Vcms", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Đăng xuất", "Logout", "Vcms", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
-                    @*<li data-id="1">
-                            <a class="root"><span>Quản lý chính sách</span><i class="fas fa-caret-down"></i></a>
-                            <div class="sub hidden">
-                                <div>@Html.ActionLink("Thêm mới bài viết", "Support", "Article", null, new { @class = "text_link" })</div>
-                                <div>@Html.ActionLink("Danh sách bài viết", "ListSupport", "Article", null, new { @class = "text_link" })</div>
-                            </div>
-                        </li>*@
-                    @*<li data-id="30">
-                            <a class="root"><span>Quản lý Địa danh</span><i class="fas fa-caret-down"></i></a>
-                            <div class="sub hidden">
-                                <div>@Html.ActionLink("Quản lý địa danh", "City", "Vcms", null, new { @class = "text_link" })</div>
-                            </div>
-                        </li>*@
-                    @*<li>
-                            <a href="@Url.Action("ListUser", "Vcms")" class="root"><span>Quản lý tài khoản</span></a>
-                        </li>*@
-                    @*<li data-id="31">
-                            <a class="root"><span>Quản lý Đơn hàng</span><i class="fas fa-caret-down"></i></a>
-                            <div class="sub hidden">
-                                <div><a href="@Url.Action("ListOrder", "Order")" class="text_link">Tất cả Đơn hàng</a></div>
-                                <div><a href="@Url.Action("ReportProduct", "Order")" class="text_link">Thống kê theo sản phẩm</a></div>
-                            </div>
-                        </li>*@
                     <li data-id="5">
                         <a class="root"><span>Quản lý Sự kiện</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
                             <div>@Html.ActionLink("Danh sách sự kiện", "Event", "SpinWheel", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Quản lý giải thưởng", "ListAward", "SpinWheel", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Thêm mới giải thưởng", "Award", "SpinWheel", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách giải thưởng", "ListAward", "SpinWheel", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Danh sách trúng giải", "ListClient", "SpinWheel", null, new { @class = "text_link" })</div>
                         </div>
                     </li>

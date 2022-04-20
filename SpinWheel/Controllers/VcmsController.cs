@@ -90,7 +90,7 @@ namespace BanGiay.Controllers
                 else
                 {
                     var hashPass = HtmlHelpers.ComputeHash(model.Password, "SHA256", null);
-                    _unitOfWork.AdminRepository.Insert(new Admin { Username = model.Username, Password = hashPass, Active = model.Active });
+                    _unitOfWork.AdminRepository.Insert(new Admin { Username = model.Username, Password = hashPass, Active = model.Active, Role = model.Role });
                     _unitOfWork.Save();
                     return RedirectToAction("CreateAdmin", new { result = "success" });
                 }
@@ -110,6 +110,7 @@ namespace BanGiay.Controllers
                 Id = admin.Id,
                 Username = admin.Username,
                 Active = admin.Active,
+                Role = admin.Role
             };
 
             return View(model);
@@ -134,6 +135,7 @@ namespace BanGiay.Controllers
                     }
                     admin.Username = model.Username;
                 }
+                admin.Role = model.Role;
                 admin.Active = model.Active;
                 if (model.Password != null)
                 {

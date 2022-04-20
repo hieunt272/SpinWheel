@@ -15,7 +15,9 @@ namespace SpinWheel.Models
         public string Mobile { get; set; } 
         public DateTime CreateDate { get; set; }
         public string AwardName { get; set; }
-        public virtual ICollection<Award> Awards { get; set; }
+        public int AdminId { get; set; }
+        public virtual Admin Admin { get; set; }
+        public IEnumerable<Award> Awards { get; set; }
         public Client()
         {
             CreateDate = DateTime.Now;

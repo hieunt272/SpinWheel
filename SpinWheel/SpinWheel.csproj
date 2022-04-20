@@ -162,6 +162,42 @@
     <Compile Include="Migrations\202203280859499_Initial.designer.cs">
       <DependentUpon>202203280859499_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203310549578_UpdateAward.cs" />
+    <Compile Include="Migrations\202203310549578_UpdateAward.designer.cs">
+      <DependentUpon>202203310549578_UpdateAward.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204010206023_UpdateUser.cs" />
+    <Compile Include="Migrations\202204010206023_UpdateUser.designer.cs">
+      <DependentUpon>202204010206023_UpdateUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204010247090_UpdateAdmin.cs" />
+    <Compile Include="Migrations\202204010247090_UpdateAdmin.designer.cs">
+      <DependentUpon>202204010247090_UpdateAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204010421334_UpdateEvent.cs" />
+    <Compile Include="Migrations\202204010421334_UpdateEvent.designer.cs">
+      <DependentUpon>202204010421334_UpdateEvent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204010444361_UpdateEvent2.cs" />
+    <Compile Include="Migrations\202204010444361_UpdateEvent2.designer.cs">
+      <DependentUpon>202204010444361_UpdateEvent2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204020311445_UpdateClient.cs" />
+    <Compile Include="Migrations\202204020311445_UpdateClient.designer.cs">
+      <DependentUpon>202204020311445_UpdateClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204020347336_UpdateClient1.cs" />
+    <Compile Include="Migrations\202204020347336_UpdateClient1.designer.cs">
+      <DependentUpon>202204020347336_UpdateClient1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204130329282_DelAdminIdFromCLientClass.cs" />
+    <Compile Include="Migrations\202204130329282_DelAdminIdFromCLientClass.designer.cs">
+      <DependentUpon>202204130329282_DelAdminIdFromCLientClass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204200113285_AddAdminIdToClientsClass.cs" />
+    <Compile Include="Migrations\202204200113285_AddAdminIdToClientsClass.designer.cs">
+      <DependentUpon>202204200113285_AddAdminIdToClientsClass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Award.cs" />
@@ -1297,6 +1333,8 @@
     <Content Include="Views\SpinWheel\Event.cshtml" />
     <Content Include="Views\SpinWheel\ListEvent.cshtml" />
     <Content Include="Views\SpinWheel\UpdateEvent.cshtml" />
+    <Content Include="Views\Home\Event.cshtml" />
+    <Content Include="Views\Vcms\ListAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1307,6 +1345,33 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202203280859499_Initial.resx">
       <DependentUpon>202203280859499_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203310549578_UpdateAward.resx">
+      <DependentUpon>202203310549578_UpdateAward.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204010206023_UpdateUser.resx">
+      <DependentUpon>202204010206023_UpdateUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204010247090_UpdateAdmin.resx">
+      <DependentUpon>202204010247090_UpdateAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204010421334_UpdateEvent.resx">
+      <DependentUpon>202204010421334_UpdateEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204010444361_UpdateEvent2.resx">
+      <DependentUpon>202204010444361_UpdateEvent2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204020311445_UpdateClient.resx">
+      <DependentUpon>202204020311445_UpdateClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204020347336_UpdateClient1.resx">
+      <DependentUpon>202204020347336_UpdateClient1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204130329282_DelAdminIdFromCLientClass.resx">
+      <DependentUpon>202204130329282_DelAdminIdFromCLientClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204200113285_AddAdminIdToClientsClass.resx">
+      <DependentUpon>202204200113285_AddAdminIdToClientsClass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -41,5 +41,7 @@ namespace SpinWheel.ViewModel
         public string Username { get; set; }
         [Display(Name = "Mật khẩu"), UIHint("Password"), StringLength(20, MinimumLength = 6, ErrorMessage = "Mật khẩu từ 6 - 20 ký tự")]
         public string Password { get; set; }
+        [Display(Name = "Phân quyền")]
+        public RoleAdmin Role { get; set; }
     }
 }

@@ -19,6 +19,11 @@ namespace SpinWheel.Models
         public string BgMobile { get; set; }
         [Display(Name = "Thứ tự"), Required(ErrorMessage = "Hãy nhập số thứ tự"), RegularExpression(@"\d+", ErrorMessage = "Chỉ nhập số nguyên dương"), UIHint("NumberBox")]
         public int Sort { get; set; }
+        [StringLength(300)]
+        public string Url { get; set; }
+        public int AdminId { get; set; }
+        public virtual Admin Admin { get; set; }
+        public virtual ICollection<Award> Awards { get; set; }
         public Event()
         {
             Active = true;

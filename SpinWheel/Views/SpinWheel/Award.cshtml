@@ -10,6 +10,18 @@
     {
         @Html.ValidationSummary(true)
         <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Award.EventId)</td>
+                <td class="form_text">
+                    <select name="EventId" class="form_control w300" required="">
+                        <option value="">Danh mục sự kiện</option>
+                        @foreach (var events in Model.Events)
+                        {
+                            <option value="@events.Id">@events.EventName</option>
+                        }
+                    </select>
+                </td>
+            </tr>
             <tbody>
                 <tr>
                     <th style="width: 300px;">@Html.LabelFor(model => model.Award.AwardName)</th>
@@ -21,7 +33,7 @@
                 </tr>
                 @for (var i = 0; i < 12; i++)
                 {
-                    <tr>
+                    <tr data-check>
                         <td class="form_text">@Html.EditorFor(model => model.Award.AwardName)</td>
                         <td class="form_text">
                             @Html.TextBoxFor(model => model.Award.BgColor, new Dictionary<string, object>
@@ -44,8 +56,8 @@
                             } })
                         </td>
                         <td class="form_text">@Html.TextBoxFor(model => model.Award.Percent)</td>
-                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Quantity)</td>
-                        <td class="form_text">@Html.CheckBoxFor(model => model.Award.Limited) Không giới hạn</td>
+                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Quantity, new { @class = "quantity" })</td>
+                        <td class="form_text">@Html.CheckBoxFor(model => model.Award.Limited, new { @class = "check" }) Không giới hạn</td>
                     </tr>
                 }
             </tbody>
@@ -57,3 +69,19 @@
         </table>
     }
 </div>
+
+@section scripts{
+    <script>
+        $('.check').each(function () {
+            $(this).change(function () {
+                var quantity = $(this).parents('tr').find(".quantity");
+                if (this.checked) {
+                    quantity.attr("disabled", "disabled");
+                }
+                else {
+                    quantity.removeAttr("disabled");
+                }
+            })
+        });
+    </script>
+}

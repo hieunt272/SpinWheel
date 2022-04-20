@@ -1,49 +1,6 @@
 ﻿@model SpinWheel.ViewModel.HomeViewModel
 
-<div class="wrapper row m-0">
-    <div class="col-lg-6 col-12 d-flex justify-content-center">
-        <div class="card">
-            <div class="card-header">
-                XÁC NHẬN THÔNG TIN
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">Họ tên: <span id="fullname"></span></li>
-                <li class="list-group-item">Số điện thoại: <span id="phone"></span></li>
-            </ul>
-        </div>
-    </div>
-    <div class="col-lg-6 col-12">
-        <div class="mainbox">
-            <canvas id="canvas"
-                    width="500"
-                    height="500"
-                    data-responsiveMinWidth="180"
-                    data-responsiveScaleHeight="true"
-                    data-responsiveMargin="50">
-                <p style="color: white">
-                    Sorry, your browser doesn't support canvas.
-                    Please try another.
-                </p>
-            </canvas>
-            <div class="spin">
-                <a href="javascript:" onclick="startSpin()" class="inner-spin" data-toggle="modal" data-target="#Modal">SPIN</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="Modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <h5 class="modal-title">Mời bạn nhập thông tin</h5>
-            <div class="modal-body text-center">
-                <form id="info-form">
-                    <input type="text" class="form-control mx-auto" name="fullname" placeholder="Họ và tên" />
-                    <input type="text" class="form-control my-3 mx-auto" name="phone" placeholder="Số điện thoại" />
-                    <button type="button" class="btn btn-confirm" onclick="infoConfirm()">Xác nhận</button>
-                    <button type="button" class="btn btn-close" data-dismiss="modal">Đóng</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+@foreach (var item in Model.Events)
+{
+    <a href="@Url.Action("Event", "Home", new { url = item.Url })" class="btn btn-success">@item.EventName</a>
+}

@@ -61,6 +61,10 @@
                         </tr>
                     }
                     <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
+                    </tr>
+                    <tr>
                         <td class="form_name">@Html.LabelFor(model => model.Sort)</td>
                         <td class="form_text">@Html.EditorFor(model => model.Sort)</td>
                     </tr>

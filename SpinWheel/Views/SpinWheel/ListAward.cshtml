@@ -20,34 +20,37 @@
 {
     <div id="AlertBox" class="alert alert-success"><strong>Cập nhật giải thưởng thành công</strong></div>}
 <a class="btn quick-link" href="@Url.Action("Award")"><i class="fal fa-plus-circle mr-1"></i>Thêm giải thưởng</a>
-<a class="btn quick-link" href="@Url.Action("UpdateAward")"><i class="fal fa-plus-circle mr-1"></i>Sửa giải thưởng</a>
 
 <div class="box_content">
     <div class="form-search-list">
-        <form action="@Url.Action("ListAward")" method="get" style="margin-left: 0;">
+        <form action="@Url.Action("ListAward")" method="get" class="ml-0">
             <p>
-                Tìm giải thưởng @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
+                Tìm theo tên giải thưởng @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
                 <button type="submit" class="btn-search">Tìm kiếm</button>
             </p>
         </form>
     </div>
-    <p>Có tổng số <strong>@Model.Awards.TotalItemCount</strong> giải thưởng</p>
+    <p>Có tổng số <strong>@Model.Event.Awards.Count()</strong> giải thưởng</p>
     <table class="list_table tablecenter table-striped">
         <tbody>
             <tr>
-                <th style="width: 300px">Tên giải thưởng</th>
+                <th style="width: 250px">Tên giải thưởng</th>
+                <th>Sự kiện</th>
                 <th>Màu nền</th>
                 <th>Màu chữ</th>
-                <th>Phần trăm giải thưởng</th>
+                <th>Tỷ lệ trúng (%)</th>
                 <th>Tổng số lượng</th>
                 <th>Tổng số giải đã trúng</th>
                 <th style="width: 150px"></th>
             </tr>
-            @foreach (var award in Model.Awards)
+            @foreach (var award in Model.Awards.Where(p => p.EventId == Model.Event.Id))
             {
                 <tr data-id="@award.Id">
                     <td class="left">
                         <strong>@award.AwardName</strong>
+                    </td>
+                    <td>
+                        @award.Event.EventName
                     </td>
                     <td>
                         <div class="box-color" style="background: @award.BgColor;"></div>
@@ -56,9 +59,19 @@
                         <div class="box-color" style="background: @award.TextColor;"></div>
                     </td>
                     <td>@award.Percent</td>
-                    <td>@award.Quantity</td>
-                    <td></td>
                     <td>
+                        @if (award.Limited == true)
+                        {
+                            @:Không giới hạn
+                        }
+                        else
+                        {
+                            @award.Quantity
+                        }
+                    </td>
+                    <td>@award.TotalWin</td>
+                    <td>
+                        @Html.ActionLink("Sửa", "UpdateAward", new { awardId = award.Id }) -
                         <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
                     </td>
                 </tr>

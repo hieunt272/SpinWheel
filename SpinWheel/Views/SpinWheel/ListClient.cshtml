@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Danh sách trúng giải";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var i = 1;
 }
 
 <h2>Danh sách trúng giải</h2>
@@ -30,13 +31,14 @@
             @foreach (var client in Model.Clients)
             {
                 <tr data-id="@client.Id">
-                    <td>@client.Id</td>
+                    <td>@i</td>
                     <td>@client.Fullname</td>
                     <td>@client.Mobile</td>
                     <td>@client.AwardName</td>
                     <td>@client.CreateDate.ToString("dd/MM/yyyy HH:mm")</td>
                     <td><a href="javascript:;" onclick="deleteClient('@client.Id')">Xóa</a></td>
                 </tr>
+                i++;
             }
             @if (Model.Clients.PageCount > 1)
             {
