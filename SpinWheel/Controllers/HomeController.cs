@@ -38,18 +38,17 @@ namespace SpinWheel.Controllers
             var fullName = fc["fullname"];
             var phone = fc["phone"];
             var prize = fc["prize"];
+            var award = _unitOfWork.AwardRepository.Get(p => p.AwardName == prize).FirstOrDefault();
             model.Mobile = phone;
             model.Fullname = fullName;
             model.AwardName = prize;
-
-            var award = _unitOfWork.AwardRepository.Get(p => p.AwardName == prize).FirstOrDefault();
             award.Clients.Add(model);
             award.TotalWin += 1;
             _unitOfWork.ClientRepository.Insert(model);
             _unitOfWork.Save();
             return Json(new { status = true });
         }
-        [Route("{url:regex(^(?!.*(vcms|uploader|article|banner|contact|productvcms)).*$)}")]
+        [Route("{url:regex(^(?!.*(user|admin|vcms|uploader|article|banner|contact|productvcms)).*$)}")]
         public ActionResult Event(string url)
         {
             var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
@@ -81,16 +80,15 @@ namespace SpinWheel.Controllers
             });
             return Json(awards, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetClientData(string phone)
+        public JsonResult GetClientData(string phone, int eventId)
         {
             var isPost = 1;
             var now = DateTime.Now;
-            var clients = _unitOfWork.ClientRepository.Get(p => p.Mobile == phone, c => c.OrderByDescending(l => l.CreateDate)).FirstOrDefault();
-            
+            var client = _unitOfWork.ClientRepository.Get(p => p.Mobile == phone).FirstOrDefault();
             // so sánh ngày quay gần nhất với now
-            if (clients != null)
+            if (client != null)
             {
-                if(DateTime.Compare(clients.CreateDate, now) <= 0 && clients.CreateDate.Day == now.Day)
+                if (DateTime.Compare(client.CreateDate, now) <= 0 && client.CreateDate.Day == now.Day)
                 {
                     isPost = 0;
                 }

@@ -8,6 +8,7 @@ using System.Web.Security;
 using SpinWheel.DAL;
 using SpinWheel.Models;
 using SpinWheel.ViewModel;
+using PagedList;
 
 namespace BanGiay.Controllers
 {
@@ -15,6 +16,7 @@ namespace BanGiay.Controllers
     public class VcmsController : Controller
     {
         public readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         #region Login
         [AllowAnonymous]
         public ActionResult Login()
@@ -279,6 +281,157 @@ namespace BanGiay.Controllers
                 return RedirectToAction("ConfigSite", "Vcms", new { result = "success" });
             }
             return View("ConfigSite", model);
+        }
+        #endregion
+
+        #region User
+        public ActionResult ListUser(int? page, string name, string typeUser, string result)
+        {
+            ViewBag.Result = result;
+            var pageNumber = page ?? 1;
+            var pageSize = 15;
+            var users = _unitOfWork.UserRepository.Get(orderBy: o => o.OrderByDescending(a => a.CreateDate));
+            if (!string.IsNullOrEmpty(name))
+            {
+                users = users.Where(a => a.Username.Contains(name.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(typeUser))
+            {
+                switch (typeUser)
+                {
+                    case "0":
+                        users = users.Where(a => a.TypeUser == TypeUser.Normal);
+                        break;
+                    case "1":
+                        users = users.Where(a => a.TypeUser == TypeUser.Premium);
+                        break;
+                    case "2":
+                        users = users.Where(a => a.TypeUser == TypeUser.Unlimited);
+                        break;
+                }
+
+            }
+            var model = new ListUserViewModel
+            {
+                Users = users.ToPagedList(pageNumber, pageSize),
+                Name = name,
+                TypeUser = typeUser,
+            };
+            return View(model);
+        }
+        public ActionResult CreateUser(string result = "")
+        {
+            ViewBag.Result = result;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateUser(User model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _unitOfWork.UserRepository.GetQuery(a => a.Username.Equals(model.Username)).SingleOrDefault();
+                if (user != null)
+                {
+                    ModelState.AddModelError("", @"Tên đăng nhập này có rồi");
+                }
+                else
+                {
+                    var hashPass = HtmlHelpers.ComputeHash(model.Password, "SHA256", null);
+                    _unitOfWork.UserRepository.Insert(new User { Username = model.Username, Password = hashPass, Active = model.Active, TypeUser = model.TypeUser });
+                    _unitOfWork.Save();
+                    return RedirectToAction("ListUser", new { result = "success" });
+                }
+            }
+            return View();
+        }
+        public ActionResult EditUser(int userId = 0)
+        {
+            var user = _unitOfWork.UserRepository.GetById(userId);
+            if (user == null)
+            {
+                return RedirectToAction("CreateUser");
+            }
+
+            var model = new EditAdminViewModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Active = user.Active,
+                TypeUser = user.TypeUser,
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult EditUser(EditAdminViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _unitOfWork.UserRepository.GetById(model.Id);
+                if (user == null)
+                {
+                    return RedirectToAction("CreateUser");
+                }
+                if (user.Username != model.Username)
+                {
+                    var exists = _unitOfWork.UserRepository.GetQuery(a => a.Username.Equals(model.Username)).SingleOrDefault();
+                    if (exists != null)
+                    {
+                        ModelState.AddModelError("", @"Tên đăng nhập này có rồi");
+                        return View(model);
+                    }
+                    user.Username = model.Username;
+                }
+                user.TypeUser = model.TypeUser;
+                user.Active = model.Active;
+                if (model.Password != null)
+                {
+                    user.Password = HtmlHelpers.ComputeHash(model.Password, "SHA256", null);
+                }
+                _unitOfWork.Save();
+                return RedirectToAction("ListUser", new { result = "update" });
+            }
+            return View(model);
+        }
+        public bool DeleteUser(int userId)
+        {
+            var user = _unitOfWork.UserRepository.GetById(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            _unitOfWork.UserRepository.Delete(user);
+            _unitOfWork.Save();
+            return true;
+        }
+        public ActionResult UserChangePassword(int result = 0)
+        {
+            ViewBag.Result = result;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult UserChangePassword(ChangePasswordModel model, int userId)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _unitOfWork.UserRepository.GetById(userId);
+                if (user == null)
+                {
+                    return RedirectToAction("ListUser", "Vcms");
+                }
+                if (HtmlHelpers.VerifyHash(model.OldPassword, "SHA256", user.Password))
+                {
+                    user.Password = HtmlHelpers.ComputeHash(model.Password, "SHA256", null);
+                    _unitOfWork.Save();
+                    return RedirectToAction("UserChangePassword", new { result = 1 });
+                }
+                else
+                {
+                    ModelState.AddModelError("", @"Mật khẩu hiện tại không đúng!");
+                    return View();
+                }
+            }
+            return View(model);
         }
         #endregion
 

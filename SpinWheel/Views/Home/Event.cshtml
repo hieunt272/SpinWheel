@@ -40,7 +40,7 @@
             <h5 class="modal-title">Mời bạn nhập thông tin</h5>
             <div class="modal-body text-center">
                 <form id="info-form">
-                    <input type="hidden" name="userId" value="@Model.Event.AdminId"/>
+                    <input type="hidden" name="eventId" value="@Model.Event.Id"/>
                     <input type="text" class="form-control mx-auto" name="fullname" placeholder="Họ và tên" />
                     <input type="text" class="form-control my-3 mx-auto" name="phone" placeholder="Số điện thoại" />
                     <button type="button" class="btn btn-confirm" onclick="infoConfirm()">Xác nhận</button>

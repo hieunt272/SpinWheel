@@ -151,10 +151,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SpinWheelController.cs" />
     <Compile Include="Controllers\UploaderController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VcmsController.cs" />
     <Compile Include="DAL\DataEntities.cs" />
     <Compile Include="DAL\GenericRepository.cs" />
     <Compile Include="DAL\UnitOfWork.cs" />
+    <Compile Include="Filters\MemberFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -198,6 +200,22 @@
     <Compile Include="Migrations\202204200113285_AddAdminIdToClientsClass.designer.cs">
       <DependentUpon>202204200113285_AddAdminIdToClientsClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202204200422178_Update-Client3.cs" />
+    <Compile Include="Migrations\202204200422178_Update-Client3.designer.cs">
+      <DependentUpon>202204200422178_Update-Client3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204200503537_Update-final.cs" />
+    <Compile Include="Migrations\202204200503537_Update-final.designer.cs">
+      <DependentUpon>202204200503537_Update-final.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204201002538_Update-CreateDateInDb0.User.cs" />
+    <Compile Include="Migrations\202204201002538_Update-CreateDateInDb0.User.designer.cs">
+      <DependentUpon>202204201002538_Update-CreateDateInDb0.User.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204210724239_AddCheckDay.cs" />
+    <Compile Include="Migrations\202204210724239_AddCheckDay.designer.cs">
+      <DependentUpon>202204210724239_AddCheckDay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Award.cs" />
@@ -211,8 +229,12 @@
     <Compile Include="ViewModel\SpinWheelViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\adminSite.css" />
-    <Content Include="Content\adminSite.min.css" />
+    <Content Include="Content\adminSite.css">
+      <DependentUpon>adminSite.less</DependentUpon>
+    </Content>
+    <Content Include="Content\adminSite.min.css">
+      <DependentUpon>adminSite.css</DependentUpon>
+    </Content>
     <Content Include="Content\admin\bg-login.jpg" />
     <Content Include="Content\admin\favicon.png" />
     <Content Include="Content\admin\form_control_bg.gif" />
@@ -1335,6 +1357,14 @@
     <Content Include="Views\SpinWheel\UpdateEvent.cshtml" />
     <Content Include="Views\Home\Event.cshtml" />
     <Content Include="Views\Vcms\ListAdmin.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Shared\_UserLayout.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Vcms\ListUser.cshtml" />
+    <Content Include="Views\Vcms\CreateUser.cshtml" />
+    <Content Include="Views\Vcms\EditUser.cshtml" />
+    <Content Include="Views\Vcms\UserChangePassword.cshtml" />
+    <Content Include="Views\User\UserChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1372,6 +1402,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202204200113285_AddAdminIdToClientsClass.resx">
       <DependentUpon>202204200113285_AddAdminIdToClientsClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204200422178_Update-Client3.resx">
+      <DependentUpon>202204200422178_Update-Client3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204200503537_Update-final.resx">
+      <DependentUpon>202204200503537_Update-final.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204201002538_Update-CreateDateInDb0.User.resx">
+      <DependentUpon>202204201002538_Update-CreateDateInDb0.User.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204210724239_AddCheckDay.resx">
+      <DependentUpon>202204210724239_AddCheckDay.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

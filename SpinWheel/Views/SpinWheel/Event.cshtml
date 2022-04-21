@@ -1,7 +1,7 @@
 ﻿@model SpinWheel.Models.Event
 @{
     ViewBag.Title = "Thêm Sự kiện";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
 <h2>Thêm Sự kiện</h2>
@@ -14,47 +14,57 @@
 <a class="btn quick-link" id="create-cat" href="#list-cat"><i class="far fa-list mr-1"></i> Danh sách sự kiện</a>
 <div class="box_content">
     <div class="row">
-        @if (ViewBag.CheckExist == true)
-        {
-            <div class="col-sm-12 col-lg-12">
-                @using (Html.BeginForm("Event", "SpinWheel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        <div class="col-sm-12 col-lg-12">
+            @using (Html.BeginForm("Event", "SpinWheel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.ValidationSummary(true)
+            <table class="form_table form-table-cat">
+                <tr>
+                    <td class="form_name">@Html.LabelFor(a => Model.EventName)</td>
+                    <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
+                </tr>
+                <tr>
+                    <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
+                    <td class="form_text">
+                        @Html.TextBoxFor(a => Model.BgPC, new { type = "file" })<span>Kích thước: 1920 x 1080</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form_name">@Html.LabelFor(a => Model.BgMobile)</td>
+                    <td class="form_text">
+                        @Html.TextBoxFor(a => Model.BgMobile, new { type = "file" })<span>Kích thước: 840 x 1480</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
+                    <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
+                </tr>
+                <tr>
+                    <td class="form_name">@Html.LabelFor(a => Model.Sort)</td>
+                    <td class="form_text">@Html.EditorFor(a => Model.Sort)</td>
+                </tr>
+                @if (ViewBag.CheckTypeUser == true)
                 {
-                    @Html.ValidationSummary(true)
-                    <table class="form_table form-table-cat">
-                        <tr>
-                            <td class="form_name">@Html.LabelFor(a => Model.EventName)</td>
-                            <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
-                        </tr>
-                        <tr>
-                            <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
-                            <td class="form_text">
-                                @Html.TextBoxFor(a => Model.BgPC, new { type = "file" })<span>Kích thước: 1920 x 1080</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="form_name">@Html.LabelFor(a => Model.BgMobile)</td>
-                            <td class="form_text">
-                                @Html.TextBoxFor(a => Model.BgMobile, new { type = "file" })<span>Kích thước: 840 x 1480</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
-                            <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
-                        </tr>
-                        <tr>
-                            <td class="form_name">@Html.LabelFor(a => Model.Sort)</td>
-                            <td class="form_text">@Html.EditorFor(a => Model.Sort)</td>
-                        </tr>
-                        <tr>
-                            <td class="form_name"></td>
-                            <td class="form_text">
-                                <input type="submit" class="btn quick-link" value="Thêm mới" />
-                            </td>
-                        </tr>
-                    </table>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                        </td>
+                    </tr>
                 }
-            </div>
-        }
+                else
+                {
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input disabled class="btn quick-link" value="Thêm mới" />
+                            <span class="text-danger d-block">Số lượt tạo sự kiện của bạn đã hết. Vui lòng liên hệ quản trị viên để nâng cấp tài khoản</span>
+                        </td>
+                    </tr>
+                }
+            </table>
+            }
+        </div>
 
         <div class="col-sm-12 col-lg-12">
             @Html.Action("ListEvent", "SpinWheel")

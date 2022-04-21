@@ -1,5 +1,9 @@
 ﻿@using SpinWheel.Models
-@{ var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"]; }
+@{ 
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    var userName = ViewContext.RouteData.Values["UserName"].ToString();
+
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +11,7 @@
     @*<meta name="viewport" content="width=device-width" />*@
     <title>@ViewBag.Title</title>
     <link rel="shortcut icon" href="~/favicon.ico">
-    @Styles.Render("~/Content/admincss", "~/Content/themes/base/css") 
+    @Styles.Render("~/Content/admincss", "~/Content/themes/base/css")
     <link href="~/Scripts/multi-upload/jquery.fileupload.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -27,13 +31,13 @@
                 <div class="media mr-lg-5 mr-3 drop">
                     <img class="mr-3 avatar" src="~/Content/admin/icon_profile.png" />
                     <div class="media-body">
-                        <h5 class="mb-0">@User.Identity.Name</h5>
-                        Quản trị viên
+                        <h5 class="mb-0">@userName</h5>
+                        Người dùng
                     </div>
                     <div class="content-drop">
-                        <a href="@Url.Action("LogOut","Vcms")"><i class="fal fa-sign-out-alt pr-1"></i> Đăng xuất</a>
-                        <a href="@Url.Action("ChangePassword","Vcms")"><i class="fal fa-low-vision mr-1"></i>Đổi mật khẩu</a>
-                        <a href="@Url.Action("ConfigSite","Vcms")"><i class="fal fa-info-circle"></i> Thông tin chung</a>
+                        <a href="@Url.Action("LogOut","User")"><i class="fal fa-sign-out-alt pr-1"></i> Đăng xuất</a>
+                        <a href="@Url.Action("UserChangePassword","User")"><i class="fal fa-low-vision mr-1"></i>Đổi mật khẩu</a>
+                        @*<a href="@Url.Action("ConfigSite","Vcms")"><i class="fal fa-info-circle"></i> Thông tin chung</a>*@
                     </div>
                 </div>
                 <a id="help" class="drop" onclick="fbFunction()">
@@ -46,22 +50,13 @@
             <div class="left_menu_profile">
                 <ul class="drop-bar">
                     <li data-id="5">
-                        <a class="root expand mb-3" href="@Url.Action("Index","Vcms")">Tổng quan website</a>
+                        <a class="root expand mb-3" href="@Url.Action("Index","User")">Tổng quan website</a>
                     </li>
                     <li data-id="0">
-                        <a class="root"><span>Admin</span><i class="fas fa-caret-down"></i></a>
+                        <a class="root"><span>Tài khoản</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
-                            <div>@Html.ActionLink("Đổi mật khẩu", "ChangePassword", "Vcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Quản lý admin", "CreateAdmin", "Vcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Thông tin chung", "ConfigSite", "Vcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Đăng xuất", "Logout", "Vcms", null, new { @class = "text_link" })</div>
-                        </div>
-                    </li>
-                    <li data-id="1">
-                        <a class="root"><span>Quản lý người dùng</span><i class="fas fa-caret-down"></i></a>
-                        <div class="sub hidden">
-                            <div>@Html.ActionLink("Thêm người dùng", "CreateUser", "Vcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Quản lý người dùng", "ListUser", "Vcms", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Đổi mật khẩu", "UserChangePassword", "User", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Đăng xuất", "Logout", "User", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
                     <li data-id="5">

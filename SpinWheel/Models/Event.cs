@@ -21,8 +21,8 @@ namespace SpinWheel.Models
         public int Sort { get; set; }
         [StringLength(300)]
         public string Url { get; set; }
-        public int AdminId { get; set; }
-        public virtual Admin Admin { get; set; }
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
         public virtual ICollection<Award> Awards { get; set; }
         public Event()
         {

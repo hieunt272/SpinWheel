@@ -112,12 +112,13 @@ function infoConfirm() {
 
 function startSpin() {
     var phone = $("[name=phone]").val();
+    var eventId = $("[name=eventId]").val();
     var isPost = true;
     if (phone == "") {
         isPost = false;
     }
     if (isPost) {
-        $.getJSON("/Home/GetClientData", { phone: phone }, function (data) {
+        $.getJSON("/Home/GetClientData", { phone: phone, eventId: eventId }, function (data) {
             if (data == 1) {
                 if (wheelSpinning == false) {
                     StatusButton(1);

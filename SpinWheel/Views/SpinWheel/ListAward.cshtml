@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @{
     ViewBag.Title = "Danh sách giải thưởng";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
 <style>
@@ -12,7 +12,7 @@
         border: 1px solid;
     }
 </style>
-
+<h2>Danh sách giải thưởng</h2>
 @if (ViewBag.Result == "success")
 {
     <div id="AlertBox" class="alert alert-success"><strong>Thêm mới giải thưởng thành công</strong></div>}
@@ -24,13 +24,23 @@
 <div class="box_content">
     <div class="form-search-list">
         <form action="@Url.Action("ListAward")" method="get" class="ml-0">
-            <p>
-                Tìm theo tên giải thưởng @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
-                <button type="submit" class="btn-search">Tìm kiếm</button>
-            </p>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    Từ khóa
+                    @Html.TextBoxFor(a => a.Name)
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    Sự kiện
+                    @Html.DropDownListFor(a => a.EventId, Model.EventSelectList, "Tất cả")
+                </div>
+                <div class="col-lg-3 col-md-6 align-self-center">
+                    <button type="submit" class="btn-search">Tìm kiếm</button>
+                </div>
+            </div>
+
         </form>
     </div>
-    <p>Có tổng số <strong>@Model.Event.Awards.Count()</strong> giải thưởng</p>
+    <p>Có tổng số <strong>@Model.TotalAward</strong> giải thưởng</p>
     <table class="list_table tablecenter table-striped">
         <tbody>
             <tr>
@@ -43,45 +53,45 @@
                 <th>Tổng số giải đã trúng</th>
                 <th style="width: 150px"></th>
             </tr>
-            @foreach (var award in Model.Awards.Where(p => p.EventId == Model.Event.Id))
-            {
-                <tr data-id="@award.Id">
-                    <td class="left">
-                        <strong>@award.AwardName</strong>
-                    </td>
-                    <td>
-                        @award.Event.EventName
-                    </td>
-                    <td>
-                        <div class="box-color" style="background: @award.BgColor;"></div>
-                    </td>
-                    <td>
-                        <div class="box-color" style="background: @award.TextColor;"></div>
-                    </td>
-                    <td>@award.Percent</td>
-                    <td>
-                        @if (award.Limited == true)
-                        {
-                            @:Không giới hạn
-                        }
-                        else
-                        {
-                            @award.Quantity
-                        }
-                    </td>
-                    <td>@award.TotalWin</td>
-                    <td>
-                        @Html.ActionLink("Sửa", "UpdateAward", new { awardId = award.Id }) -
-                        <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
-                    </td>
-                </tr>
-            }
-            @if (Model.Awards.PageCount > 1)
-            {
-                <tr>
-                    <td colspan="8">@Html.PagedListPager(Model.Awards, page => Url.Action("ListAward", new { page, name = Model.Name }))</td>
-                </tr>
-            }
+            @foreach (var award in Model.Awards)
+                {
+                    <tr data-id="@award.Id">
+                        <td class="left">
+                            <strong>@award.AwardName</strong>
+                        </td>
+                        <td>
+                            @award.Event.EventName
+                        </td>
+                        <td>
+                            <div class="box-color" style="background: @award.BgColor;"></div>
+                        </td>
+                        <td>
+                            <div class="box-color" style="background: @award.TextColor;"></div>
+                        </td>
+                        <td>@award.Percent</td>
+                        <td>
+                            @if (award.Limited == true)
+                            {
+                                @:Không giới hạn
+                            }
+                            else
+                            {
+                                @award.Quantity
+                            }
+                        </td>
+                        <td>@award.TotalWin</td>
+                        <td>
+                            @Html.ActionLink("Sửa", "UpdateAward", new { awardId = award.Id }) -
+                            <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Awards.PageCount > 1)
+                {
+                    <tr>
+                        <td colspan="8">@Html.PagedListPager(Model.Awards, page => Url.Action("ListAward", new { page, name = Model.Name }))</td>
+                    </tr>
+                }
         </tbody>
     </table>
 </div>

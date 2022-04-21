@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;  
-using System.Web; 
- 
-namespace SpinWheel.Models 
-{ 
+using System.Linq;
+using System.Web;
+
+namespace SpinWheel.Models
+{
     public class Admin
     {
         public int Id { get; set; }
@@ -14,11 +14,11 @@ namespace SpinWheel.Models
         public string Username { get; set; }
         [DisplayName("Mật khẩu"), Required(ErrorMessage = "Hãy nhập mật khẩu"), StringLength(60, ErrorMessage = "Tối đa 60 ký tự"), UIHint("Password")]
         public string Password { get; set; }
-        [Display(Name = "Hoạt động", Description = "Hoạt động")] 
+        [Display(Name = "Hoạt động", Description = "Hoạt động")]
         public bool Active { get; set; }
         [Display(Name = "Phân quyền")]
         public RoleAdmin Role { get; set; }
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<User> Users { get; set; }
         public Admin()
         {
             Active = true;
@@ -27,6 +27,5 @@ namespace SpinWheel.Models
     public enum RoleAdmin
     {
         Admin,
-        User
     }
 }

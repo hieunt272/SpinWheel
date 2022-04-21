@@ -2,5 +2,13 @@
   {
     "outputFile": "Content/style.css",
     "inputFile": "Content/style.scss"
+  },
+  {
+    "outputFile": "Content/material-dashboard.css",
+    "inputFile": "Content/material-dashboard.scss"
+  },
+  {
+    "outputFile": "Content/adminSite.css",
+    "inputFile": "Content/adminSite.less"
   }
 ]
