@@ -17,7 +17,7 @@ namespace SpinWheel.Models
         [Display(Name = "Thời gian quay thưởng gần nhất")]
         public DateTime CheckDate { get; set; }
         public string AwardName { get; set; }
-        public virtual ICollection<Award> Awards { get; set; }
+        public virtual ICollection<ListClientAward> ListClientAwards { get; set; }
         public Client()
         {
             CreateDate = DateTime.Now;

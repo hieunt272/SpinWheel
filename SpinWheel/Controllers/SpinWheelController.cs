@@ -397,7 +397,7 @@ namespace SpinWheel.Controllers
         {
             var pageNumber = page ?? 1;
             const int pageSize = 15;
-            var clients = _unitOfWork.ClientRepository.GetQuery(c => c.Awards.Any(a => a.Event.UserId == userId), o => o.OrderByDescending(a => a.CreateDate));
+            var clients = _unitOfWork.ClientRepository.GetQuery(c => c.ListClientAwards.Any(a => a.Award.Event.UserId == userId), o => o.OrderByDescending(a => a.CreateDate));
 
             if (!string.IsNullOrEmpty(name))
             {

@@ -15,7 +15,10 @@ namespace SpinWheel.DAL
         private GenericRepository<Event> _eventRepository;
         private GenericRepository<Client> _clientRepository;
         private GenericRepository<User> _userRepository;
+        private GenericRepository<ListClientAward> _listClientAwardRepository;
 
+        public GenericRepository<ListClientAward> ListClientAwardRepository =>
+            _listClientAwardRepository ?? (_listClientAwardRepository = new GenericRepository<ListClientAward>(_context));
         public GenericRepository<Award> AwardRepository =>
             _awardRepository ?? (_awardRepository = new GenericRepository<Award>(_context));
         public GenericRepository<Event> EventRepository =>

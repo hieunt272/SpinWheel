@@ -26,7 +26,7 @@ namespace SpinWheel.Models
         public int Sort { get; set; }
         [Display(Name = "Danh mục sự kiện"), Required(ErrorMessage = "Hãy chọn danh mục sự kiện")]
         public int EventId { get; set; }
-        public virtual ICollection<Client> Clients { get; set; }
+        public virtual ICollection<ListClientAward> ListClientAwards { get; set; }
         public virtual Event Event { get; set; }
 
         public Award()

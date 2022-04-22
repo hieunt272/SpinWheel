@@ -11,6 +11,7 @@ $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
                 'textFillStyle': val.txtColor,
                 'quantity': val.quantity,
                 'totalwin': val.totalWin,
+                'id': val.id,
             }, 1);
         }
         else {
@@ -21,6 +22,7 @@ $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
                 'size': percent,
                 'quantity': val.quantity,
                 'totalwin': val.totalWin,
+                'id': val.id,
             }, 1);
         }
     });
@@ -161,7 +163,7 @@ function alertPrize() {
         });
         var fullName = $("[name=fullname]").val();
         var phone = $("[name=phone]").val();
-        $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text }, function (data) {
+        $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text, awardId: winningSegment.id }, function (data) {
         })
         $("#info-form").trigger("reset");
         StatusButton(3);
