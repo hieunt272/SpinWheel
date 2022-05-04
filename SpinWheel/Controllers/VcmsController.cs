@@ -10,7 +10,7 @@ using SpinWheel.Models;
 using SpinWheel.ViewModel;
 using PagedList;
 
-namespace BanGiay.Controllers
+namespace SpinWheel.Controllers
 {
     [Authorize]
     public class VcmsController : Controller
@@ -64,7 +64,10 @@ namespace BanGiay.Controllers
             {
                 Admins = _unitOfWork.AdminRepository.Get(),
                 Events = _unitOfWork.EventRepository.Get(),
-                Clients = _unitOfWork.ClientRepository.Get()
+                Users = _unitOfWork.UserRepository.Get(),
+                Banners = _unitOfWork.BannerRepository.Get(),
+                Articles = _unitOfWork.ArticleRepository.Get(),
+                Contacts = _unitOfWork.ContactRepository.Get(),
             };
             return View(model);
         }
@@ -203,7 +206,7 @@ namespace BanGiay.Controllers
             return View(config);
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult ConfigSite(ConfigSite model)
+        public ActionResult ConfigSite(ConfigSite model, FormCollection fc)
         {
             var config = _unitOfWork.ConfigSiteRepository.Get().FirstOrDefault();
             if (config == null)
@@ -212,21 +215,19 @@ namespace BanGiay.Controllers
             }
             else
             {
-
                 config.Facebook = model.Facebook;
-                config.Instagram = model.Instagram;
                 config.GoogleMap = model.GoogleMap;
+                config.Youtube = model.Youtube;
+                config.Twitter = model.Twitter;
+                config.Instagram = model.Instagram;
                 config.Title = model.Title;
                 config.Description = model.Description;
                 config.GoogleAnalytics = model.GoogleAnalytics;
                 config.Hotline = model.Hotline;
                 config.Email = model.Email;
                 config.LiveChat = model.LiveChat;
-                config.Twitter = model.Twitter;
-                config.Linkedin = model.Linkedin;
                 config.Place = model.Place;
                 config.AboutText = model.AboutText;
-                config.Instagram = model.Instagram;
                 config.AboutUrl = model.AboutUrl;
                 config.InfoFooter = model.InfoFooter;
                 config.InfoContact = model.InfoContact;
@@ -332,7 +333,7 @@ namespace BanGiay.Controllers
                 var user = _unitOfWork.UserRepository.GetQuery(a => a.Username.Equals(model.Username)).SingleOrDefault();
                 if (user != null)
                 {
-                    ModelState.AddModelError("", @"Tên đăng nhập này có rồi");
+                    ModelState.AddModelError("", @"Tên đăng nhập đã tồn tại!! Vui lòng nhập tên đăng khác");
                 }
                 else
                 {

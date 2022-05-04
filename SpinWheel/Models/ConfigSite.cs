@@ -20,9 +20,9 @@ namespace SpinWheel.Models
         [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Instagram"),
          Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
         public string Instagram { get; set; }
-        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Linkedin"),
+        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn Youtube"),
         Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
-        public string Linkedin { get; set; }
+        public string Youtube { get; set; }
         [StringLength(4000, ErrorMessage = "Tối đa 4000 ký tự"), Display(Name = "Mã nhúng Live chat"),
         UIHint("TextArea")]
         public string LiveChat { get; set; }

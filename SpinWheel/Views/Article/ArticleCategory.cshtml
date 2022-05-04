@@ -1,0 +1,121 @@
+﻿@model SpinWheel.Models.ArticleCategory
+@{
+    ViewBag.Title = "Thêm danh mục";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Thêm Danh mục</h2>
+@if (ViewBag.ArticleCat == "success")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Thêm mới danh mục thành công</strong></div>
+}
+@if (ViewBag.ArticleCat == "update")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật danh mục thành công</strong></div>
+}
+<a class="btn quick-link" id="create-cat" href="#list-cat"><i class="far fa-list mr-1"></i> Danh sách danh mục</a>
+<div class="box_content">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            @using (Html.BeginForm("ArticleCategory", "Article", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.ValidationSummary(true)
+                <table class="form_table form-table-cat">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.ParentId)</td>
+                        <td class="form_text">@Html.DropDownListFor(a => Model.ParentId, (SelectList)ViewBag.RootCats, "Danh mục cha", new { @class = "form_control w300" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.TypePost)</td>
+                        <td class="form_text">@Html.EnumDropDownListFor(a => Model.TypePost, new { @class = "form_control w300" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.CategoryName)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.CategoryName)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Description)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Description)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Image)</td>
+                        <td class="form_text">
+                            <div class="alert alert-info">
+                                <p class="btn" style="margin: 0 0 0 -15px; text-align: left;">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <button class="btn-search" type="button" onclick="triggerImage()">Chọn ảnh</button>
+                                    @Html.TextBoxFor(a => Model.Image, new { @class = "form-control hidden file-select", @type = "file" })
+                                    @if (Model.Image != null)
+                                    {
+                                        <img id="thumb" style="width:200px;" src="/images/articleCategory/@Model.Image" />
+                                        <input type="hidden" name="oldfile" value="/images/articleCategory/@Model.Image" /> }
+                                    else
+                                    {
+                                        <img id="thumb" style="width: 200px" src="" />}
+                                </p><br />
+                                - Chọn ảnh để upload: (gif, png, jpg, jpeg < 4MB)<br />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.CategorySort)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.CategorySort)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.ShowMenu)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.ShowMenu)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.CategoryActive)</td>
+                        <td class="form_text">@Html.CheckBoxFor(a => Model.CategoryActive, new { @checked = "checked" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
+                    </tr>
+                    <tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.TitleMeta)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.TitleMeta)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.DescriptionMeta)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.DescriptionMeta)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+        <div class="col-sm-12 col-lg-12">
+            @Html.Action("ListCategory", "Article")
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#thumb').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]); // convert to base64 string
+            }
+        }
+        $("#Image").change(function () {
+            readURL(this);
+        });
+        function triggerImage() {
+            $('.file-select').trigger('click');
+        }
+        function changeImage(event) {
+            $('#image-name').html($('.file-select').val());
+        }
+    </script>
+}
+

@@ -29,6 +29,7 @@ namespace SpinWheel.ViewModel
     public class ListClientViewModel
     {
         public PagedList.IPagedList<Client> Clients { get; set; }
+        public PagedList.IPagedList<ListClientAward> ListClientAwards { get; set; }
         public string Name { get; set; }
         public Event Event { get; set; }
     }

@@ -7,36 +7,52 @@
 }
 
 <h2>Danh sách trúng giải</h2>
-<a class="btn quick-link" href="@Url.Action("Index","Vcms")"><i class="fal fa-home mr-1"></i>Về trang chính</a>
+<a class="btn quick-link" href="@Url.Action("Event","SpinWheel")"><i class="far fa-calendar-star mr-1"></i>Trang sự kiện</a>
 <div class="box_content">
     <div class="form-search-list">
         <form action="@Url.Action("ListClient")" method="get" class="ml-0">
-            <p>
-                Tìm tên người trúng giải @Html.TextBoxFor(a => a.Name, new { @class = "w300" })
-                <button type="submit" class="btn-search">Tìm kiếm</button>
-            </p>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    Tìm số điện thoại
+                    @Html.TextBoxFor(a => a.Name)
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    Tìm theo ngày
+                    <div id="reportrange">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                    </div>
+                    <input type="hidden" name="startdate" value="" />
+                    <input type="hidden" name="enddate" value="" />
+                </div>
+                <div class="col-lg-3 col-md-6 align-self-center">
+                    <button type="submit" class="btn-search">Tìm kiếm</button>
+                </div>
+            </div>
         </form>
     </div>
-    <p>Có tổng số <strong>@Model.Clients.TotalItemCount</strong> giải thưởng đã quay</p>
+    <p>Có tổng số <strong>@Model.ListClientAwards.Count()</strong> giải thưởng đã quay</p>
     <table class="list_table tablecenter table-striped">
         <tbody>
             <tr>
                 <th>STT</th>
-                <th style="width: 150px">Họ và tên</th>
-                <th style="width: 300px">Số điện thoại</th>
-                <th style="width: 300px">Giải thưởng</th>
-                <th style="width: 300px">Ngày quay</th>
+                <th style="width: 200px">Họ và tên</th>
+                <th style="width: 150px">Số điện thoại</th>
+                <th style="width: 200px">Sự kiện</th>
+                <th style="width: 250px">Giải thưởng</th>
+                <th style="width: 150px">Ngày quay</th>
                 <th style="width: 100px"></th>
             </tr>
-            @foreach (var client in Model.Clients)
+            @foreach (var item in Model.ListClientAwards)
             {
-                <tr data-id="@client.Id">
+                <tr data-id="@item.Client.Id">
                     <td>@i</td>
-                    <td>@client.Fullname</td>
-                    <td>@client.Mobile</td>
-                    <td>@client.AwardName</td>
-                    <td>@client.CreateDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td><a href="javascript:;" onclick="deleteClient('@client.Id')">Xóa</a></td>
+                    <td>@item.Client.Fullname</td>
+                    <td>@item.Client.Mobile</td>
+                    <td>@item.Award.Event.EventName</td>
+                    <td>@item.Award.AwardName</td>
+                    <td>@item.CreateDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><a href="javascript:;" onclick="deleteClient('@item.Client.Id')">Xóa</a></td>
                 </tr>
                 i++;
             }

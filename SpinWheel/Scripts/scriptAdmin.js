@@ -219,3 +219,42 @@ $("[data-action=update]").on("blur", function () {
         });
     }
 })
+
+$('#reportrange').daterangepicker(
+    {
+        startDate: moment().subtract('days', 29),
+        endDate: moment(),
+        dateLimit: { days: 60 },
+        ranges: {
+            'Hôm nay': [moment(), moment()],
+            'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '7 ngày qua': [moment().subtract(6, 'days'), moment()],
+            '30 ngày qua': [moment().subtract(29, 'days'), moment()],
+            'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+            'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            applyLabel: 'Áp dụng',
+            cancelLabel: 'Đóng',
+            customRangeLabel: 'Tùy chỉnh',
+            format: 'DD/MM/YYYY',
+            daysOfWeek: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+            monthNames: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            firstDay: 1
+        },
+    },
+    function (start, end) {
+        var startDate = start.format('DD/MM/YYYY');
+        var endDate = end.format('DD/MM/YYYY');
+        $("[name=startdate]").val(startDate);
+        $("[name=enddate]").val(endDate);
+        $('#reportrange span').html(startDate + ' - ' + endDate);
+    }
+);
+
+var startDate = moment().subtract('days', 29).format('DD/MM/YYYY');
+var endDate = moment().format('DD/MM/YYYY');
+
+$('#reportrange span').html(startDate + ' - ' + endDate);
+$("[name=startdate]").val(startDate);
+$("[name=enddate]").val(endDate);

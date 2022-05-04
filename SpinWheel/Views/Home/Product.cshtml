@@ -1,0 +1,41 @@
+﻿@model SpinWheel.ViewModel.ProductDetailViewModel
+@using SpinWheel.Models
+@using Helpers
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = Model.Product.TitleMeta ?? Model.Product.Name;
+    ViewBag.Description = Model.Product.DescriptionMeta ?? Model.Product.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ProductDetail", "Home", new { url = Model.Product.Url });
+}
+
+@Html.Action("Header", "Home")
+<div class="bg-breadcrumb">
+    <div class="container">
+        <ol class="breadcrumb px-0 m-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Product.Name</li>
+        </ol>
+    </div>
+</div>
+
+<div class="bg-light p-main">
+    <div class="container">
+        <div class="product">
+            <div class="title">
+                Phần mềm @Model.Product.Name
+            </div>
+            <div class="description">
+                @Model.Product.Description
+            </div>
+            @Html.Raw(Model.Product.Body)
+
+            <div class="text-center mt-5">
+                <a href="@Url.Action("Register", "User")" class="btn btn-register">
+                    <i class="fas fa-share"></i>
+                    Dùng thử miễn phí
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Action("Footer", "Home")

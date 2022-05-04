@@ -10,14 +10,66 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using PagedList;
-
+using System.Threading.Tasks;
 
 namespace SpinWheel.Controllers
 {
-    [RoutePrefix("user"), MemberFilter]
+    [RoutePrefix("account"), MemberFilter]
     public class UserController : Controller
     {
         public readonly UnitOfWork _unitOfWork = new UnitOfWork();
+        private int userId => Convert.ToInt32(RouteData.Values["UserId"]);
+
+        [OverrideActionFilters, Route("dang-ky")]
+        public ActionResult Register()
+        {
+            return View();
+        }
+        [Route("dang-ky")]
+        [HttpPost, ValidateAntiForgeryToken, OverrideActionFilters]
+        public ActionResult Register(RegisterViewModel model, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var emailVal = model.Email.Trim();
+                var phoneVal = model.PhoneNumber.Trim();
+
+                var checkUser = _unitOfWork.UserRepository.GetQuery(a => a.Username.Equals(model.Username)).SingleOrDefault();
+                if (checkUser != null)
+                {
+                    ModelState.AddModelError("", @"Tên đăng nhập đã tồn tại!! Vui lòng nhập tên đăng khác");
+                }
+                else
+                {
+                    var hashPass = HtmlHelpers.ComputeHash(model.Password, "SHA256", null);
+                    var user = new User
+                    {
+                        Username = model.Username,
+                        Password = hashPass,
+                        Email = emailVal,
+                        PhoneNumber = phoneVal,
+                        Active = true,
+                        TypeUser = 0,
+                    };
+                    _unitOfWork.UserRepository.Insert(user);
+                    _unitOfWork.Save();
+                    var userData = user.Id + "|" + user.Username + "|" + user.TypeUser;
+                    var ticket = new FormsAuthenticationTicket(2, model.Username.ToLower(), DateTime.Now, DateTime.Now.AddDays(30), true,
+                        userData, FormsAuthentication.FormsCookiePath);
+
+                    var encTicket = FormsAuthentication.Encrypt(ticket);
+                    // Create the cookie.
+                    Response.Cookies.Add(new HttpCookie(".MEMBERAUTH", encTicket));
+                    if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
+                        && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "User");
+                }
+            }
+            return View(model);
+        }
         [OverrideActionFilters, Route("dang-nhap")]
         public ActionResult Login()
         {
@@ -94,15 +146,28 @@ namespace SpinWheel.Controllers
             return View(model);
         }
 
-        public ActionResult Index()
+        [OverrideActionFilters]
+        public JsonResult CheckPhone(string phoneNumber)
         {
+            var user = _unitOfWork.UserRepository.GetQuery(a => a.PhoneNumber == phoneNumber).SingleOrDefault();
+
+            if (user == null)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("Số điện thoại đã được sử dụng, vui lòng thử lại", JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Index()
+         {
             var model = new HomeUserViewModel
             {
-                Events = _unitOfWork.EventRepository.Get(),
-                Awards = _unitOfWork.AwardRepository.Get(),
+                Events = _unitOfWork.EventRepository.GetQuery(a => a.UserId == userId),
+                Awards = _unitOfWork.AwardRepository.GetQuery(a => a.Event.UserId == userId),
+                ListClientAwards = _unitOfWork.ListClientAwardRepository.GetQuery(a => a.Award.Event.UserId == userId)
             };
             return View(model);
         }
-
     }
 }

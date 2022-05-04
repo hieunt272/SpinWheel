@@ -1,0 +1,70 @@
+﻿@model SpinWheel.ViewModel.InsertProductViewModel
+@using SpinWheel.Models;
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Thêm sản phẩm</h2>
+<a class="btn quick-link" href="@Url.Action("ListProduct")"><i class="far fa-list mr-1"></i> Danh sách sản phẩm</a>
+<div class="box_content">
+    @using (Html.BeginForm("Product", "ProductVcms", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-lg-8 pr-lg-5">
+                @Html.ValidationSummary(true)
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Name)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Name)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Description)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Description)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Body)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Body)</td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Url)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Url)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.TitleMeta)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.TitleMeta)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.DescriptionMeta)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.DescriptionMeta)</td>
+                    </tr>
+
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="col-lg-4">
+                <table class="form_table">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Active)</td>
+                        <td class="form_text">@Html.CheckBoxFor(model => model.Product.Active, new { @checked = "checked" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.ShowMenu)</td>
+                        <td class="form_text">@Html.CheckBoxFor(model => model.Product.ShowMenu)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(model => model.Product.Sort)</td>
+                        <td class="form_text">@Html.EditorFor(model => model.Product.Sort)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>

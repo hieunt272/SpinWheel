@@ -16,7 +16,25 @@ namespace SpinWheel.DAL
         private GenericRepository<Client> _clientRepository;
         private GenericRepository<User> _userRepository;
         private GenericRepository<ListClientAward> _listClientAwardRepository;
+        private GenericRepository<Article> _articleRepository;
+        private GenericRepository<ArticleCategory> _articleCategoryRepository;
+        private GenericRepository<Product> _productRepository;
+        private GenericRepository<Contact> _contactRepository;
+        private GenericRepository<Banner> _bannerRepository;
+        private GenericRepository<Quote> _quoteRepository;
 
+        public GenericRepository<Quote> QuoteRepository =>
+            _quoteRepository ?? (_quoteRepository = new GenericRepository<Quote>(_context));
+        public GenericRepository<Banner> BannerRepository =>
+            _bannerRepository ?? (_bannerRepository = new GenericRepository<Banner>(_context));
+        public GenericRepository<Article> ArticleRepository =>
+            _articleRepository ?? (_articleRepository = new GenericRepository<Article>(_context));
+        public GenericRepository<ArticleCategory> ArticleCategoryRepository =>
+            _articleCategoryRepository ?? (_articleCategoryRepository = new GenericRepository<ArticleCategory>(_context));
+        public GenericRepository<Product> ProductRepository => 
+            _productRepository ?? (_productRepository = new GenericRepository<Product>(_context));
+        public GenericRepository<Contact> ContactRepository => 
+            _contactRepository ?? (_contactRepository = new GenericRepository<Contact>(_context));
         public GenericRepository<ListClientAward> ListClientAwardRepository =>
             _listClientAwardRepository ?? (_listClientAwardRepository = new GenericRepository<ListClientAward>(_context));
         public GenericRepository<Award> AwardRepository =>

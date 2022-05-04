@@ -61,7 +61,28 @@
                         <a class="root"><span>Quản lý người dùng</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
                             <div>@Html.ActionLink("Thêm người dùng", "CreateUser", "Vcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Quản lý người dùng", "ListUser", "Vcms", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách người dùng", "ListUser", "Vcms", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
+                    <li data-id="2">
+                        <a class="root"><span>Quản lý Sản phẩm</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Thêm mới sản phẩm", "Product", "ProductVcms", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách sản phẩm", "ListProduct", "ProductVcms", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
+                    <li data-id="3">
+                        <a class="root"><span>Quản lý Bài viết</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Danh mục bài viết", "ArticleCategory", "Article", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Thêm mới bài viết", "Article", "Article", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách bài viết", "ListArticle", "Article", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
+                    <li data-id="4">
+                        <a class="root"><span>Quản lý Dịch vụ</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Thêm mới phí dịch vụ", "Quote", "Quote", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
                     <li data-id="5">
@@ -71,6 +92,19 @@
                             <div>@Html.ActionLink("Thêm mới giải thưởng", "Award", "SpinWheel", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Danh sách giải thưởng", "ListAward", "SpinWheel", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Danh sách trúng giải", "ListClient", "SpinWheel", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
+                    <li data-id="6">
+                        <a class="root"><span>Quản lý Quảng cáo</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Thêm mới quảng cáo", "Banner", "Banner", null, new { @class = "text_link" })</div>
+                            <div>@Html.ActionLink("Danh sách quảng cáo", "ListBanner", "Banner", null, new { @class = "text_link" })</div>
+                        </div>
+                    </li>
+                    <li data-id="7">
+                        <a class="root"><span>Quản lý Liên hệ</span><i class="fas fa-caret-down"></i></a>
+                        <div class="sub hidden">
+                            <div>@Html.ActionLink("Danh sách liên hệ", "ListContact", "Contact", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
                 </ul>
@@ -93,6 +127,7 @@
     <script src="~/Scripts/jquery.cookie.js"></script>
     <script src="~/Scripts/jquery.fancybox.js"></script>
     <script src="~/Scripts/jscolor.min.js"></script>
+    <script src="~/Scripts/daterangepicker.js"></script>
     <script src="~/Scripts/scriptAdmin.js"></script>
     @RenderSection("scripts", false)
 </body>

@@ -26,10 +26,10 @@ namespace SpinWheel
                       "~/Scripts/bootstrap.bundle.js",
                       "~/Scripts/jquery.fancybox.js",
                       "~/Scripts/jquery.toast.js",
-                      "~/Scripts/jquery-migrate.js",
                       "~/Scripts/sweetalert2.min.js",
                       "~/Scripts/TweenMax.min.js",
                       "~/Scripts/Winwheel.min.js",
+                      //"~/Scripts/jquery-migrate.js",
                       "~/Scripts/scripts.js"
                       ));
 
@@ -50,6 +50,7 @@ namespace SpinWheel
                       "~/Content/jquery.toast.css",
                       "~/Content/PagedList.css",
                       "~/Content/jquery.fancybox.css",
+                      "~/Content/daterangepicker.css",
                       "~/Content/adminSite.css"
                       ));
 

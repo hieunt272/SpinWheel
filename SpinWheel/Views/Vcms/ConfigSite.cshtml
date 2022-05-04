@@ -46,6 +46,29 @@
                 </tr>
             }
             <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutImage)</td>
+                <td class="form_text">@Html.TextBoxFor(model => model.AboutImage, new { type = "file" }) <span class="red-warring">Kích thươc: 470px - 600px</span></td>
+            </tr>
+            @if (Model.AboutImage != null)
+            {
+                <tr>
+                    <td class="form_name"></td>
+                    <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.AboutImage)?w=150" /></td>
+                </tr>
+            }
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutText)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutText)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.AboutUrl)</td>
+                <td class="form_text">@Html.EditorFor(model => model.AboutUrl)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.InfoFooter)</td>
+                <td class="form_text">@Html.EditorFor(model => model.InfoFooter)</td>
+            </tr>
+            <tr>
                 <td class="form_name">@Html.LabelFor(model => model.Place)</td>
                 <td class="form_text">@Html.EditorFor(model => model.Place)</td>
             </tr>
@@ -71,10 +94,10 @@
                 <td class="form_text">@Html.EditorFor(model => model.Twitter)</td>
             </tr>
             <tr>
-                <td class="form_name">@Html.LabelFor(model => model.Linkedin)</td>
-                <td class="form_text">@Html.EditorFor(model => model.Linkedin)</td>
+                <td class="form_name">@Html.LabelFor(model => model.Youtube)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Youtube)</td>
             </tr>
-            <tr> 
+            <tr>
                 <td class="form_name">@Html.LabelFor(model => model.IntroduceUrl)</td>
                 <td class="form_text">@Html.EditorFor(model => model.IntroduceUrl)</td>
             </tr>

@@ -31,7 +31,10 @@ namespace SpinWheel.ViewModel
     {
         public IEnumerable<Admin> Admins { get; set; }
         public IEnumerable<Event> Events { get; set; }
-        public IEnumerable<Client> Clients { get; set; }
+        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<Banner> Banners { get; set; }
+        public IEnumerable<Article> Articles { get; set; }
+        public IEnumerable<Contact> Contacts { get; set; }
     }
     public class EditAdminViewModel
     {
@@ -52,6 +55,7 @@ namespace SpinWheel.ViewModel
     {
         public IEnumerable<Event> Events { get; set; }
         public IEnumerable<Award> Awards { get; set; }
+        public IEnumerable<ListClientAward> ListClientAwards { get; set; }
     }
 
     public class ListUserViewModel

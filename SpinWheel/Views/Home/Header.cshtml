@@ -1,0 +1,126 @@
+﻿@model SpinWheel.ViewModel.HeaderViewModel
+@using SpinWheel.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+
+<section class="header-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <div class="social">
+                    <a href="@config.Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="@config.Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="@config.Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="@config.Youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-9 d-flex justify-content-end">
+                <div class="header-contact">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Zalo:</span>
+                    <a href="https://zalo.me/@config.Hotline" target="_blank">@config.Hotline</a>
+                </div>
+                <div class="header-contact">
+                    <span>Hotline:</span>
+                    <a href="tel:@config.Hotline">@config.Hotline</a>
+                </div>
+                <a href="mailto:@config.Email" class="btn email">
+                    <i class="far fa-envelope"></i>
+                    <span>EMAIL:</span>
+                    @config.Email
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-1">
+                <div class="logo">
+                    @if (config.Image != null)
+                    {
+                        <a href="@Url.Action("Index", "Home")">
+                            <img src="@Path.Combine("/images/configs/", config.Image)" alt="@config.Title">
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <ul class="ul-reset nav">
+                    <li><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                    <li>
+                        <a href="#">Sản phẩm</a>
+                        @if (Model.Products.Any())
+                        {
+                            <div class="drop">
+                                <ul class="ul-reset sub-nav">
+                                    @foreach (var product in Model.Products)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Product", "Home", new { url = product.Url })">
+                                                @product.Name
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                    <li><a href="@Url.Action("Quote", "Home")">Phí dịch vụ</a></li>
+                    @if (Model.ArticleCategories.Any())
+                    {
+                        foreach (var category in Model.ArticleCategories)
+                        {
+                            <li>
+                                <a href="@Url.Action("ArticleCategory", "Home", new { url = category.Url })">
+                                    @category.CategoryName
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="col-lg-3 d-flex align-items-center justify-content-end">
+                <a href="@Url.Action("Register", "User")" class="btn btn-header">
+                    Dùng thử miễn phí
+                </a>
+                <a href="@Url.Action("Login", "User")" class="btn-header login btn">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="header-mobile">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-6 d-flex align-items-center">
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-6 d-flex justify-content-end">
+                <div class="logo">
+                    @if (config.Image != null)
+                    {
+                        <a href="@Url.Action("Index", "Home")">
+                            <img src="@Path.Combine("/images/configs/", config.Image)" alt="@config.Title">
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 d-flex justify-content-end align-items-center">
+                <a href="@Url.Action("Register", "User")" class="btn btn-header">
+                    Dùng thử miễn phí
+                </a>
+                <a href="@Url.Action("Login", "User")" class="btn-header login btn">
+                    Đăng nhập
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

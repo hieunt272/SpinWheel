@@ -1,0 +1,74 @@
+﻿@model SpinWheel.ViewModel.RegisterViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link href="~/Content/login.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;600&display=swap" rel="stylesheet">
+    @Styles.Render("~/Content/style.css", "~/Content/all.css")
+</head>
+<body>
+    @Html.Action("Header", "Home")
+    <div class="bg-second">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-lg-5 order-lg-1 order-0">
+                    <div class="limiter">
+                        <div class="wrap-login100">
+                            <div class="title"><h2>Đăng ký</h2></div>
+                            @using (Html.BeginForm())
+                            {
+                                @Html.ValidationSummary(true)
+                                @Html.AntiForgeryToken()
+                                <div class="input-group">
+                                    @Html.LabelFor(model => model.Username, new { @class = "mt-3 user-name" })
+                                    @Html.TextBoxFor(model => model.Username, new { placeholder = "*Nhập tài khoản" })<br />
+                                    @Html.ValidationMessageFor(model => model.Username)
+                                </div>
+                                <div class="input-group">
+                                    @Html.LabelFor(model => model.Password, new { @class = "mt-3 user-name" })
+                                    @Html.PasswordFor(model => model.Password, new { placeholder = "*Mật khẩu" })<br />
+                                    @Html.ValidationMessageFor(model => model.Password)
+                                </div>
+                                <div class="input-group">
+                                    @Html.LabelFor(model => model.ConfirmPassword, new { @class = "mt-3 user-name" })
+                                    @Html.PasswordFor(model => model.ConfirmPassword, new { placeholder = "*Nhập lại mật khẩu" })<br />
+                                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                                </div>
+                                <div class="input-group">
+                                    @Html.LabelFor(model => model.PhoneNumber, new { @class = "mt-3 user-name" })
+                                    @Html.TextBoxFor(model => model.PhoneNumber, new { placeholder = "Số điện thoại" })<br />
+                                    @Html.ValidationMessageFor(model => model.PhoneNumber)
+                                </div>
+                                <div class="input-group">
+                                    @Html.LabelFor(model => model.Email, new { @class = "mt-3 user-name" })
+                                    @Html.TextBoxFor(model => model.Email, new { placeholder = "Email" })<br />
+                                    @Html.ValidationMessageFor(model => model.Email)
+                                </div>
+                                <div>
+                                    <div class="pb-3 border-bottom text-center">
+                                        <button type="submit" class="btn btn-register">Đăng ký</button>
+                                    </div>
+                                    <div class="mt-3 text-center">
+                                        <a class="login100-form-btn btn-login" href="@Url.Action("Login", "User")">
+                                            <i class="fal fa-sign-in-alt mr-1"></i>Đăng nhập
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Action("Footer", "Home")
+
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval", "~/Scripts/scripts.js")
+</body>
+</html>

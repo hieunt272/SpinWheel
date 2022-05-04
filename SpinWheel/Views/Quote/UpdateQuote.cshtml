@@ -1,0 +1,53 @@
+﻿@model SpinWheel.Models.Quote
+@{
+    ViewBag.Title = "Cập nhật Phí dịch vụ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Cập nhật Phí dịch vụ</h2>
+<a class="btn quick-link" id="create-cat" href="#list-cat"><i class="far fa-list mr-1"></i> Danh sách phí dịch vụ</a>
+<div class="box_content">
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            @using (Html.BeginForm("UpdateQuote", "Quote", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(model => model.Id)
+                <table class="form_table form-table-cat">
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.TypeService)</td>
+                        <td class="form_text">@Html.EnumDropDownListFor(a => Model.TypeService, new { @class = "form_control w300" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Name)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Name)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Price)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Price)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Body)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Body)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Sort)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Sort)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Active)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Active)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name"></td>
+                        <td class="form_text">
+                            <input type="submit" class="btn quick-link" value="Cập nhật" />
+                        </td>
+                    </tr>
+                </table>
+                }
+        </div>
+        <div class="col-sm-12 col-lg-12">
+            @Html.Action("ListQuote", "Quote")
+        </div>
+    </div>
+</div>

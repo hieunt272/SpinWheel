@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SpinWheel.Models.Quote>
+
+<style>
+    .img-cat {
+        width: 150px;
+        height: 100px;
+        object-fit: contain;
+    }
+</style>
+
+<table class="list_table tablecenter" id="list-cat">
+    <tr>
+        <th>STT</th>
+        <th>Tên dịch vụ</th>
+        <th>Giá</th>
+        <th>Hoạt động</th>
+        <th style="width: 140px;"></th>
+    </tr>
+    <tbody id="sortable-cat">
+        @foreach (var quote in Model)
+        {
+            <tr data-id="@quote.Id" style="background: #ededed;">
+                <td style="width: 150px;">
+                    <input type="number" name="Sort" value="@quote.Sort" class="form_control w100" />
+                </td>
+                <td class="left"><strong>@quote.Name</strong></td>
+                <td>@quote.Price</td>
+                <td>@Html.EditorFor(a => quote.Active, new { htmlAttributes = new { id = "Active" } })</td>
+                <td>
+                    <a href="javascript:;" onclick="updateQuote('@quote.Id')">Cập nhật - </a>
+                    @Html.ActionLink("Sửa", "UpdateQuote", new { quoteId = quote.Id }) -
+                    <a href="javascript:;" onclick="deleteQuote('@quote.Id')" style="color: red">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    function deleteQuote(id) {
+        if (confirm("Bạn có chắc chắn xóa dịch vụ này không?")) {
+            $.post("/Quote/DeleteQuote", { quoteId: id }, function (data) {
+                if (data) {
+                    $.toast({
+                        text: 'Đang xóa dịch vụ',
+                        position: 'bottom-right',
+                        icon: 'success',
+                    })
+                    $("tr[data-id='" + id + "']").fadeOut();
+                } else {
+                    $.toast({
+                        text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                        icon: 'error',
+                    })
+                }
+            });
+        }
+    }
+    function updateQuote(id) {
+        var divId = $("tr[data-id='" + id + "']");
+        var sort = divId.find("input[name=Sort]").val();
+        var active = divId.find("input#Active").prop("checked");
+
+        if (sort == "") {
+            alert("Bạn hãy nhập số thứ tự");
+        }
+
+        $.post("/Quote/QuickUpdateQuote", { quoteId: id, sort, active }, function (data) {
+            if (data) {
+                $.toast({
+                    text: 'Cập nhật thành công',
+                    position: 'bottom-right',
+                    icon: 'success',
+                })
+            } else {
+                $.toast({
+                    text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                    icon: 'error',
+                })
+            }
+        });
+    }
+</script>

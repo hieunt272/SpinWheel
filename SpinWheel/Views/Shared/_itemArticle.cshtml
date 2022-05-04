@@ -1,0 +1,27 @@
+﻿@model SpinWheel.Models.Article
+
+<div class="article-item">
+    <div class="card-img">
+        @if (Model.Image != null)
+        {
+            <a href="@Url.Action("ArticleDetail", new { url = Model.Url })">
+                <img src="@Path.Combine("/images/articles/", Model.Image)" alt="@Model.Subject">
+            </a>
+        }
+    </div>
+    <div class="card-body bg-white">
+        <div class="calendar">
+            <i class="fal fa-calendar-alt"></i>
+            @Model.CreateDate.ToString("dd/MM/yyyy")
+        </div>
+        <a href="@Url.Action("ArticleDetail", new { url = Model.Url })" class="truncate subject">
+            @Model.Subject
+        </a>
+        <div class="desc truncate">
+            @Model.Description
+        </div>
+        <a href="@Url.Action("ArticleDetail", new { url = Model.Url })" class="btn-reading">
+            Đọc tiếp
+        </a>
+    </div>
+</div>

@@ -1,8 +1,46 @@
-﻿
+﻿@model SpinWheel.ViewModel.HomeUserViewModel
 @{
     ViewBag.Title = "Trang người dùng";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
-<h2>Index</h2>
-
+<div class="top-title">
+    <div class="media">
+        <p><i class="fal fa-home-lg-alt"></i></p>
+        <div class="media-body">
+            <h5 class="mt-3">Tổng quan</h5>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon"><i class="far fa-calendar-star"></i></div>
+            <a class="stretched-link" href="@Url.Action("Event","SpinWheel")">Sự kiện</a>
+            <p class="counter">@Model.Events.Count()</p>
+            <div class="info">
+                <i class="far fa-edit mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-product"><i class="fal fa-award"></i></div>
+            <a class="stretched-link" href="@Url.Action("Award","SpinWheel")">Giải thưởng</a>
+            <p class="counter">@Model.Awards.Count()</p>
+            <div class="info">
+                <i class="far fa-edit mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-cart"><i class="fas fa-users"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListClient","SpinWheel")">Người dùng</a>
+            <p class="counter">@Model.ListClientAwards.Count()</p>
+            <div class="info">
+                <i class="fal fa-history"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+</div>

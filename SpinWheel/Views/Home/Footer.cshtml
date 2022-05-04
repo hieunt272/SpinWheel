@@ -1,0 +1,81 @@
+﻿@model SpinWheel.ViewModel.FooterViewModel
+@using SpinWheel.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+
+<section class="footer">
+    <div class="container">
+        <div class="row outstanding">
+            <div class="col-lg-4">
+                <div class="footer-title">
+                    @config.Title
+                </div>
+                <div class="footer-info">
+                    @Html.Raw(config.InfoFooter)
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-title">
+                    Liên kết nhanh
+                </div>
+                <ul class="ul-reset quick-link">
+                    <li><a href="#contact-form">Đăng ký đại lý</a></li>
+                    <li><a href="#contact-form">Liên hệ</a></li>
+                    <li>
+                        <a href="#">
+                            Quay số ngẫu nhiên<br>
+                            VICO SPIN miễn phí
+                        </a>
+                    </li>
+                    <li><a href="#contact-form">Đăng ký</a></li>
+                    <li>
+                        <a href="#">
+                            Giữ chân và thu hút<br>
+                            khách hàng
+                        </a>
+                    </li>
+                </ul>
+                <div class="footer-title">
+                    Từ khóa cần tìm
+                </div>
+                <ul class="ul-reset key-word">
+                    <li><a href="#">Phần mềm quay số</a></li>
+                    <li><a href="#">Phần mềm vòng quay may mắn</a></li>
+                    <li><a href="#">Tổ chức sự kiện</a></li>
+                    <li><a href="#">Tin tức VICO SPIN</a></li>
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Khách hàng góp ý</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-title">
+                    Chính sách
+                </div>
+                @if (Model.Policies.Any())
+                {
+                    <ul class="ul-reset policy">
+                        @foreach (var item in Model.Articles)
+                        {
+                            <li>
+                                <i class="far fa-long-arrow-right"></i>
+                                <a href="@Url.Action("ArticleDetail", "Home", new { url = item.Url })">
+                                    @item.Subject
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+                <a href="#">
+                    <img src="~/Content/images/img-main/logo-BCT.png" />
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright outstanding">
+        © Copyright ©2007-2022 - Công ty CP Công nghệ đa nền tảng VICO.
+    </div>
+</section>
+<section class="btn-scroll" title="Go to top">
+    <i class="far fa-arrow-up"></i>
+</section>

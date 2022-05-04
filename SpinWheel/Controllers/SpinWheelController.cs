@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using SpinWheel.Filters;
+using System.Data.Entity;
+using System.Globalization;
 
 namespace SpinWheel.Controllers
 {
@@ -57,7 +59,7 @@ namespace SpinWheel.Controllers
             if (ModelState.IsValid)
             {
                 var isPost = true;
-                var file = Request.Files["BgPC"];
+                var file = Request.Files["Event.BgPC"];
                 if (file != null && file.ContentLength > 0)
                 {
                     if (!HtmlHelpers.CheckFileExt(file.FileName, "jpg|jpeg|png|gif"))
@@ -88,7 +90,7 @@ namespace SpinWheel.Controllers
                     }
                 }
 
-                var file1 = Request.Files["BgMobile"];
+                var file1 = Request.Files["Event.BgMobile"];
                 if (file1 != null && file1.ContentLength > 0)
                 {
                     if (file1.ContentType != "image/jpeg" & file1.ContentType != "image/png" && file1.ContentType != "image/gif")
@@ -226,6 +228,7 @@ namespace SpinWheel.Controllers
                 }
                 if (isPost)
                 {
+                    model.UserId = userId;
                     model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName);
                     _unitOfWork.EventRepository.Update(model);
                     _unitOfWork.Save();
@@ -392,20 +395,33 @@ namespace SpinWheel.Controllers
         }
         #endregion
 
-        #region Client
-        public ActionResult ListClient(int? page, string name)
+        #region Client 
+        public ActionResult ListClient(int? page, string name, string startDate, string endDate)
         {
-            var pageNumber = page ?? 1;
+            var pageNumber = page ?? 1; 
             const int pageSize = 15;
             var clients = _unitOfWork.ClientRepository.GetQuery(c => c.ListClientAwards.Any(a => a.Award.Event.UserId == userId), o => o.OrderByDescending(a => a.CreateDate));
+            var listClientAwards = _unitOfWork.ListClientAwardRepository.GetQuery(a => a.Award.Event.UserId == userId, o => o.OrderByDescending(a => a.Id));
+            if(startDate != null && endDate != null)
+            {
+                if (DateTime.TryParse(startDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var start))
+                {
+                    listClientAwards = listClientAwards.Where(a => DbFunctions.TruncateTime(a.CreateDate) >= DbFunctions.TruncateTime(start));
+                }
+                if (DateTime.TryParse(endDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var end))
+                {
+                    listClientAwards = listClientAwards.Where(a => DbFunctions.TruncateTime(a.CreateDate) <= DbFunctions.TruncateTime(end));
+                }
+            }
 
             if (!string.IsNullOrEmpty(name))
             {
-                clients = clients.Where(l => l.Fullname.ToLower().Contains(name.ToLower()));
+                listClientAwards = listClientAwards.Where(l => l.Client.Mobile.ToLower().Contains(name.ToLower()));
             }
             var model = new ListClientViewModel
             {
                 Clients = clients.ToPagedList(pageNumber, pageSize),
+                ListClientAwards = listClientAwards.ToPagedList(pageNumber, pageSize),
                 Name = name
             };
             return View(model);
@@ -422,7 +438,6 @@ namespace SpinWheel.Controllers
             return true;
         }
         #endregion
-
         protected override void Dispose(bool disposing)
         {
             _unitOfWork.Dispose();

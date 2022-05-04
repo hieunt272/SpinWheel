@@ -1,0 +1,50 @@
+﻿@model SpinWheel.ViewModel.QuoteViewModel
+@{
+    ViewBag.Title = "Phí dịch vụ";
+}
+
+@Html.Action("Header", "Home")
+<div class="bg-breadcrumb">
+    <div class="container">
+        <ol class="breadcrumb px-0 m-0">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Phí dịch vụ</li>
+        </ol>
+    </div>
+</div>
+
+<div class="bg-light p-main">
+    <div class="container">
+        <div class="title-quote">Phí dịch vụ</div>
+        @if (Model.Quotes.Any())
+        {
+            <div class="row">
+                @foreach (var item in Model.Quotes)
+                {
+                    <div class="col-lg-4 col-md-6 mb-5">
+                        <div class="quote-item">
+                            <div class="recomment">@item.TypeService</div>
+                            <div class="quote-top">
+                                <div class="name">@item.Name</div>
+                                @if (item.Price != null)
+                                {
+                                    <div class="price">@item.Price</div>
+                                }
+                            </div>
+                            <div class="quote-body">
+                                @Html.Raw(item.Body)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col-12">
+                <p class="alert alert-success small">Nội dung hiện chưa được cập nhật. Vui lòng quay lại sau !!!!</p>
+            </div>
+        }
+    </div>
+</div>
+@Html.Action("Footer", "Home")

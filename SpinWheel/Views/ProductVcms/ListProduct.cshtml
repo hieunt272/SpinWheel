@@ -1,0 +1,174 @@
+﻿@model SpinWheel.ViewModel.ListProductViewModel
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Danh sách sản phẩm</h2>
+@if (ViewBag.Result == "success")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Thêm mới sản phẩm thành công</strong></div>
+}
+@if (ViewBag.Result == "update")
+{
+    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật sản phẩm thành công</strong></div>
+}
+<a class="btn quick-link" href="@Url.Action("Product")"><i class="fal fa-plus-circle mr-1"></i>Thêm sản phẩm</a>
+<div class="box_content">
+    <form action="@Url.Action("ListProduct")" method="get">
+        <div class="row">
+            <div class="col-3">
+                <label>Từ khóa</label>
+                @Html.TextBoxFor(a => a.Name, new { @class = "form_control" })
+            </div>
+            <div class="col-3">
+                <label>Sắp xếp</label>
+                <select class="form_control" name="Sort">
+                    <option value="date-desc">Mới nhất</option>
+                    <option value="date-asc" @if (Model.Sort == "date-asc") { @Html.Raw("selected='selected'") }>Cũ nhất</option>
+                    <option value="sort-asc" @if (Model.Sort == "sort-asc") { @Html.Raw("selected='selected'") }>STT nhỏ nhất</option>
+                    <option value="sort-desc" @if (Model.Sort == "sort-desc") { @Html.Raw("selected='selected'") }>STT lớn nhất</option>
+                    <option value="hot-asc" @if (Model.Sort == "hot-asc") { @Html.Raw("selected='selected'") }>Sản phẩm bán chạy</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn-search">Tìm kiếm</button>
+        </div>
+    </form>
+    <p>Có tổng số <strong>@Model.Products.TotalItemCount</strong> sản phẩm</p>
+    <form id="productList">
+        <table class="list_table tablecenter table-striped">
+            <tbody>
+                <tr>
+                    <th style="width: 100px">STT</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Hoạt động</th>
+                    <th style="width: 140px;"></th>
+                </tr>
+                @foreach (var product in Model.Products)
+                {
+                    <tr data-id="@product.Id">
+                        <td>
+                            <input type="hidden" name="ProductId" value="@product.Id" />
+                            @Html.DisplayFor(a => product.Sort)
+                        </td>
+                        <td class="left">
+                            <a href="@Url.Action("UpdateProduct", new { proId = product.Id })">
+                                <strong>@product.Name</strong>
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => product.Active)<br />
+                            <span id="statusResult"></span>
+                        </td>
+                        <td>
+                            @Html.ActionLink("Sửa", "UpdateProduct", new { proId = product.Id })
+                            - <a href="javascript:;" onclick="deleteProduct('@product.Id')" class="red-warring">Xóa</a>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Products.PageCount > 1)
+                {
+                    <tr>
+                        <td colspan="9">@Html.PagedListPager(Model.Products, page => Url.Action("ListProduct", new { page, name = Model.Name, sort = Model.Sort }))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+@section scripts
+{
+    <script type="text/javascript">
+        function deleteProduct(id) {
+            if (confirm("Bạn có chắc chắn xóa bài viết này không?")) {
+                $.post("/ProductVcms/DeleteProduct", { proId: id }, function (data) {
+                    if (data) {
+                        $.toast({
+                            text: 'Xóa sản phẩm thành công',
+                            position: 'bottom-right',
+                            icon: 'success',
+                        })
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error',
+                        })
+                    }
+                });
+            }
+        }
+        function updateStatus(id) {
+            var elm = $('tr[data-id="' + id + '"]');
+            var status = elm.find("#ProductStatus").prop("checked");
+
+            $.post("/ProductVcms/QuickUpdate", { proId: id, status },
+                function (data) {
+                    if (data) {
+                        elm.find("#statusResult").html("<strong>OK</strong>");
+                        elm.find("#statusResult strong").delay(1000).fadeOut();
+                    } else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            position: 'bottom-right',
+                            icon: 'error',
+                        })
+                        window.location.reload();
+                    };
+                });
+        }
+
+        function updateInfo(id) {
+            var elm = $('tr[data-id="' + id + '"]');
+            var sort = elm.find("#product_Sort").val();
+            var home = elm.find("input#Home").prop("checked");
+            var active = elm.find("input#ProductStatus").prop("checked");
+            var quantity = elm.find("#product_Quantity").val();
+            if (quantity <= 0) {
+                $.toast({
+                    text: 'Số lượng trong kho không hợp lệ.',
+                    position: 'bottom-right',
+                    icon: 'error',
+                })
+                return false;
+            }
+            $.post("/ProductVcms/QuickUpdate", { proId: id, quantity, sort, active, home, hot },
+                function (data) {
+                    if (data) {
+                        $.toast({
+                            text: 'Cập nhật thành công',
+                            position: 'bottom-right',
+                            icon: 'success',
+                        })
+                    } else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            position: 'bottom-right',
+                            icon: 'error',
+                        })
+                        window.location.reload();
+                    };
+                });
+        }
+        $("[data-item=root]").on("change", function (data) {
+            const id = $(this).val();
+            var items = [];
+            items.push("<option value>Hãy chọn danh mục</option>");
+
+            if (id !== "") {
+                $.getJSON("/ProductVcms/GetProductCategory", { parentId: id }, function (data) {
+                    $.each(data,
+                        function (key, val) {
+                            items.push("<option value='" + val.Id + "'>" + val.Name + "</option>");
+                        });
+                    $("[data-item=child]").html(items.join(""));
+                });
+            } else {
+                $("[data-item=child]").html(items.join(""));
+            }
+        });
+    </script>
+}

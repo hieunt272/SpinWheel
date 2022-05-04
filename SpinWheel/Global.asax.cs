@@ -1,10 +1,10 @@
-﻿using SpinWheel.DAL;
-using SpinWheel.Migrations;
-using System.Data.Entity;
+﻿using System.Data.Entity;
+using SpinWheel.DAL;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SpinWheel.Migrations; 
 
 namespace SpinWheel
 {
@@ -21,6 +21,7 @@ namespace SpinWheel
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
             using (var unitofWork = new UnitOfWork())
             {
                 Application["ConfigSite"] = unitofWork.ConfigSiteRepository.GetQuery().FirstOrDefault();

@@ -19,45 +19,25 @@
                         <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.BgPC)</td>
-                        <td class="form_text">
-                            @Html.TextBoxFor(model => model.BgPC, new { type = "file" })
-                        </td>
+                        <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
+                        <td class="form_text">@Html.TextBoxFor(a => Model.BgPC, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
                     </tr>
-                    @if (!string.IsNullOrEmpty(Model.BgPC))
+                    @if (Model.BgPC != null)
                     {
-                        <tr id="ImgPreview">
+                        <tr>
                             <td class="form_name"></td>
-                            <td class="form_text">
-                                <img src="@Path.Combine("/images/events/", Model.BgPC)" style="width: 150px; height: 100px; object-fit: contain" />
-                                <br />
-                                @if (!string.IsNullOrEmpty(Model.BgPC))
-                                {
-                                    <br /><a href="javascript:;" onclick="$('#ImgPreview').hide(); $('#CurrentFile').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
-                                    <input type="hidden" name="CurrentFile" id="CurrentFile" value="@Model.BgPC" />
-                                }
-                            </td>
+                            <td class="form_text"><img class="img-border" src="@Path.Combine("/images/events/", Model.BgPC)" /></td>
                         </tr>
                     }
                     <tr>
-                        <td class="form_name">@Html.LabelFor(model => model.BgMobile)</td>
-                        <td class="form_text">
-                            @Html.TextBoxFor(model => model.BgMobile, new { type = "file" })
-                        </td>
+                        <td class="form_name">@Html.LabelFor(a => Model.BgMobile)</td>
+                        <td class="form_text">@Html.TextBoxFor(a => Model.BgMobile, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
                     </tr>
-                    @if (!string.IsNullOrEmpty(Model.BgMobile))
+                    @if (Model.BgMobile != null)
                     {
-                        <tr id="ImgPreview1">
+                        <tr>
                             <td class="form_name"></td>
-                            <td class="form_text">
-                                <img src="@Path.Combine("/images/events/", Model.BgMobile)" style="width: 150px; height: 100px; object-fit: contain" />
-                                <br />
-                                @if (!string.IsNullOrEmpty(Model.BgMobile))
-                                {
-                                    <br /><a href="javascript:;" onclick="$('#ImgPreview').hide(); $('#CurrentFile1').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
-                                    <input type="hidden" name="CurrentFile1" id="CurrentFile1" value="@Model.BgMobile" />
-                                }
-                            </td>
+                            <td class="form_text"><img class="img-border" src="@Path.Combine("/images/events/", Model.BgMobile)" /></td>
                         </tr>
                     }
                     <tr>

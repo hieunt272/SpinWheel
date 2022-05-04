@@ -20,4 +20,44 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-product"><i class="fas fa-users"></i></div>
+            <a class="stretched-link" href="@Url.Action("CreateUser","Vcms")">Người dùng</a>
+            <p class="counter">@Model.Users.Count()</p>
+            <div class="info">
+                <i class="far fa-edit mr-1"></i> Có thể thay đổi thông tin website
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-cart"><i class="fal fa-ad mr-1"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListBanner","Banner")">Quảng cáo</a>
+            <p class="counter">@Model.Banners.Count()</p>
+            <div class="info">
+                <i class="fal fa-shopping-cart mr-1"></i> Cập nhật liên tục
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-city"><i class="fal fa-mailbox"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListContact","Contact")">Liên hệ</a>
+            <p class="counter">@Model.Contacts.Count()</p>
+            <div class="info">
+                <i class="far fa-history mr-1"></i> Cập nhật mới nhất
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3 mt-md-5 mt-3">
+        <div class="overview-item">
+            <div class="icon icon-article"> <i class="fal fa-newspaper"></i></div>
+            <a class="stretched-link" href="@Url.Action("ListArticle","Article")">Tin tức</a>
+            <p class="counter">@Model.Articles.Count()</p>
+            <div class="info">
+                <i class="far fa-history mr-1"></i> Tin tức mới nhất
+            </div>
+        </div>
+    </div>
 </div>

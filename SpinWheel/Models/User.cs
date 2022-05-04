@@ -14,6 +14,10 @@ namespace SpinWheel.Models
         public string Username { get; set; }
         [DisplayName("Mật khẩu"), Required(ErrorMessage = "Hãy nhập mật khẩu"), StringLength(60, ErrorMessage = "Tối đa 60 ký tự"), UIHint("Password")]
         public string Password { get; set; }
+        [Display(Name = "Số điện thoại"), Phone(ErrorMessage = "Số điện thoại không hợp lệ")]
+        public string PhoneNumber { get; set; }
+        [StringLength(50, ErrorMessage = "Tối đa 50 ký tự"), Display(Name = "Địa chỉ email"), EmailAddress(ErrorMessage = "Email không chính xác")]
+        public string Email { get; set; }
         [Display(Name = "Hoạt động", Description = "Hoạt động")]
         public bool Active { get; set; }
         public virtual Admin Admin { get; set; }

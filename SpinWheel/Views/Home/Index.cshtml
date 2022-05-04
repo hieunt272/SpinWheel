@@ -1,6 +1,394 @@
 ﻿@model SpinWheel.ViewModel.HomeViewModel
-
-@foreach (var item in Model.Events)
-{
-    <a href="@Url.Action("Event", "Home", new { url = item.Url })" class="btn btn-success">@item.EventName</a>
+@using SpinWheel.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = config.Title;
+    ViewBag.Description = config.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Index");
 }
+
+@Html.Action("Header", "Home")
+<section class="introduce">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 order-lg-0 order-1">
+                <div class="title-intro">
+                    tạo phần mềm quay số
+                    <p>nhanh chóng & chuyên nghiệp</p>
+                </div>
+                <div class="sub-title">
+                    Apps are built based on highly
+                </div>
+                <div class="media-list">
+                    <div class="media">
+                        <div class="media-img">
+                            <img src="~/Content/images/img-main/icon-intro.png" />
+                        </div>
+                        <div class="body">
+                            Công ty <br>
+                            chất lượng
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-img">
+                            <img src="~/Content/images/img-main/icon-intro (1).png" />
+                        </div>
+                        <div class="body">
+                            Hàng đầu<br>
+                            về quay số
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-img">
+                            <img src="~/Content/images/img-main/icon-intro (2).png" />
+                        </div>
+                        <div class="body">
+                            Không thể<br>
+                            can thiệp
+                        </div>
+                    </div>
+                    <div class="media">
+                        <div class="media-img">
+                            <img src="~/Content/images/img-main/icon-intro (3).png" />
+                        </div>
+                        <div class="body">
+                            Hơn 2 triệu <br>
+                            người dùng
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-intro">
+                    <a href="@Url.Action("ArticleDetail", "Home", new { url = config.AboutUrl })" class="btn-main">
+                        Tìm hiểu thêm
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1 order-0">
+                <div class="img-intro">
+                    @if (config.AboutImage != null)
+                    {
+                        <img src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if (Model.Banners.Any(b => b.GroupId == 1))
+{
+    <section class="customer">
+        <div class="container">
+            <div class="title">
+                KHÁCH HÀNG TIÊU BIỂU
+            </div>
+            <div class="partner-list">
+                @foreach (var item in Model.Banners.Where(b => b.GroupId == 1))
+                {
+                    <div class="partner-item">
+                        @if (item.Image != null)
+                        {
+                            <img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@if (Model.Banners.Any(b => b.GroupId == 2))
+{
+    <section class="why-1">
+        <div class="container">
+            <div class="title">
+                TẠI SAO BẠN NÊN SỬ DỤNG PHẦN MỀM <br>
+                QUAY SỐ NGẪU NHIÊN Vico SPIN
+            </div>
+            <div class="row">
+                @foreach (var item in Model.Banners.Where(b => b.GroupId == 2))
+                {
+                    <div class="col-lg-4 col-md-4">
+                        <div class="why-item">
+                            @if (item.Image != null)
+                            {
+                                <img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
+                            }
+                            <div class="body">
+                                <div class="why-name">
+                                    @item.BannerName
+                                </div>
+                                @if (item.Content != null)
+                                {
+                                    <div class="desc">
+                                        @Html.Raw(item.Content)
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.Products.Any())
+            {
+                foreach (var product in Model.Products)
+                {
+                    <div class="text-center">
+                        <a href="@Url.Action("Product", "Home", new { url = product.Url })" class="btn-main">
+                            chi tiết sản phẩm
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+}
+<section class="tutorial bg-second">
+    <div class="container">
+        <div class="title">
+            DỄ DÀNG QUAY SỐ TRÚNG THƯỞNG
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+                <div class="tutorial-item">
+                    <div class="step-number">
+                        01
+                    </div>
+                    <div class="tutorial-body">
+                        <img src="~/Content/images/img-main/icon-tutorial.png" />
+                        <div class="step-name">
+                            Chọn số thứ tự
+                        </div>
+                        <div class="step-desc">
+                            Bạn cần chọn số nhỏ nhất và số lớn nhất trùng với giá trị bạn cần
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+                <div class="tutorial-item __step-2">
+                    <div class="step-number">
+                        02
+                    </div>
+                    <div class="tutorial-body">
+                        <img src="~/Content/images/img-main/icon-tutorial (1).png" />
+                        <div class="step-name">
+                            Bấm nút quay
+                        </div>
+                        <div class="step-desc">
+                            Sẽ hiện kết quả trúng thưởng trùng với khách.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+                <div class="tutorial-item __step-3">
+                    <div class="step-number">
+                        03
+                    </div>
+                    <div class="tutorial-body">
+                        <img src="~/Content/images/img-main/icon-tutorial (2).png" />
+                        <div class="step-name">
+                            Trao Phần thưởng
+                        </div>
+                        <div class="step-desc">
+                            Bạn cần đối chiếu với kết quả và quy định của bạn với khách hàng.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="why-2">
+    <div class="container">
+        <div class="title">
+            TẠI SAO NÊN SỬ DỤNG<br>
+            Spin.vicogroup.VN
+        </div>
+        <div class="box-content">
+            <img src="~/Content/images/img-main/img-why.png" class="why-img" />
+            <div class="content-left">
+                <div class="why-item-2">
+                    <div class="why-img-2">
+                        <img src="~/Content/images/img-main/icon-why-2.png" />
+                    </div>
+                    Domain ngắn gọn dẽ nhớ
+                </div>
+                <div class="why-item-2">
+                    <div class="why-img-2">
+                        <img src="~/Content/images/img-main/icon-why-2 (1).png" />
+                    </div>
+                    Giao diện thân thiện với người dùng
+                </div>
+                <div class="why-item-2">
+                    <div class="why-img-2">
+                        <img src="~/Content/images/img-main/icon-why-2 (2).png" />
+                    </div>
+                    Hoàn toàn miễn phí
+                </div>
+                <div class="why-item-2">
+                    <div class="why-img-2">
+                        <img src="~/Content/images/img-main/icon-why-2 (3).png" />
+                    </div>
+                    Uy tín và ổn định
+                </div>
+                <div class="why-item-2">
+                    <div class="why-img-2">
+                        <img src="~/Content/images/img-main/icon-why-2 (4).png" />
+                    </div>
+                    Hỗ trợ 24/7
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if (Model.Articles.Any())
+{
+    var article = Model.Articles.FirstOrDefault();
+    <section class="news">
+        <div class="container">
+            <div class="title">
+                tin tức nổi bật
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="article-large">
+                        @if (article.Image != null)
+                        {
+                            <div class="article-img">
+                                <a href="@Url.Action("ArticleDetail", "Home", new { url = article.Url })">
+                                    <img src="@Path.Combine("/images/articles/", article.Image)" alt="@article.Subject">
+                                </a>
+                            </div>
+                        }
+                        <div class="article-body">
+                            <div class="subject truncate">
+                                <a href="@Url.Action("ArticleDetail", "Home", new { url = article.Url })">
+                                    @article.Subject
+                                </a>
+                            </div>
+                            <div class="calendar">
+                                <i class="fal fa-calendar-alt"></i>
+                                @article.CreateDate.ToString("dd/MM/yyyy")
+                            </div>
+                            <div class="desc truncate">
+                                @article.Description
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    @if (Model.Articles.Count() > 1)
+                    {
+                        <div class="row">
+                            @foreach (var item in Model.Articles.Skip(1))
+                            {
+                                <div class="col-lg-12">
+                                    <div class="article-home">
+                                        @if (item.Image != null)
+                                        {
+                                            <div class="article-img">
+                                                <a href="@Url.Action("ArticleDetail", "Home", new { url = item.Url })">
+                                                    <img src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject">
+                                                </a>
+                                            </div>
+                                        }
+                                        <div class="article-body">
+                                            <div class="subject truncate">
+                                                <a href="@Url.Action("ArticleDetail", "Home", new { url = item.Url })">
+                                                    @item.Subject
+                                                </a>
+                                            </div>
+                                            <div class="calendar">
+                                                <i class="fal fa-calendar-alt"></i>
+                                                @item.CreateDate.ToString("dd/MM/yyyy")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="@Url.Action("AllArticle", "Home")" class="btn-main">
+                    xem thêm
+                </a>
+            </div>
+        </div>
+    </section>
+}
+<section class="contact bg-second">
+    <div class="container">
+        <div class="title">Liên hệ với chúng tôi</div>
+        <div class="box-contact">
+            <form id="contact-form">
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        @Html.TextBoxFor(a => Model.Contact.Fullname, new { @class = "form-control", @placeholder = "Họ và tên *", @required = "required" })
+                        @Html.ValidationMessageFor(a => Model.Contact.Fullname)
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        @Html.TextBoxFor(a => Model.Contact.Email, new { @class = "form-control", @placeholder = "Email *", @required = "required" })
+                        @Html.ValidationMessageFor(a => Model.Contact.Email)
+                    </div>
+                </div>
+                @Html.TextBoxFor(a => Model.Contact.Email, new { @class = "form-control", @placeholder = "Chủ đề *" })
+                @Html.ValidationMessageFor(a => Model.Contact.Email)
+                @Html.TextAreaFor(a => Model.Contact.Body, new { @class = "form-control", rows = 5, @placeholder = "Tin nhắn *" })
+                @Html.ValidationMessageFor(a => Model.Contact.Body)
+                <button type="submit" class="btn-main">
+                    gửi tin nhắn
+                </button>
+            </form>
+            <img src="~/Content/images/img-main/img-contact.png" class="contact-img" />
+        </div>
+    </div>
+</section>
+<section class="service">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item">
+                    <div class="service-name">
+                        <i class="fas fa-user"></i>
+                        hỗ trợ 27/7
+                    </div>
+                    <div class="service-desc">
+                        Đội ngũ hỗ trợ chuyên nghiệp, luôn sẵn sàng phục vụ 24/7 để giải đáp các vấn đề thắc mắc của bạn một cách nhanh nhất.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item">
+                    <div class="service-name">
+                        <i class="fas fa-headset"></i>
+                        <a href="tel:@config.Hotline">
+                            HOTLINE-ZALO: @config.Hotline
+                        </a>
+                    </div>
+                    <div class="service-desc">
+                        Tổng đài tư vấn miễn phí 100% dành cho khách hàng VICO SPIN. Hãy gọi cho chúng tôi ngay khi lúc nào bạn gặp khó khăn.
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item">
+                    <div class="service-name">
+                        <i class="fas fa-user"></i>
+                        <a href="mailto:@config.Email">
+                            E-MAIL: @config.Email
+                        </a>
+                    </div>
+                    <div class="service-desc">
+                        Mọi yêu cầu của khách hàng gửi về email của demo@vico.vn được giải quyết và trả lời một cách nhanh nhất.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Action("Footer", "Home")

@@ -1,0 +1,56 @@
+﻿@model SpinWheel.ViewModel.MenuArticleViewModel
+
+<div class="box-border shadow mt-lg-0 mt-5">
+    <form action="@Url.Action("SearchArticle", "Home")" class="form-search">
+        <input type="text" name="keywords" class="form-control" placeholder="Tìm kiếm" required="">
+        <button class="btn" type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+    @if (Model.ArticleCategories.Any())
+    {
+        <div class="category-post">
+            <div class="post-sidebar-title">
+                Danh mục bài viết
+            </div>
+            <ul>
+                @foreach (var category in Model.ArticleCategories.Where(a => a.ParentId == null))
+                {
+                    <li><a href="@Url.Action("ArticleCategory", "Home", new {url = category.Url})">@category.CategoryName</a></li>
+                    foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == category.Id))
+                    {
+                        <li><a href="@Url.Action("ArticleCategory", "Home", new {url = child.Url})">@child.CategoryName</a></li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+    @if (Model.Articles.Any())
+    {
+        <div class="recent-post">
+            <div class="post-sidebar-title">
+                Bài viết gần đây
+            </div>
+            @foreach (var article in Model.Articles)
+            {
+                <div class="media py-3">
+                    @if (article.Image != null)
+                    {
+                        <a href="@Url.Action("ArticleDetail", "Home", new { url = article.Url })">
+                            <img src="@Path.Combine("/images/articles/", article.Image)" class="mr-2" alt="@article.Subject">
+                        </a>
+                    }
+                    <div class="media-body">
+                        <a href="@Url.Action("ArticleDetail", "Home", new { url = article.Url })" class="subject truncate">
+                            @article.Subject
+                        </a>
+                        <span class="date">
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            @article.CreateDate.ToString("dd/MM/yyyy")
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
