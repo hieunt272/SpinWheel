@@ -37,6 +37,7 @@ namespace SpinWheel.ViewModel
         public IEnumerable<ArticleCategory> ArticleCategories { get; set; }
         public IEnumerable<Article> Articles { get; set; }
         public IEnumerable<ArticleCategory> Policies { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
     public class AllArticleViewModel
     {

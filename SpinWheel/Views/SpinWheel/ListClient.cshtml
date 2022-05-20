@@ -13,6 +13,10 @@
         <form action="@Url.Action("ListClient")" method="get" class="ml-0">
             <div class="row">
                 <div class="col-lg-3 col-md-6">
+                    Sự kiện
+                    @Html.DropDownListFor(a => a.EventId, Model.EventSelectList, "Tất cả")
+                </div>
+                <div class="col-lg-3 col-md-6">
                     Tìm theo tên giải thưởng
                     @Html.TextBoxFor(a => a.Name)
                 </div>

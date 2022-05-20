@@ -23,7 +23,7 @@
                     <li><a href="#contact-form">Đăng ký đại lý</a></li>
                     <li><a href="#contact-form">Liên hệ</a></li>
                     <li>
-                        <a href="#">
+                        <a href="@Url.Action("Register", "User")">
                             Quay số ngẫu nhiên<br>
                             VICO SPIN miễn phí
                         </a>
@@ -40,8 +40,18 @@
                     Từ khóa cần tìm
                 </div>
                 <ul class="ul-reset key-word">
-                    <li><a href="#">Phần mềm quay số</a></li>
-                    <li><a href="#">Phần mềm vòng quay may mắn</a></li>
+                    <li><a href="@Url.Action("Index")">Phần mềm quay số</a></li>
+                    @if (Model.Products.Any())
+                    {
+                        foreach (var product in Model.Products)
+                        {
+                            <li>
+                                <a href="@Url.Action("Product", "Home", new { url = product.Url })">
+                                    Phần mềm vòng quay may mắn
+                                </a>
+                            </li>
+                        }
+                    }
                     <li><a href="#">Tổ chức sự kiện</a></li>
                     <li><a href="#">Tin tức VICO SPIN</a></li>
                     <li><a href="#">Hướng dẫn sử dụng</a></li>

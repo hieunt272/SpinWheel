@@ -409,7 +409,7 @@ namespace SpinWheel.Controllers
         #endregion
 
         #region Client
-        public ActionResult ListClient(int? page, string name, string startDate, string endDate)
+        public ActionResult ListClient(int? page, int? eventId, string name, string startDate, string endDate)
         {
             var pageNumber = page ?? 1;
             const int pageSize = 15;
@@ -431,8 +431,15 @@ namespace SpinWheel.Controllers
             {
                 listClientAwards = listClientAwards.Where(l => l.Award.AwardName.ToLower().Contains(name.ToLower()));
             }
+            if (eventId > 0)
+            {
+                listClientAwards = listClientAwards.Where(a => a.Award.EventId == eventId);
+            }
+
             var model = new ListClientViewModel
             {
+                EventSelectList = new SelectList(Events.Where(a => a.UserId == userId), "Id", "EventName"),
+                EventId = eventId,
                 Clients = clients.ToPagedList(pageNumber, pageSize),
                 ListClientAwards = listClientAwards.ToPagedList(pageNumber, pageSize),
                 Name = name

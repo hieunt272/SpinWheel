@@ -657,6 +657,7 @@ a, a:hover {
   padding-bottom: 15px;
   margin-bottom: 15px;
   position: relative;
+  z-index: 1;
 }
 .article-home::before {
   content: "";
@@ -1085,6 +1086,13 @@ a, a:hover {
 }
 .limiter form {
   background: #fff;
+}
+.limiter form input {
+  width: 60%;
+}
+.limiter .user-name {
+  text-align: left;
+  margin-left: 30px;
 }
 
 .bg-breadcrumb {
@@ -1811,7 +1819,7 @@ a, a:hover {
   }
 
   .media-list .media {
-    min-width: 180px;
+    min-width: 170px;
   }
 
   .partner-list {
@@ -1884,6 +1892,19 @@ a, a:hover {
 
   .quote-top .price {
     font-size: 1.25rem;
+  }
+
+  .limiter form input {
+    width: 50%;
+  }
+  .limiter form .user-name {
+    margin-left: 0;
+    width: 130px;
+  }
+  .limiter .field-validation-error {
+    width: auto;
+    bottom: 0%;
+    left: 45%;
   }
 }
 @keyframes gradient {

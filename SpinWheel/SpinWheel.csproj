@@ -1419,7 +1419,6 @@
     <Content Include="webfonts\fa-solid-900.woff2" />
     <Content Include="Views\SpinWheel\ListAward.cshtml" />
     <Content Include="Views\SpinWheel\Award.cshtml" />
-    <Content Include="Views\SpinWheel\UpdateAward.cshtml" />
     <Content Include="Views\SpinWheel\ListClient.cshtml" />
     <Content Include="Views\SpinWheel\Event.cshtml" />
     <Content Include="Views\SpinWheel\ListEvent.cshtml" />

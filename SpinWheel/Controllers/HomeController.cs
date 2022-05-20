@@ -52,6 +52,7 @@ namespace SpinWheel.Controllers
                 ArticleCategories = ArticleCategories.Where(a => a.ShowFooter),
                 Articles = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && a.ArticleCategory.TypePost == TypePost.Policy).Take(6),
                 Policies = ArticleCategories.Where(a => a.TypePost == TypePost.Policy),
+                Products = _unitOfWork.ProductRepository.GetQuery(a => a.Active),
             };
             return PartialView(model);
         }

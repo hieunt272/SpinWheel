@@ -34,6 +34,9 @@ namespace SpinWheel.ViewModel
         public PagedList.IPagedList<ListClientAward> ListClientAwards { get; set; }
         public string Name { get; set; }
         public Event Event { get; set; }
+        [Display(Name = "Danh mục sự kiện")]
+        public int? EventId { get; set; }
+        public SelectList EventSelectList { get; set; }
     }
     public class InsertEventViewModel
     {

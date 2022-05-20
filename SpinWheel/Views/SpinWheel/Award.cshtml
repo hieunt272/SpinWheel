@@ -15,7 +15,7 @@
             <tr>
                 <td class="form_name">@Html.LabelFor(model => model.Award.EventId)</td>
                 <td class="form_text">
-                    <select name="EventId" class="form_control w300" required="">
+                    <select name="EventId" class="form_control w300 event-select" required="">
                         @foreach (var events in Model.Events)
                         {
                             <option value="@events.Id"
@@ -180,5 +180,11 @@
                 $(this).parents('td').find("input[name='item.Limited'][type=hidden]").remove();
             }
         });
+
+        $('.event-select').change(function () {
+            let url = window.location.href.split('=');
+            let eventId = $(this).val();
+            window.location.href = url[0] + "=" + eventId;
+        })
     </script>
 }
