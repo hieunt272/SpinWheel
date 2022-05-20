@@ -478,12 +478,16 @@ input[type=submit]:focus {
   cursor: pointer;
   display: block;
   font-weight: bold;
-  padding: 0px 20px 0px 14px;
+  padding: 0px 20px 0px 30px;
   line-height: 44px;
   overflow: hidden;
   white-space: nowrap;
   text-transform: uppercase;
   background-position: 95%;
+  color: #fff;
+  background: #079AA6;
+  border-radius: 3px;
+  margin-bottom: 5px;
 }
 .left_menu_profile ul li a.root:hover {
   text-decoration: none;
@@ -586,6 +590,11 @@ input.quick-link {
   margin-right: 10px;
   transition: 0.1s;
 }
+.drop-bar a .icon {
+  font-size: 0.875rem;
+  top: 14px;
+  right: 195px;
+}
 .drop-bar .expand {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(92, 87, 93, 0.4);
   background: #079AA6;
@@ -600,6 +609,9 @@ input.quick-link {
 }
 .drop-bar .expand i {
   transform: rotate(-180deg);
+}
+.drop-bar .expand .icon {
+  transform: rotate(0);
 }
 .drop-bar .sub {
   position: relative;
@@ -1330,5 +1342,12 @@ h2 {
   cursor: pointer;
   padding: 5px 10px;
   border: 1px solid #ccc;
-  width: 100%;
+  width: 200px;
+}
+.quantity.active {
+  background: #fafafa;
+  cursor: default;
+}
+.quantity.active:focus {
+  border-color: #bebebe;
 }

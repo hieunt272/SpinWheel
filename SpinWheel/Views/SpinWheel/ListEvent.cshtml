@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<SpinWheel.Models.Event>
+<style>
+    .btn-event {
+        font-size: .875rem;
+    }
+</style>
 <table class="list_table tablecenter mb-4" id="list-event">
     <tr>
         <th>STT</th>
@@ -31,7 +36,8 @@
                 </td>
                 <td>@Html.EditorFor(a => events.Active, new { htmlAttributes = new { id = "Active" } })</td>
                 <td>
-                    <a href="@Url.Action("Event", "Home", new { url = events.Url })" class="btn btn-success" target="_blank">Link Vòng quay</a>
+                    <a href="@Url.Action("Event", "Home", new { url = events.Url })" class="btn btn-success mb-2 btn-event" target="_blank">Link Vòng quay</a> <br />
+                    <a href="@Url.Action("Award", "SpinWheel", new { eventId = events.Id })" class="btn btn-danger btn-event">Sửa giải thưởng</a>
                 </td>
                 <td>
                     <a href="javascript:;" onclick="updateEvent('@events.Id')">Cập nhật - </a>
@@ -42,6 +48,7 @@
         }
     </tbody>
 </table>
+
 <script type="text/javascript">
     function deleteEvent(id) {
         if (confirm("Bạn có chắc chắn xóa sự kiện này không?")) {
@@ -86,4 +93,5 @@
                 })
             }
         });
-    }</script>
+    }
+</script>

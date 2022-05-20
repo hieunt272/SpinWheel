@@ -13,7 +13,6 @@ namespace SpinWheel.ViewModel
         public PagedList.IPagedList<Award> Awards { get; set; }
         public int TotalAward { get; set; }
         public string Name { get; set; }
-        [Display(Name = "Danh mục sự kiện")]
         public int? EventId { get; set; }
         public Event Event { get; set; }
         public IEnumerable<Event> Events { get; set; }
@@ -23,8 +22,11 @@ namespace SpinWheel.ViewModel
     public class InsertAwardViewModel
     {
         public Award Award { get; set; }
+        public IEnumerable<Award> Awards { get; set; }
         [Display(Name = "Danh mục sự kiện")]
         public IEnumerable<Event> Events { get; set; }
+        public int TotalAward { get; set; }
+        public int? EventId { get; set; }
     }
     public class ListClientViewModel
     {

@@ -1,0 +1,11 @@
+﻿@model SpinWheel.Models.Client
+
+<form id="info-form">
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="eventId" value="@Model.Event.Id" />
+    <input type="text" class="form-control mx-auto" name="fullname" placeholder="Họ và tên" />
+    <input type="text" class="form-control my-3 mx-auto" name="phone" placeholder="Số điện thoại" />
+    <button type="button" class="btn btn-confirm" onclick="infoConfirm()">Xác nhận</button>
+    <button type="button" class="btn btn-close" onclick="closeModal()">Đóng</button>
+</form>

@@ -238,6 +238,10 @@
     <Compile Include="Migrations\202205040652051_AddQuoteClass.designer.cs">
       <DependentUpon>202205040652051_AddQuoteClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202205050702040_DeleteMobileToContactClass.cs" />
+    <Compile Include="Migrations\202205050702040_DeleteMobileToContactClass.designer.cs">
+      <DependentUpon>202205050702040_DeleteMobileToContactClass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Article.cs" />
@@ -1462,6 +1466,8 @@
     <Content Include="Views\Quote\Quote.cshtml" />
     <Content Include="Views\Quote\UpdateQuote.cshtml" />
     <Content Include="Views\Home\Quote.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\InfoForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -1529,6 +1535,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205040652051_AddQuoteClass.resx">
       <DependentUpon>202205040652051_AddQuoteClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202205050702040_DeleteMobileToContactClass.resx">
+      <DependentUpon>202205050702040_DeleteMobileToContactClass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

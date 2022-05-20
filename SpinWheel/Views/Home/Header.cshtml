@@ -69,14 +69,29 @@
                         }
                     </li>
                     <li><a href="@Url.Action("Quote", "Home")">Phí dịch vụ</a></li>
-                    @if (Model.ArticleCategories.Any())
+                    @if (Model.ArticleCategories.Any(a => a.ParentId == null))
                     {
-                        foreach (var category in Model.ArticleCategories)
+                        foreach (var category in Model.ArticleCategories.Where(a => a.ParentId == null))
                         {
                             <li>
                                 <a href="@Url.Action("ArticleCategory", "Home", new { url = category.Url })">
                                     @category.CategoryName
                                 </a>
+                                @if (Model.ArticleCategories.Any(a => a.ParentId == category.Id))
+                                {
+                                    <div class="drop">
+                                        <ul class="ul-reset sub-nav">
+                                            @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == category.Id))
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("ArticleCategory", new { url = child.Url })">
+                                                        @child.CategoryName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
                             </li>
                         }
                     }

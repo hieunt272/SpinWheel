@@ -15,11 +15,13 @@
 <h2>Danh sách giải thưởng</h2>
 @if (ViewBag.Result == "success")
 {
-    <div id="AlertBox" class="alert alert-success"><strong>Thêm mới giải thưởng thành công</strong></div>}
+    <div id="AlertBox" class="alert alert-success"><strong>Thêm mới giải thưởng thành công</strong></div>
+}
 @if (ViewBag.Result == "update")
 {
-    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật giải thưởng thành công</strong></div>}
-<a class="btn quick-link" href="@Url.Action("Award")"><i class="fal fa-plus-circle mr-1"></i>Thêm giải thưởng</a>
+    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật giải thưởng thành công</strong></div>
+}
+<a class="btn quick-link" href="@Url.Action("Award", "SpinWheel", new { eventId = Model.EventId })"><i class="fal fa-plus-circle mr-1"></i>Sửa giải thưởng</a>
 
 <div class="box_content">
     <div class="form-search-list">
@@ -28,10 +30,6 @@
                 <div class="col-lg-3 col-md-6">
                     Tìm giải thưởng
                     @Html.TextBoxFor(a => a.Name)
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    Sự kiện
-                    @Html.DropDownListFor(a => a.EventId, Model.EventSelectList, "Tất cả")
                 </div>
                 <div class="col-lg-3 col-md-6 align-self-center">
                     <button type="submit" class="btn-search">Tìm kiếm</button>
@@ -53,44 +51,43 @@
                 <th style="width: 150px"></th>
             </tr>
             @foreach (var award in Model.Awards)
-                {
-                    <tr data-id="@award.Id">
-                        <td class="left">
-                            <strong>@award.AwardName</strong>
-                        </td>
-                        <td>
-                            @award.Event.EventName
-                        </td>
-                        <td>
-                            <div class="box-color" style="background: @award.BgColor;"></div>
-                        </td>
-                        <td>
-                            <div class="box-color" style="background: @award.TextColor;"></div>
-                        </td>
-                        <td>@award.Percent</td>
-                        <td>
-                            @if (award.Limited == true)
-                            {
-                                @:Không giới hạn
-                            }
-                            else
-                            {
-                                @award.Quantity
-                            }
-                        </td>
-                        <td>@award.TotalWin</td>
-                        <td>
-                            @Html.ActionLink("Sửa", "UpdateAward", new { awardId = award.Id }) -
-                            <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
-                        </td>
-                    </tr>
-                }
-                @if (Model.Awards.PageCount > 1)
-                {
-                    <tr>
-                        <td colspan="8">@Html.PagedListPager(Model.Awards, page => Url.Action("ListAward", new { page, name = Model.Name }))</td>
-                    </tr>
-                }
+            {
+                <tr data-id="@award.Id">
+                    <td class="left">
+                        <strong>@award.AwardName</strong>
+                    </td>
+                    <td>
+                        @award.Event.EventName
+                    </td>
+                    <td>
+                        <div class="box-color" style="background: @award.BgColor;"></div>
+                    </td>
+                    <td>
+                        <div class="box-color" style="background: @award.TextColor;"></div>
+                    </td>
+                    <td>@award.Percent</td>
+                    <td>
+                        @if (award.Limited == true)
+                        {
+                            @:Không giới hạn
+                        }
+                        else
+                        {
+                            @award.Quantity
+                        }
+                    </td>
+                    <td>@award.TotalWin</td>
+                    <td>
+                        <a href="javascript:;" onclick="deleteAward('@award.Id')" style="color: red;">Xóa</a>
+                    </td>
+                </tr>
+            }
+            @if (Model.Awards.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="8">@Html.PagedListPager(Model.Awards, page => Url.Action("ListAward", new { page, name = Model.Name }))</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

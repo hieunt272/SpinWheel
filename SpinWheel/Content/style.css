@@ -1021,6 +1021,11 @@ a, a:hover {
   padding: 8px 16px;
   border-radius: 3px;
 }
+#info-form .field-validation-error,
+#info-form .field-validation-valid {
+  bottom: 38%;
+  left: 56px;
+}
 
 .modal-title {
   font-size: 1.875rem;
@@ -1479,6 +1484,15 @@ a, a:hover {
   list-style: none;
 }
 
+.field-validation-error,
+.field-validation-valid {
+  color: #c90404;
+  font-size: 0.75rem;
+  position: absolute;
+  bottom: 3%;
+  left: 8%;
+}
+
 /* Responsive */
 @media (max-width: 1600px) {
   .introduce {
@@ -1493,6 +1507,16 @@ a, a:hover {
   .contact-img {
     width: 850px;
     height: 450px;
+  }
+
+  #canvas {
+    width: 500px !important;
+    height: 500px !important;
+  }
+
+  .border-spin {
+    width: 620px;
+    height: 620px;
   }
 }
 @media (max-width: 1366px) {

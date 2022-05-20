@@ -19,27 +19,53 @@
                         <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
                     </tr>
                     <tr>
-                        <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
-                        <td class="form_text">@Html.TextBoxFor(a => Model.BgPC, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
+                        <td class="form_name">@Html.LabelFor(model => model.BgPC)</td>
+                        <td class="form_text">
+                            @Html.TextBoxFor(model => model.BgPC, new { type = "file" })
+                            <p>Kích thước khuyến nghị: 1920 x 1080</p>
+                        </td>
                     </tr>
                     @if (Model.BgPC != null)
                     {
-                        <tr>
+                        <tr id="ImgPreview">
                             <td class="form_name"></td>
-                            <td class="form_text"><img class="img-border" src="@Path.Combine("/images/events/", Model.BgPC)" /></td>
+                            <td class="form_text">
+                                <img class="img-border" src="@Path.Combine("/images/events/",  Model.BgPC)" />
+                                <br />
+                                @if (!string.IsNullOrEmpty(Model.BgPC))
+                                {
+                                    <br /><a href="javascript:;" onclick="$('#ImgPreview').hide(); $('#CurrentFile').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
+                                    <input type="hidden" name="CurrentFile" id="CurrentFile" value="@Model.BgPC" />
+                                }
+                            </td>
                         </tr>
                     }
                     <tr>
-                        <td class="form_name">@Html.LabelFor(a => Model.BgMobile)</td>
-                        <td class="form_text">@Html.TextBoxFor(a => Model.BgMobile, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
+                        <td class="form_name">@Html.LabelFor(model => model.BgMobile)</td>
+                        <td class="form_text">
+                            @Html.TextBoxFor(model => model.BgMobile, new { type = "file" })
+                            <p>Kích thước khuyến nghị: 840 x 1480</p>
+                        </td>
                     </tr>
                     @if (Model.BgMobile != null)
                     {
-                        <tr>
+                        <tr id="ImgPreview">
                             <td class="form_name"></td>
-                            <td class="form_text"><img class="img-border" src="@Path.Combine("/images/events/", Model.BgMobile)" /></td>
+                            <td class="form_text">
+                                <img class="img-border" src="@Path.Combine("/images/events/",  Model.BgMobile)" />
+                                <br />
+                                @if (!string.IsNullOrEmpty(Model.BgMobile))
+                                {
+                                    <br /><a href="javascript:;" onclick="$('#ImgPreview').hide(); $('#CurrentFile1').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
+                                    <input type="hidden" name="CurrentFile1" id="CurrentFile1" value="@Model.BgMobile" />
+                                }
+                            </td>
                         </tr>
                     }
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Active)</td>
+                        <td class="form_text">@Html.CheckBoxFor(a => Model.Active, new { @checked = "checked" })</td>
+                    </tr>
                     <tr>
                         <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
                         <td class="form_text">@Html.EditorFor(a => Model.Url)</td>

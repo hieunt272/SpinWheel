@@ -7,10 +7,12 @@
 <h2>Thêm Sự kiện</h2>
 @if (ViewBag.Result == "success")
 {
-    <div id="AlertBox" class="alert alert-success"><strong>Thêm sự kiện thành công</strong></div>}
+    <div id="AlertBox" class="alert alert-success"><strong>Thêm sự kiện thành công</strong></div>
+}
 @if (ViewBag.Result == "update")
 {
-    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật sự kiện thành công</strong></div>}
+    <div id="AlertBox" class="alert alert-success"><strong>Cập nhật sự kiện thành công</strong></div>
+}
 <a class="btn quick-link" id="create-cat" href="#list-cat"><i class="far fa-list mr-1"></i> Danh sách sự kiện</a>
 <div class="box_content">
     <div class="row">
@@ -18,47 +20,57 @@
             @using (Html.BeginForm("Event", "SpinWheel", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.ValidationSummary(true)
-            <table class="form_table form-table-cat">
-                <tr>
-                    <td class="form_name">@Html.LabelFor(a => Model.EventName)</td>
-                    <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
-                </tr>
-                <tr>
-                    <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
-                    <td class="form_text">@Html.TextBoxFor(a => Model.BgPC, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
-                </tr>
-                <tr>
-                    <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
-                    <td class="form_text">@Html.TextBoxFor(a => Model.BgPC, new { type = "file" }) <span class="red-warring">Chấp nhận ảnh jpg, png, gif, jpeg < 4MB</span></td>
-                </tr>
-                <tr>
-                    <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
-                    <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
-                </tr>
-                <tr>
-                    <td class="form_name">@Html.LabelFor(a => Model.Sort)</td>
-                    <td class="form_text">@Html.EditorFor(a => Model.Sort)</td>
-                </tr>
-                @if (ViewBag.CheckTypeUser == true)
-                {
+                <table class="form_table form-table-cat">
                     <tr>
-                        <td class="form_name"></td>
+                        <td class="form_name">@Html.LabelFor(a => Model.EventName)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.EventName)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.BgPC)</td>
                         <td class="form_text">
-                            <input type="submit" class="btn quick-link" value="Thêm mới" />
+                            @Html.TextBoxFor(a => Model.BgPC, new { type = "file" })
+                            <p>Kích thước khuyến nghị: 1920 x 1080</p>
                         </td>
                     </tr>
-                }
-                else
-                {
                     <tr>
-                        <td class="form_name"></td>
+                        <td class="form_name">@Html.LabelFor(a => Model.BgMobile)</td>
                         <td class="form_text">
-                            <input disabled class="btn quick-link mb-2" value="Thêm mới" />
-                            <span class="text-danger d-block mb-3">Số lượt tạo sự kiện của bạn đã hết. Vui lòng liên hệ quản trị viên để nâng cấp tài khoản</span>
+                            @Html.TextBoxFor(a => Model.BgMobile, new { type = "file" })
+                            <p>Kích thước khuyến nghị: 840 x 1480</p>
                         </td>
                     </tr>
-                }
-            </table>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Active)</td>
+                        <td class="form_text">@Html.CheckBoxFor(a => Model.Active, new { @checked = "checked" })</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Url)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Url)</td>
+                    </tr>
+                    <tr>
+                        <td class="form_name">@Html.LabelFor(a => Model.Sort)</td>
+                        <td class="form_text">@Html.EditorFor(a => Model.Sort)</td>
+                    </tr>
+                    @if (ViewBag.CheckTypeUser == true)
+                    {
+                        <tr>
+                            <td class="form_name"></td>
+                            <td class="form_text">
+                                <input type="submit" class="btn quick-link" value="Thêm mới" />
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="form_name"></td>
+                            <td class="form_text">
+                                <input disabled class="btn quick-link mb-2" value="Thêm mới" />
+                                <span class="text-danger d-block mb-3">Số lượt tạo sự kiện của bạn đã hết. Vui lòng liên hệ quản trị viên để nâng cấp tài khoản</span>
+                            </td>
+                        </tr>
+                    }
+                </table>
             }
         </div>
 

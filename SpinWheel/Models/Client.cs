@@ -11,7 +11,8 @@ namespace SpinWheel.Models
         public int Id { get; set; }
         [Display(Name = "Họ và tên"), StringLength(50, ErrorMessage = "Tối đa 50 ký tự"), UIHint("TextBox")]
         public string Fullname { get; set; }
-        [Display(Name = "Số điện thoại"), StringLength(20, ErrorMessage = "Tối đa 20 ký tự"), UIHint("TextBox")]
+        [Display(Name = "Số điện thoại"), RegularExpression(@"^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$", ErrorMessage = "Số điện thoại không đúng định dạng!"),
+         StringLength(20, ErrorMessage = "Tối đa 20 ký tự"), UIHint("TextBox")]
         public string Mobile { get; set; }
         public DateTime CreateDate { get; set; }
         [Display(Name = "Thời gian quay thưởng gần nhất")]

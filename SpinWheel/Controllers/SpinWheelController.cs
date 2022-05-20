@@ -51,7 +51,7 @@ namespace SpinWheel.Controllers
                 }
             }
             ViewBag.CheckTypeUser = isExist;
-            return View();
+            return View(events);
         }
         [HttpPost]
         public ActionResult Event(Event model)
@@ -59,21 +59,18 @@ namespace SpinWheel.Controllers
             if (ModelState.IsValid)
             {
                 var isPost = true;
-                var file = Request.Files["Event.BgPC"];
+                var file = Request.Files["BgPC"];
                 if (file != null && file.ContentLength > 0)
                 {
-                    if (!HtmlHelpers.CheckFileExt(file.FileName, "jpg|jpeg|png|gif"))
+                    if (file.ContentType != "image/jpeg" & file.ContentType != "image/png" && file.ContentType != "image/gif")
                     {
                         ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                        isPost = false;
                     }
                     else
                     {
-
                         if (file.ContentLength > 4000 * 1024)
                         {
                             ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                            isPost = false;
                         }
                         else
                         {
@@ -84,26 +81,24 @@ namespace SpinWheel.Controllers
                             model.BgPC = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
 
                             var newImage = Image.FromStream(file.InputStream);
-                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 800, 600, false);
+                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 600, 600, false);
                             HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
                         }
                     }
                 }
 
-                var file1 = Request.Files["Event.BgMobile"];
+                var file1 = Request.Files["BgMobile"];
                 if (file1 != null && file1.ContentLength > 0)
                 {
                     if (file1.ContentType != "image/jpeg" & file1.ContentType != "image/png" && file1.ContentType != "image/gif")
                     {
                         ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                        isPost = false;
                     }
                     else
                     {
                         if (file1.ContentLength > 4000 * 1024)
                         {
                             ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                            isPost = false;
                         }
                         else
                         {
@@ -119,6 +114,7 @@ namespace SpinWheel.Controllers
                         }
                     }
                 }
+
                 if (isPost)
                 {
                     model.UserId = userId;
@@ -157,14 +153,12 @@ namespace SpinWheel.Controllers
                     if (file.ContentType != "image/jpeg" & file.ContentType != "image/png" && file.ContentType != "image/gif")
                     {
                         ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                        isPost = false;
                     }
                     else
                     {
                         if (file.ContentLength > 4000 * 1024)
                         {
                             ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                            isPost = false;
                         }
                         else
                         {
@@ -188,21 +182,18 @@ namespace SpinWheel.Controllers
                 {
                     model.BgPC = fc["CurrentFile"];
                 }
-
                 var file1 = Request.Files["BgMobile"];
                 if (file1 != null && file1.ContentLength > 0)
                 {
                     if (file1.ContentType != "image/jpeg" & file1.ContentType != "image/png" && file1.ContentType != "image/gif")
                     {
                         ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                        isPost = false;
                     }
                     else
                     {
                         if (file1.ContentLength > 4000 * 1024)
                         {
                             ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                            isPost = false;
                         }
                         else
                         {
@@ -226,6 +217,7 @@ namespace SpinWheel.Controllers
                 {
                     model.BgMobile = fc["CurrentFile1"];
                 }
+
                 if (isPost)
                 {
                     model.UserId = userId;
@@ -273,39 +265,43 @@ namespace SpinWheel.Controllers
         #endregion
 
         #region Award
-        public ActionResult ListAward(int? page, int? eventId, string name, string result = "")
+        public ActionResult ListAward(int? page, int eventId, string name, string result = "")
         {
             ViewBag.Result = result;
             var pageNumber = page ?? 1;
-            const int pageSize = 15;
-            var events = _unitOfWork.EventRepository.Get(a => a.UserId == userId, o => o.OrderBy(a => a.Sort));
-            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.Event.UserId == userId, l => l.OrderBy(a => a.Id));
+            const int pageSize = 12;
+
+            var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == eventId);
 
             if (!string.IsNullOrEmpty(name))
             {
                 awards = awards.Where(l => l.AwardName.ToLower().Contains(name.ToLower()));
             }
-            if (eventId > 0)
-            {
-                awards = awards.Where(a => a.EventId == eventId);
-            }
 
             var model = new ListAwardViewModel
             {
-                EventSelectList = new SelectList(Events.Where(a => a.UserId == userId), "Id", "EventName"),
-                Events = events,
+                Events = Events.Where(a => a.UserId == userId),
+                EventId = eventId,
                 Awards = awards.ToPagedList(pageNumber, pageSize),
                 Name = name,
-                EventId = eventId,
                 TotalAward = awards.Count(),
             };
             return View(model);
         }
-        public ActionResult Award()
+        public ActionResult Award(int eventId)
         {
+            var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == eventId);
+            var results = awards.GroupBy(
+                a => a.Id,
+                a => a.EventId,
+                (key, g) => new { AwardId = key, EventId = g.ToList() });
             var model = new InsertAwardViewModel
             {
                 Events = Events.Where(a => a.UserId == userId),
+                Awards = awards,
+                TotalAward = awards.Count(),
+                EventId = eventId,
+
             };
             return View(model);
         }
@@ -314,71 +310,88 @@ namespace SpinWheel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var awardName = fc.GetValues("Award.AwardName");
-                var bgColor = fc.GetValues("Award.BgColor");
-                var textColor = fc.GetValues("Award.TextColor");
-                var percent = fc.GetValues("Award.Percent");
-                var quantity = fc.GetValues("Award.Quantity");
-                var limited = fc.GetValues("Award.Limited");
-                for (var i = 0; i < awardName.Length; i++)
+                var awardName = fc.GetValues("AwardName_insert");
+                var bgColor = fc.GetValues("BgColor_insert");
+                var textColor = fc.GetValues("TextColor_insert");
+                var percent = fc.GetValues("Percent_insert");
+                var quantity = fc.GetValues("Quantity_insert");
+                var limited = fc.GetValues("Limited_insert");
+
+                var awardId = fc.GetValues("Award_id");
+                var awardNameUpdate = fc.GetValues("AwardName_update");
+                var bgColorUpdate = fc.GetValues("BgColor_update");
+                var textColorUpdate = fc.GetValues("TextColor_update");
+                var percentUpdate = fc.GetValues("Percent_update");
+                var quantityUpdate = fc.GetValues("Quantity_update");
+                var limitedUpdate = fc.GetValues("item.Limited");
+
+                var events = Convert.ToInt32(fc["EventId"]);
+                var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == events);
+                var awardCount = 12 - awards.Count();
+
+                if (awards.Count() <= 0)
                 {
-                    if (!string.IsNullOrEmpty(awardName[i]))
+                    for (var i = 0; i < 12; i++)
                     {
-                        var award = new Award
+                        if (!string.IsNullOrEmpty(awardName[i]))
                         {
-                            EventId = Convert.ToInt32(fc["EventId"]),
-                            AwardName = awardName[i],
-                            BgColor = bgColor[i],
-                            TextColor = textColor[i],
-                            Percent = percent[i],
-                            Quantity = quantity[i],
-                            Limited = Convert.ToBoolean(limited[i]),
-                            Sort = i
-                        };
-                        _unitOfWork.AwardRepository.Insert(award);
-                        _unitOfWork.Save();
+                            var award = new Award
+                            {
+                                EventId = Convert.ToInt32(fc["EventId"]),
+                                AwardName = awardName[i],
+                                BgColor = bgColor[i],
+                                TextColor = textColor[i],
+                                Percent = percent[i],
+                                Quantity = quantity[i],
+                                Limited = Convert.ToBoolean(limited[i]),
+                                Sort = i
+                            };
+                            _unitOfWork.AwardRepository.Insert(award);
+                        }
                     }
                 }
-                return RedirectToAction("ListAward", new { result = "success" });
-            }
-            return View(model);
-        }
-        public ActionResult UpdateAward(int awardId = 0)
-        {
-            var award = _unitOfWork.AwardRepository.GetById(awardId);
-            if (award == null)
-            {
-                return RedirectToAction("ListAward");
-            }
-            var model = new InsertAwardViewModel
-            {
-                Award = award,
-                Events = Events.Where(a => a.UserId == userId),
-            };
-            return View(model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult UpdateAward(InsertAwardViewModel model, FormCollection fc)
-        {
-            var award = _unitOfWork.AwardRepository.GetById(model.Award.Id);
-            if (award == null)
-            {
-                return RedirectToAction("ListAward");
-            }
-            if (ModelState.IsValid)
-            {
-                award.EventId = Convert.ToInt32(fc["EventId"]);
-                award.AwardName = model.Award.AwardName;
-                award.TextColor = model.Award.TextColor;
-                award.BgColor = model.Award.BgColor;
-                award.Percent = model.Award.Percent;
-                award.Quantity = model.Award.Quantity;
-                award.Limited = model.Award.Limited;
+                else
+                {
+                    for (var i = 0; i < awards.Count(); i++)
+                    {
+                        if (!string.IsNullOrEmpty(awardNameUpdate[i]))
+                        {
+                            var _awardId = Convert.ToInt32(awardId[i]);
+                            var award = _unitOfWork.AwardRepository.GetById(_awardId);
 
+                            award.EventId = Convert.ToInt32(fc["EventId"]);
+                            award.AwardName = awardNameUpdate[i];
+                            award.BgColor = bgColorUpdate[i];
+                            award.TextColor = textColorUpdate[i];
+                            award.Percent = percentUpdate[i];
+                            award.Quantity = quantityUpdate[i];
+                            award.Limited = Convert.ToBoolean(limitedUpdate[i]);
+                            award.Sort = i;
+                            _unitOfWork.Save();
+                        }
+                    }
+                    for (var i = 0; i < awardCount; i++)
+                    {
+                        if (!string.IsNullOrEmpty(awardName[i]))
+                        {
+                            var award = new Award
+                            {
+                                EventId = Convert.ToInt32(fc["EventId"]),
+                                AwardName = awardName[i],
+                                BgColor = bgColor[i],
+                                TextColor = textColor[i],
+                                Percent = percent[i],
+                                Quantity = quantity[i],
+                                Limited = Convert.ToBoolean(limited[i]),
+                                Sort = i
+                            };
+                            _unitOfWork.AwardRepository.Insert(award);
+                        }
+                    }
+                }
                 _unitOfWork.Save();
-                return RedirectToAction("ListAward", new { result = "update" });
+                return RedirectToAction("ListAward", new { result = "success", eventId = Convert.ToInt32(fc["EventId"]) });
             }
-            model.Events = Events;
             return View(model);
         }
         [HttpPost]
@@ -395,14 +408,14 @@ namespace SpinWheel.Controllers
         }
         #endregion
 
-        #region Client 
+        #region Client
         public ActionResult ListClient(int? page, string name, string startDate, string endDate)
         {
-            var pageNumber = page ?? 1; 
+            var pageNumber = page ?? 1;
             const int pageSize = 15;
             var clients = _unitOfWork.ClientRepository.GetQuery(c => c.ListClientAwards.Any(a => a.Award.Event.UserId == userId), o => o.OrderByDescending(a => a.CreateDate));
             var listClientAwards = _unitOfWork.ListClientAwardRepository.GetQuery(a => a.Award.Event.UserId == userId, o => o.OrderByDescending(a => a.Id));
-            if(startDate != null && endDate != null)
+            if (startDate != null && endDate != null)
             {
                 if (DateTime.TryParse(startDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var start))
                 {
@@ -416,7 +429,7 @@ namespace SpinWheel.Controllers
 
             if (!string.IsNullOrEmpty(name))
             {
-                listClientAwards = listClientAwards.Where(l => l.Client.Mobile.ToLower().Contains(name.ToLower()));
+                listClientAwards = listClientAwards.Where(l => l.Award.AwardName.ToLower().Contains(name.ToLower()));
             }
             var model = new ListClientViewModel
             {

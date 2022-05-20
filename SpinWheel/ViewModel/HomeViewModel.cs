@@ -13,14 +13,13 @@ namespace SpinWheel.ViewModel
         public IEnumerable<Product> Products { get; set; }
         public IEnumerable<Article> Articles { get; set; }
         public IEnumerable<Banner> Banners { get; set; }
-        public Contact Contact { get; set; }
     }
 
     public class EventViewModel
     {
-        public IEnumerable<Award> Awards { get; set; }
+        //public IEnumerable<Award> Awards { get; set; }
         public Event Event { get; set; }
-        public IEnumerable<Client> Clients { get; set; }
+        public Client Client { get; set; }
     }
 
     public class ProductDetailViewModel

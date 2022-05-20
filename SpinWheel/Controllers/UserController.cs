@@ -31,13 +31,12 @@ namespace SpinWheel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var emailVal = model.Email.Trim();
                 var phoneVal = model.PhoneNumber.Trim();
 
                 var checkUser = _unitOfWork.UserRepository.GetQuery(a => a.Username.Equals(model.Username)).SingleOrDefault();
                 if (checkUser != null)
                 {
-                    ModelState.AddModelError("", @"Tên đăng nhập đã tồn tại!! Vui lòng nhập tên đăng khác");
+                    ModelState.AddModelError("", @"Tên đăng nhập đã tồn tại!! Vui lòng nhập tên đăng nhập khác");
                 }
                 else
                 {
@@ -46,7 +45,7 @@ namespace SpinWheel.Controllers
                     {
                         Username = model.Username,
                         Password = hashPass,
-                        Email = emailVal,
+                        Email = model.Email,
                         PhoneNumber = phoneVal,
                         Active = true,
                         TypeUser = 0,
@@ -76,7 +75,7 @@ namespace SpinWheel.Controllers
             return View();
         }
         [HttpPost, Route("dang-nhap"), OverrideActionFilters]
-        public ActionResult Login(AdminLoginModel model, string returnUrl)
+        public ActionResult Login(UserLoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {

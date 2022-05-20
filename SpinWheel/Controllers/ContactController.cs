@@ -26,7 +26,7 @@ namespace SpinWheel.Controllers
             var contact = _unitOfWork.ContactRepository.Get(orderBy: l => l.OrderByDescending(a => a.Id));
             if (!string.IsNullOrEmpty(name))
             {
-                contact = contact.Where(l => l.Mobile.ToLower().Contains(name.ToLower()));
+                contact = contact.Where(l => l.Fullname.ToLower().Contains(name.ToLower()));
             }
             var model = new ListContactViewModel
             {

@@ -23,43 +23,46 @@
                     <div class="category-title">
                         danh mục bài viết
                     </div>
-                    <div class="accordion">
-                        @foreach (var item in Model.Categories.Where(p => p.ParentId == null))
-                        {
-                            <div class="card">
-                                <div class="card-header" id="heading-@item.Id">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h2 class="mb-0">
-                                            <a href="@Url.Action("ArticleCategory", "Home", new {url = item.Url})">@item.CategoryName</a>
-                                        </h2>
-                                        @if (Model.Categories.Any(a => a.ParentId == item.Id))
-                                        {
-                                            <button class="btn-card" type="button" data-toggle="collapse" data-target="#collapse-@item.Id" aria-expanded="false" aria-controls="collapse-@item.Id">
-                                                <i class="fas fa-chevron-down"></i>
-                                            </button>
-                                        }
-                                    </div>
-                                </div>
-                                @if (Model.Categories.Where(p => p.ParentId == item.Id).Any())
-                                {
-                                    <div id="collapse-@item.Id" class="collapse">
-                                        <div class="card-body">
-                                            <ul class="pl-0 mb-0">
-                                                @foreach (var child in Model.Categories.Where(p => p.ParentId == item.Id))
-                                                {
-                                                    <li>
-                                                        <a href="@Url.Action("ArticleCategory", "Home", new {url = child.Url})">
-                                                            @child.CategoryName
-                                                        </a>
-                                                    </li>
-                                                }
-                                            </ul>
+                    @if (Model.Categories.Any(a => a.ParentId == null))
+                    {
+                        <div class="accordion">
+                            @foreach (var item in Model.Categories.Where(p => p.ParentId == null))
+                            {
+                                <div class="card">
+                                    <div class="card-header" id="heading-@item.Id">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h2 class="mb-0">
+                                                <a href="@Url.Action("ArticleCategory", "Home", new {url = item.Url})">@item.CategoryName</a>
+                                            </h2>
+                                            @if (Model.Categories.Any(a => a.ParentId == item.Id))
+                                            {
+                                                <button class="btn-card" type="button" data-toggle="collapse" data-target="#collapse-@item.Id" aria-expanded="false" aria-controls="collapse-@item.Id">
+                                                    <i class="fas fa-chevron-down"></i>
+                                                </button>
+                                            }
                                         </div>
                                     </div>
-                                }
-                            </div>
-                        }
-                    </div>
+                                    @if (Model.Categories.Where(p => p.ParentId == item.Id).Any())
+                                    {
+                                        <div id="collapse-@item.Id" class="collapse">
+                                            <div class="card-body">
+                                                <ul class="pl-0 mb-0">
+                                                    @foreach (var child in Model.Categories.Where(p => p.ParentId == item.Id))
+                                                    {
+                                                        <li>
+                                                            <a href="@Url.Action("ArticleCategory", "Home", new {url = child.Url})">
+                                                                @child.CategoryName
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
             <div class="col-lg-9 order-lg-1 order-0">

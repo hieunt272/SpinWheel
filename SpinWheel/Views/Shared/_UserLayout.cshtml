@@ -53,18 +53,16 @@
                         <a class="root expand mb-3" href="@Url.Action("Index","User")">Tổng quan</a>
                     </li>
                     <li data-id="0">
-                        <a class="root"><span>Tài khoản</span><i class="fas fa-caret-down"></i></a>
+                        <a class="root"><i class="fal fa-user icon"></i><span>Tài khoản</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
                             <div>@Html.ActionLink("Đổi mật khẩu", "UserChangePassword", "User", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Đăng xuất", "Logout", "User", null, new { @class = "text_link" })</div>
                         </div>
                     </li>
                     <li data-id="5">
-                        <a class="root"><span>Quản lý Sự kiện</span><i class="fas fa-caret-down"></i></a>
+                        <a class="root"><i class="fal fa-calendar-star icon"></i><span>Quản lý Sự kiện</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
                             <div>@Html.ActionLink("Danh sách sự kiện", "Event", "SpinWheel", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Thêm mới giải thưởng", "Award", "SpinWheel", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Danh sách giải thưởng", "ListAward", "SpinWheel", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Danh sách trúng giải", "ListClient", "SpinWheel", null, new { @class = "text_link" })</div>
                         </div>
                     </li>

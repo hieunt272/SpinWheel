@@ -1,0 +1,23 @@
+﻿@model SpinWheel.Models.Contact
+
+<form id="contact-form">
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            @Html.TextBoxFor(a => Model.Fullname, new { @class = "form-control", @placeholder = "Họ và tên *", @required = "required" })
+            @Html.ValidationMessageFor(a => Model.Fullname)
+        </div>
+        <div class="col-lg-6 col-md-6">
+            @Html.TextBoxFor(a => Model.Email, new { @class = "form-control", @placeholder = "Email *", @required = "required" })
+            @Html.ValidationMessageFor(a => Model.Email)
+        </div>
+    </div>
+    @Html.TextBoxFor(a => Model.Theme, new { @class = "form-control", @placeholder = "Chủ đề *" })
+    @Html.ValidationMessageFor(a => Model.Theme)
+    @Html.TextAreaFor(a => Model.Body, new { @class = "form-control", rows = 5, @placeholder = "Tin nhắn *" })
+    @Html.ValidationMessageFor(a => Model.Body)
+    <button type="submit" class="btn-main">
+        gửi tin nhắn
+    </button>
+</form>

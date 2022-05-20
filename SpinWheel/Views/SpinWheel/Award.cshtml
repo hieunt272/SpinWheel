@@ -2,22 +2,26 @@
 @{
     ViewBag.Title = "Thêm giải thưởng";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
+    var awardCount = 12 - Model.TotalAward;
 }
 
-<a class="btn quick-link" href="@Url.Action("ListAward","SpinWheel")"><i class="far fa-list mr-1"></i> Danh sách giải thưởng</a>
+<a class="btn quick-link" href="@Url.Action("ListAward","SpinWheel", new { eventId = Model.EventId })"><i class="far fa-list mr-1"></i> Danh sách giải thưởng</a>
 <div class="box_content">
     @using (Html.BeginForm("Award", "SpinWheel", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(true)
+        <input type="hidden" value="@awardCount" />
         <table class="form_table">
             <tr>
                 <td class="form_name">@Html.LabelFor(model => model.Award.EventId)</td>
                 <td class="form_text">
                     <select name="EventId" class="form_control w300" required="">
-                        <option value="">Danh mục sự kiện</option>
                         @foreach (var events in Model.Events)
                         {
-                            <option value="@events.Id">@events.EventName</option>
+                            <option value="@events.Id"
+                                    @if (events.Id == Model.EventId) { @Html.Raw("selected='selected'") }>
+                                @events.EventName
+                            </option>
                         }
                     </select>
                 </td>
@@ -31,39 +35,96 @@
                     <th>@Html.LabelFor(model => model.Award.Quantity)</th>
                     <th style="width: 150px;"></th>
                 </tr>
-                @for (var i = 0; i < 12; i++)
+                @if (Model.TotalAward <= 0)
                 {
-                    <tr data-check>
-                        <td class="form_text">@Html.EditorFor(model => model.Award.AwardName)</td>
-                        <td class="form_text">
-                            @Html.TextBoxFor(model => model.Award.BgColor, new Dictionary<string, object>
-                                { { "data-jscolor",
-                                    "{required:true, " +
-                                    "closeButton:true, " +
-                                    "closeText:'Đóng', " +
-                                    "backgroundColor:'#333', " +
-                                    "buttonColor:'#FFF'}"
-                            } })
-                        </td>
-                        <td class="form_text">
-                            @Html.TextBoxFor(model => model.Award.TextColor, new Dictionary<string, object>
-                                { { "data-jscolor",
-                                    "{required:true, " +
-                                    "closeButton:true, " +
-                                    "closeText:'Đóng', " +
-                                    "backgroundColor:'#333', " +
-                                    "buttonColor:'#FFF'}"
-                            } })
-                        </td>
-                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Percent)</td>
-                        <td class="form_text">@Html.TextBoxFor(model => model.Award.Quantity, new { @class = "quantity" })</td>
-                        <td class="form_text">@Html.CheckBoxFor(model => model.Award.Limited, new { @class = "check" }) Không giới hạn</td>
-                    </tr>
+                    for (var i = 0; i < 12; i++)
+                    {
+                        <tr>
+                            <td class="form_text">
+                                <input type="text" name="AwardName_insert" value="" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="BgColor_insert" value=""
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="TextColor_insert" value=""
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Percent_insert" value="" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Quantity_insert" value="" class="form_control quantity" />
+                            </td>
+                            <td class="form_text">
+                                <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
+                                <input name="Limited_insert" type="hidden" value="false" />
+                                Không giới hạn
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    foreach (var item in Model.Awards)
+                    {
+                        <tr>
+                            <input type="hidden" name="Award_id" value="@item.Id" />
+                            <td class="form_text">
+                                <input type="text" name="AwardName_update" value="@item.AwardName" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="BgColor_update" value="@item.BgColor"
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="TextColor_update" value="@item.TextColor"
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Percent_update" value="@item.Percent" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Quantity_update" value="@item.Quantity" class="form_control quantity" />
+                            </td>
+                            <td class="form_text">
+                                @Html.CheckBoxFor(model => item.Limited, new { @class = "check-update" }) Không giới hạn
+                            </td>
+                        </tr>
+                    }
+                    for (var a = 0; a < awardCount; a++)
+                    {
+                        <tr>
+                            <td class="form_text">
+                                <input type="text" name="AwardName_insert" value="" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="BgColor_insert" value=""
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="TextColor_insert" value=""
+                                       data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Percent_insert" value="" class="form_control" />
+                            </td>
+                            <td class="form_text">
+                                <input type="text" name="Quantity_insert" value="" class="form_control quantity" />
+                            </td>
+                            <td class="form_text">
+                                <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
+                                <input name="Limited_insert" type="hidden" value="false" />
+                                Không giới hạn
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
             <tr>
                 <td class="form_text">
-                    <input type="submit" class="btn quick-link" value="Thêm mới" />
+                    <input type="submit" class="btn quick-link" value="Cập nhật" />
                 </td>
             </tr>
         </table>
@@ -73,15 +134,51 @@
 @section scripts{
     <script>
         $('.check').each(function () {
+            var quantity = $(this).parents('tr').find(".quantity");
+            var parent = $(this).parents('td');
             $(this).change(function () {
-                var quantity = $(this).parents('tr').find(".quantity");
                 if (this.checked) {
-                    quantity.attr("disabled", "disabled");
+                    quantity.attr("readonly", "readonly");
+                    quantity.addClass("active");
+                    quantity.val("");
+                    $(this).parents('td').find("input[name='Limited_insert'][type=hidden]").remove();
                 }
                 else {
-                    quantity.removeAttr("disabled");
+                    quantity.removeAttr("readonly");
+                    quantity.removeClass("active");
+                    parent.append('<input name="Limited_insert" type="hidden" value="false"/>');
                 }
             })
+            if (this.checked) {
+                quantity.attr("readonly", "readonly");
+                quantity.addClass("active");
+                quantity.val("");
+                $(this).parents('td').find("input[name='Limited_insert'][type=hidden]").remove();
+                $(this).parents('td').find("input[name='item.Limited'][type=hidden]").remove();
+            }
+        });
+        $('.check-update').each(function () {
+            var quantity = $(this).parents('tr').find(".quantity");
+            var parent = $(this).parents('td');
+            $(this).change(function () {
+                if (this.checked) {
+                    quantity.attr("readonly", "readonly");
+                    quantity.addClass("active");
+                    quantity.val("");
+                    $(this).parents('td').find("input[name='item.Limited'][type=hidden]").remove();
+                }
+                else {
+                    quantity.removeAttr("readonly");
+                    quantity.removeClass("active");
+                    parent.append('<input name="item.Limited" type="hidden" value="false"/>');
+                }
+            })
+            if (this.checked) {
+                quantity.attr("readonly", "readonly");
+                quantity.addClass("active");
+                quantity.val("");
+                $(this).parents('td').find("input[name='item.Limited'][type=hidden]").remove();
+            }
         });
     </script>
 }

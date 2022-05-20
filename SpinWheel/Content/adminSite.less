@@ -598,12 +598,16 @@ input[type=submit]:focus {
     cursor: pointer;
     display: block;
     font-weight: bold;
-    padding: 0px 20px 0px 14px;
+    padding: 0px 20px 0px 30px;
     line-height: 44px;
     overflow: hidden;
     white-space: nowrap;
     text-transform: uppercase;
     background-position: 95%;
+    color: #fff;
+    background: #079AA6;
+    border-radius: 3px;
+    margin-bottom: 5px;
 }
 
 .left_menu_profile ul li a.root:hover {
@@ -725,6 +729,12 @@ input.quick-link {
             margin-right: 10px;
             transition: .1s;
         }
+
+        .icon {
+            font-size: .875rem;
+            top: 14px;
+            right: 195px;
+        }
     }
 
     .expand {
@@ -743,6 +753,10 @@ input.quick-link {
 
         i {
             transform: rotate(-180deg);
+        }
+
+        .icon {
+            transform: rotate(0);
         }
     }
 
@@ -1606,5 +1620,14 @@ h2 {
     cursor: pointer;
     padding: 5px 10px;
     border: 1px solid #ccc;
-    width: 100%;
+    width: 200px;
+}
+
+.quantity.active {
+    background: #fafafa;
+    cursor: default;
+
+    &:focus {
+        border-color: #bebebe;
+    }
 }

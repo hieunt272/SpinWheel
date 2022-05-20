@@ -5,6 +5,7 @@ using SpinWheel.Models;
 using SpinWheel.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Configuration;
@@ -27,7 +28,6 @@ namespace SpinWheel.Controllers
         {
             var model = new HomeViewModel
             {
-                Contact = new Contact(),
                 Products = _unitOfWork.ProductRepository.GetQuery(a => a.Active),
                 Banners = _unitOfWork.BannerRepository.Get(b => b.Active, o => o.OrderBy(b => b.Sort)),
                 Articles = _unitOfWork.ArticleRepository.Get(a => a.Active && a.Home && a.ArticleCategory.TypePost == TypePost.Article, o => o.OrderByDescending(a => a.CreateDate), 5),
@@ -39,7 +39,7 @@ namespace SpinWheel.Controllers
         {
             var model = new HeaderViewModel
             {
-                ArticleCategories = ArticleCategories.Where(a => a.ShowMenu),
+                ArticleCategories = ArticleCategories.Where(a => a.ShowMenu && a.ParentId == null),
                 Products = _unitOfWork.ProductRepository.GetQuery(p => p.Active && p.ShowMenu)
             };
             return PartialView(model);
@@ -57,6 +57,11 @@ namespace SpinWheel.Controllers
         }
         #endregion
 
+        [ChildActionOnly]
+        public PartialViewResult Contact()
+        {
+            return PartialView();
+        }
         [HttpPost, ValidateAntiForgeryToken]
         public JsonResult Contact(Contact model)
         {
@@ -117,7 +122,7 @@ namespace SpinWheel.Controllers
             {
                 Category = category,
                 Articles = articles.ToPagedList(pageNumber, 12),
-                Categories = ArticleCategories
+                Categories = ArticleCategories.Where(a => a.CategoryActive && a.TypePost == TypePost.Article)
             };
 
             if (category.ParentId != null)
@@ -126,7 +131,7 @@ namespace SpinWheel.Controllers
             }
             return View(model);
         }
-        [Route("bai-viet", Order = 3)]
+        [Route("bai-viet")]
         public ActionResult AllArticle(int? page)
         {
             var pageNumber = page ?? 1;
@@ -134,7 +139,7 @@ namespace SpinWheel.Controllers
             var model = new AllArticleViewModel()
             {
                 Articles = article.ToPagedList(pageNumber, 12),
-                Categories = ArticleCategories,
+                Categories = ArticleCategories.Where(a => a.TypePost == TypePost.Article),
             };
             return View(model);
         }
@@ -145,7 +150,7 @@ namespace SpinWheel.Controllers
             {
                 RootId = rootId,
                 CatId = catId,
-                ArticleCategories = ArticleCategories.Where(a => a.CategoryActive),
+                ArticleCategories = ArticleCategories.Where(a => a.TypePost == TypePost.Article),
                 Articles = _unitOfWork.ArticleRepository.GetQuery(l => l.Active && l.ArticleCategory.TypePost == TypePost.Article,
                 a => a.OrderByDescending(c => c.CreateDate), 6)
             };
@@ -213,6 +218,7 @@ namespace SpinWheel.Controllers
         {
             var fullName = fc["fullname"];
             var phone = fc["phone"];
+
             var awardId = Convert.ToInt32(fc["awardId"]);
             var award = _unitOfWork.AwardRepository.GetById(awardId);
             model.Mobile = phone;
@@ -247,11 +253,9 @@ namespace SpinWheel.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var award = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id);
             var model = new EventViewModel
             {
                 Event = events,
-                Awards = award
             };
             return View(model);
         }
