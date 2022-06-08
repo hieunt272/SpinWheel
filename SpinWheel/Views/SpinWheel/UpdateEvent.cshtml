@@ -49,14 +49,14 @@
                     </tr>
                     @if (Model.BgMobile != null)
                     {
-                        <tr id="ImgPreview">
+                        <tr id="ImgPreview1">
                             <td class="form_name"></td>
                             <td class="form_text">
                                 <img class="img-border" src="@Path.Combine("/images/events/",  Model.BgMobile)" />
                                 <br />
                                 @if (!string.IsNullOrEmpty(Model.BgMobile))
                                 {
-                                    <br /><a href="javascript:;" onclick="$('#ImgPreview').hide(); $('#CurrentFile1').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
+                                    <br /><a href="javascript:;" onclick="$('#ImgPreview1').hide(); $('#CurrentFile1').val('');"><img src="/Content/admin/icon-delete-red.png" alt="" style="vertical-align: middle; margin-top: 0; height: 10px;" /> Xóa ảnh</a>
                                     <input type="hidden" name="CurrentFile1" id="CurrentFile1" value="@Model.BgMobile" />
                                 }
                             </td>

@@ -11,6 +11,8 @@ namespace SpinWheel.Models
         public int Id { get; set; }
         [Display(Name = "Tên giải thưởng"), StringLength(100, ErrorMessage = "Tối đa 100 ký tự"), UIHint("TextBox")]
         public string AwardName { get; set; }
+        [Display(Name = "Hình ảnh"), StringLength(500), UIHint("UploadMultiFile")]
+        public string Image { get; set; }
         [Display(Name = "Màu nền"), Required(ErrorMessage = "Hãy chọn màu nền"), UIHint("TextBox")]
         public string BgColor { get; set; }
         [Display(Name = "Màu chữ"), Required(ErrorMessage = "Hãy chọn màu chữ"), UIHint("TextBox")]

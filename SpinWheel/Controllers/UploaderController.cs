@@ -53,7 +53,7 @@ namespace SpinWheel.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFile(string name, string folder = "products")
+        public ActionResult DeleteFile(string name, string folder = "awards")
         {
             GetFileInfo(name, folder).Delete();
             return Json($"{name} was deleted");
@@ -96,7 +96,7 @@ namespace SpinWheel.Controllers
         }
 
         [HttpPost]
-        public JsonResult Upload(string folder = "products")
+        public JsonResult Upload(string folder = "awards")
         {
             var array = Request.Files.Cast<string>().Select(k => Request.Files[k]).ToArray();
             var stringList = new List<string>();
@@ -136,7 +136,7 @@ namespace SpinWheel.Controllers
             return directoryInfo;
         }
 
-        private static FileInfo GetFileInfo(string name, string folder = "products")
+        private static FileInfo GetFileInfo(string name, string folder = "awards")
         {
             return GetUploadFolder(folder).GetFiles(name).Single();
         }

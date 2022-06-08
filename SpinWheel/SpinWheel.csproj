@@ -242,6 +242,10 @@
     <Compile Include="Migrations\202205050702040_DeleteMobileToContactClass.designer.cs">
       <DependentUpon>202205050702040_DeleteMobileToContactClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206050416390_AddImageToAwardClass.cs" />
+    <Compile Include="Migrations\202206050416390_AddImageToAwardClass.designer.cs">
+      <DependentUpon>202206050416390_AddImageToAwardClass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Admin.cs" />
     <Compile Include="Models\Article.cs" />
@@ -319,6 +323,7 @@
     <Content Include="Content\images\img-main\bg-why %282%29.png" />
     <Content Include="Content\images\img-main\bg-why %283%29.png" />
     <Content Include="Content\images\img-main\bg-why.png" />
+    <Content Include="Content\images\img-main\border-spin %281%29.png" />
     <Content Include="Content\images\img-main\border-spin.png" />
     <Content Include="Content\images\img-main\icon-intro %281%29.png" />
     <Content Include="Content\images\img-main\icon-intro %282%29.png" />
@@ -335,6 +340,8 @@
     <Content Include="Content\images\img-main\img-contact.png" />
     <Content Include="Content\images\img-main\img-why.png" />
     <Content Include="Content\images\img-main\logo-BCT.png" />
+    <Content Include="Content\images\img-main\pop-up-winner.png" />
+    <Content Include="Content\images\img-main\start-spin %281%29.png" />
     <Content Include="Content\images\img-main\start-spin.png" />
     <Content Include="Content\images\svg-contact\earth.svg" />
     <Content Include="Content\images\svg-contact\email.svg" />
@@ -353,7 +360,11 @@
     <Content Include="Content\skitter.css" />
     <Content Include="Content\slick.css" />
     <Content Include="Content\sound\applause.mp3" />
+    <Content Include="Content\sound\clickingsound.mp3" />
     <Content Include="Content\sound\ding.mp3" />
+    <Content Include="Content\sound\fanfare-winner.mp3" />
+    <Content Include="Content\sound\foundMa.mp3" />
+    <Content Include="Content\sound\tick.mp3" />
     <Content Include="Content\style.css">
       <DependentUpon>style.scss</DependentUpon>
     </Content>
@@ -779,6 +790,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202205050702040_DeleteMobileToContactClass.resx">
       <DependentUpon>202205050702040_DeleteMobileToContactClass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206050416390_AddImageToAwardClass.resx">
+      <DependentUpon>202206050416390_AddImageToAwardClass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

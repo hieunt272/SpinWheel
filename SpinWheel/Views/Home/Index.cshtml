@@ -85,10 +85,12 @@
                 @foreach (var item in Model.Banners.Where(b => b.GroupId == 1))
                 {
                     <div class="partner-item">
-                        @if (item.Image != null)
-                        {
-                            <img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
-                        }
+                        <a href="@item.Url">
+                            @if (item.Image != null)
+                            {
+                                <img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
+                            }
+                        </a>
                     </div>
                 }
             </div>

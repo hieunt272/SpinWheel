@@ -956,7 +956,7 @@ a, a:hover {
 .card-info {
   width: 500px;
   height: 150px;
-  margin-top: 30px;
+  margin: 30px auto 0;
   opacity: 0;
   visibility: hidden;
   transform: translateY(30px);
@@ -994,13 +994,23 @@ a, a:hover {
   border-radius: 50%;
   background: #ccc;
 }
+#canvas::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 40px 34px #00000042;
+}
 
 .border-spin {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 740px;
-  height: 740px;
+  width: 750px;
+  height: 750px;
   transform: translate(-50%, -51%);
   background: url("images/img-main/border-spin.png") no-repeat top center/contain;
 }
@@ -1009,29 +1019,113 @@ a, a:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-52%, -62%);
-  width: 100px;
-  height: 120px;
+  transform: translate(-51%, -62%);
+  width: 140px;
+  height: 190px;
   background: url("images/img-main/start-spin.png") no-repeat top center/contain;
   cursor: pointer;
+}
+.start-spin span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "LatoBold";
+  color: #fff;
+  margin-top: 25px;
+  margin-left: 3px;
+  font-size: 1.25rem;
+  transform: translateY(79px);
 }
 
 #info-form .form-control {
   width: 90%;
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  border-radius: 3px;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+  border-radius: 0;
+}
+#info-form .form-control::placeholder {
+  color: #fff;
+}
+#info-form .form-control:focus {
+  box-shadow: none;
 }
 #info-form .field-validation-error,
 #info-form .field-validation-valid {
-  bottom: 38%;
-  left: 56px;
+  bottom: 35%;
+  left: 40px;
+  color: #fff;
+}
+
+.winner {
+  position: relative;
+  background: url("images/img-main/pop-up-winner.png") no-repeat top center/100% 100%;
+  margin: 50px auto;
+  width: 500px;
+  height: 580px;
+  box-shadow: 0 0 200px 1300px rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.winner.active {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s linear;
+}
+
+.award-text {
+  margin: 70px 0 10px;
+  font-size: 1.5rem;
+  font-family: "LatoBold";
+}
+
+.award-img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  padding: 3px;
+}
+.award-img[src=""] {
+  display: none;
+}
+
+.btn-continue {
+  position: absolute;
+  bottom: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: #D6410C;
+  width: 370px;
+  text-align: center;
+  background: linear-gradient(180deg, #FEEE5F 0%, #FFC508 100%);
+  border-radius: 50px;
+  padding: 19px 0;
+  cursor: pointer;
+}
+
+.modal-content {
+  background: rgba(44, 62, 80, 0.85);
+  border-radius: 10px;
 }
 
 .modal-title {
   font-size: 1.875rem;
   text-align: center;
-  margin: 10px 0 10px;
+  margin: 15px 0 10px;
+  color: #fff;
 }
 
 .btn-confirm,
@@ -1055,7 +1149,14 @@ a, a:hover {
 }
 
 .swal2-modal {
-  width: 350px !important;
+  width: 400px !important;
+}
+
+.swal2-icon-warning {
+  width: 500px !important;
+}
+.swal2-icon-warning .swal2-title {
+  font-size: 1.5rem !important;
 }
 
 .swal2-warning {
@@ -1079,6 +1180,14 @@ a, a:hover {
   top: 23px !important;
   width: 35px !important;
   right: 7px !important;
+}
+
+.swal2-question {
+  width: 50px !important;
+  height: 50px !important;
+}
+.swal2-question .swal2-icon-content {
+  font-size: 2.5rem !important;
 }
 
 .limiter {
@@ -1548,6 +1657,19 @@ a, a:hover {
 
   .article-item img {
     height: 195px;
+  }
+
+  .winner {
+    margin: 10px auto 0;
+    width: 400px;
+    height: 430px;
+  }
+
+  .btn-continue {
+    bottom: 25px;
+    width: 280px;
+    padding: 12px 0 8px;
+    font-size: 1.25rem;
   }
 }
 @media (max-width: 840px) {

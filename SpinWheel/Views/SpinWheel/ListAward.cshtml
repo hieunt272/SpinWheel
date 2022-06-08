@@ -11,6 +11,9 @@
         height: 30px;
         border: 1px solid;
     }
+    .img-border {
+        width: 100px;
+    }
 </style>
 <h2>Danh sách giải thưởng</h2>
 @if (ViewBag.Result == "success")
@@ -41,20 +44,30 @@
     <table class="list_table tablecenter table-striped">
         <tbody>
             <tr>
-                <th style="width: 250px">Tên giải thưởng</th>
+                <th style="width: 200px">Tên giải thưởng</th>
+                <th>Hình ảnh</th>
                 <th>Sự kiện</th>
                 <th>Màu nền</th>
                 <th>Màu chữ</th>
                 <th>Tỷ lệ trúng (%)</th>
                 <th>Tổng số lượng</th>
                 <th>Tổng số giải đã trúng</th>
-                <th style="width: 150px"></th>
+                <th style="width: 100px"></th>
             </tr>
             @foreach (var award in Model.Awards)
             {
                 <tr data-id="@award.Id">
                     <td class="left">
                         <strong>@award.AwardName</strong>
+                    </td>
+                    <td>
+                        @if (award.Image != "")
+                        {
+                            <img class="img-border" src="@Path.Combine("/images/awards/", award.Image)" /> }
+                        else
+                        {
+                            @:NO PICTURE
+                        }
                     </td>
                     <td>
                         @award.Event.EventName

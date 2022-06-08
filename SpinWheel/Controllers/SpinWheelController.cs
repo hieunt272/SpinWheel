@@ -12,6 +12,11 @@ using System.Web.Mvc;
 using SpinWheel.Filters;
 using System.Data.Entity;
 using System.Globalization;
+using System.Web;
+using System.Web.Hosting;
+using System.Drawing.Drawing2D;
+using System.Drawing.Text;
+using System.Drawing.Imaging;
 
 namespace SpinWheel.Controllers
 {
@@ -79,10 +84,7 @@ namespace SpinWheel.Controllers
                             var imgFileName = DateTime.Now.ToFileTimeUtc() + Path.GetExtension(file.FileName);
 
                             model.BgPC = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-
-                            var newImage = Image.FromStream(file.InputStream);
-                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 600, 600, false);
-                            HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
                         }
                     }
                 }
@@ -109,8 +111,7 @@ namespace SpinWheel.Controllers
                             model.BgMobile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
 
                             var newImage = Image.FromStream(file1.InputStream);
-                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 600, 600, false);
-                            HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
                         }
                     }
                 }
@@ -118,7 +119,7 @@ namespace SpinWheel.Controllers
                 if (isPost)
                 {
                     model.UserId = userId;
-                    model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName);
+                    model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName) + "-" + userId;
                     var countUrl = _unitOfWork.EventRepository.GetQuery(a => a.Url == model.Url).Count();
                     if (countUrl > 1)
                     {
@@ -171,10 +172,7 @@ namespace SpinWheel.Controllers
                                 System.IO.File.Delete(Server.MapPath("/images/events/" + model.BgPC));
                             }
                             model.BgPC = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-
-                            var newImage = Image.FromStream(file.InputStream);
-                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 600, 600, false);
-                            HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
                         }
                     }
                 }
@@ -206,10 +204,7 @@ namespace SpinWheel.Controllers
                                 System.IO.File.Delete(Server.MapPath("/images/events/" + model.BgMobile));
                             }
                             model.BgMobile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-
-                            var newImage = Image.FromStream(file1.InputStream);
-                            var fixSizeImage = HtmlHelpers.FixedSize(newImage, 600, 600, false);
-                            HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
                         }
                     }
                 }
@@ -316,6 +311,7 @@ namespace SpinWheel.Controllers
                 var percent = fc.GetValues("Percent_insert");
                 var quantity = fc.GetValues("Quantity_insert");
                 var limited = fc.GetValues("Limited_insert");
+                var image = fc.GetValues("Pictures_insert");
 
                 var awardId = fc.GetValues("Award_id");
                 var awardNameUpdate = fc.GetValues("AwardName_update");
@@ -324,6 +320,7 @@ namespace SpinWheel.Controllers
                 var percentUpdate = fc.GetValues("Percent_update");
                 var quantityUpdate = fc.GetValues("Quantity_update");
                 var limitedUpdate = fc.GetValues("item.Limited");
+                var imageUpdate = fc.GetValues("Pictures_update");
 
                 var events = Convert.ToInt32(fc["EventId"]);
                 var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == events);
@@ -344,7 +341,8 @@ namespace SpinWheel.Controllers
                                 Percent = percent[i],
                                 Quantity = quantity[i],
                                 Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i
+                                Sort = i,
+                                Image = image[i],
                             };
                             _unitOfWork.AwardRepository.Insert(award);
                         }
@@ -367,6 +365,7 @@ namespace SpinWheel.Controllers
                             award.Quantity = quantityUpdate[i];
                             award.Limited = Convert.ToBoolean(limitedUpdate[i]);
                             award.Sort = i;
+                            award.Image = imageUpdate[i];
                             _unitOfWork.Save();
                         }
                     }
@@ -383,7 +382,8 @@ namespace SpinWheel.Controllers
                                 Percent = percent[i],
                                 Quantity = quantity[i],
                                 Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i
+                                Sort = i,
+                                Image = image[i],
                             };
                             _unitOfWork.AwardRepository.Insert(award);
                         }
@@ -458,6 +458,168 @@ namespace SpinWheel.Controllers
             return true;
         }
         #endregion
+
+        #region Upload
+        [HttpGet]
+        public JsonResult Upload(IEnumerable<string> names, string folder)
+        {
+            if (names == null)
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+
+            var f = GetUploadFolder(folder).GetFiles();
+            var listFile = (from fileInfo in f from name in names where name.Contains(fileInfo.Name) select fileInfo.Name).ToList();
+
+            return Json(new
+            {
+                files = listFile.Select(
+                    file => new
+                    {
+                        deleteType = "POST",
+                        name = DateTime.Now.ToString("yyyy/MM/dd") + "/" + file,
+                        size = file.Length,
+                        url = Url.Action("GetFile", "Uploader", new
+                        {
+                            Name = file
+                        }),
+                        thumbnailUrl = Url.Action("GetFile", "Uploader", new
+                        {
+                            Name = file,
+                            thumbnail = true
+                        }),
+                        deleteUrl = Url.Action("DeleteFile", "Uploader", new
+                        {
+                            Name = file
+                        })
+                    })
+            }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult Upload(string folder = "awards")
+        {
+            var array = Request.Files.Cast<string>().Select(k => Request.Files[k]).ToArray();
+            var stringList = new List<string>();
+            foreach (var file in array)
+            {
+                var disk = SaveFileToDisk(file, folder);
+                stringList.Add(disk);
+            }
+            return Upload(stringList, folder);
+        }
+        private string SaveFileToDisk(HttpPostedFileBase fileData, string folderPath)
+        {
+            var folderDate = DateTime.Now.ToString("yyyy/MM/dd");
+            var folder = "~/images/" + folderPath + "/" + folderDate;
+            var result = "";
+            if (fileData.ContentLength <= 4000 * 1024 &&
+                HtmlHelpers.CheckFileExt(Path.GetExtension(fileData.FileName), "jpg|png|gif|jpeg"))
+            {
+                HtmlHelpers.CreateFolder(Server.MapPath(folder));
+
+                var randomName = HtmlHelpers.ConvertToUnSign(null, Path.GetFileNameWithoutExtension(fileData.FileName)) + "-" + DateTime.Now.Millisecond + Path.GetExtension(fileData.FileName);
+
+                var fileName = Server.MapPath(Path.Combine(folder, randomName));
+
+                Resize(fileData, 1200, 900, Path.Combine(folder, fileName));
+                result = folderDate + "/" + randomName;
+            }
+            return result;
+        }
+        private static DirectoryInfo GetUploadFolder(string folder)
+        {
+            var directoryInfo = new DirectoryInfo(HostingEnvironment.MapPath(Path.Combine("/images/" + folder + "/" + DateTime.Now.ToString("yyyy/MM/dd"))));
+            if (!directoryInfo.Exists)
+                directoryInfo.Create();
+            return directoryInfo;
+        }
+        public static void Resize(HttpPostedFileBase originalImage, int maxWidth, int maxHeight, string path, string font = null, int fontsize = 0)
+        {
+            var originalBmp = new Bitmap(originalImage.InputStream);
+            //Check EXIF
+            if (originalBmp.PropertyIdList.Contains(0x0112))
+            {
+                int rotationValue = originalBmp.GetPropertyItem(0x0112).Value[0];
+                switch (rotationValue)
+                {
+                    case 1: // landscape, do nothing
+                        break;
+                    case 8: // rotated 90 right
+                        // de-rotate:
+                        originalBmp.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        break;
+
+                    case 3: // bottoms up
+                        originalBmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        break;
+
+                    case 6: // rotated 90 left
+                        originalBmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        break;
+                }
+            }
+
+            float origWidth = originalBmp.Width;
+            float origHeight = originalBmp.Height;
+            float sngRatio;
+
+            if (origWidth > maxWidth)
+            {
+                sngRatio = maxWidth / origWidth;
+                origWidth = maxWidth;
+                origHeight = origHeight * sngRatio;
+            }
+
+            if (origHeight > maxHeight)
+            {
+                sngRatio = maxHeight / origHeight;
+                origHeight = maxHeight;
+                origWidth = origWidth * sngRatio;
+            }
+
+            var newBmp = new Bitmap(originalBmp, (int)origWidth, (int)origHeight);
+            var oGraphics = Graphics.FromImage(newBmp);
+
+            oGraphics.SmoothingMode = SmoothingMode.HighQuality;
+            oGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            oGraphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            oGraphics.CompositingQuality = CompositingQuality.HighQuality;
+
+            if (font != null)
+            {
+                using (var font1 = new Font(font, fontsize, FontStyle.Bold, GraphicsUnit.Pixel))
+                {
+                    var rect1 = new Rectangle(0, 0, (int)origWidth - 1, (int)origHeight - 1);
+                    var rect2 = new Rectangle(0, 0, (int)origWidth, (int)origHeight);
+
+                    var stringFormat = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Far };
+
+                    oGraphics.DrawString("www.vico.vn", font1, new SolidBrush(Color.FromArgb(255, Color.Black)), rect1, stringFormat);
+                    oGraphics.DrawString("www.vico.vn", font1, new SolidBrush(Color.FromArgb(255, Color.White)), rect2, stringFormat);
+                    //oGraphics.DrawRectangle(Pens.DarkRed, rect1);
+                }
+            }
+
+            oGraphics.DrawImage(newBmp, 0, 0, origWidth, origHeight);
+
+            //var jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+            var mimeType = HtmlHelpers.GetMimeType(originalImage.FileName);
+            var jgpEncoder = HtmlHelpers.GetEncoderInfo(mimeType);
+
+            var myEncoder = Encoder.Quality;
+            var myEncoderParameters = new EncoderParameters(1);
+
+            var myEncoderParameter = new EncoderParameter(myEncoder, 90L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+
+            newBmp.Save(path, jgpEncoder, myEncoderParameters);
+
+            originalBmp.Dispose();
+            newBmp.Dispose();
+            oGraphics.Dispose();
+        }
+        #endregion
+
         protected override void Dispose(bool disposing)
         {
             _unitOfWork.Dispose();

@@ -274,6 +274,7 @@ namespace SpinWheel.Controllers
                 quantity = a.Quantity,
                 totalWin = a.TotalWin,
                 id = a.Id,
+                image = a.Image,
             });
             return Json(awards, JsonRequestBehavior.AllowGet);
         }

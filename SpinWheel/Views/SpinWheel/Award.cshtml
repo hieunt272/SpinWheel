@@ -4,6 +4,20 @@
     Layout = "~/Views/Shared/_UserLayout.cshtml";
     var awardCount = 12 - Model.TotalAward;
 }
+<style>
+    .check-update {
+        margin-top: 5px;
+    }
+
+    .fileinput-button {
+        margin: -5px auto 16px;
+        padding: 4px 12px;
+    }
+
+    #ListImages li a {
+        display: none;
+    }
+</style>
 
 <a class="btn quick-link" href="@Url.Action("ListAward","SpinWheel", new { eventId = Model.EventId })"><i class="far fa-list mr-1"></i> Danh sách giải thưởng</a>
 <div class="box_content">
@@ -28,36 +42,51 @@
             </tr>
             <tbody>
                 <tr>
-                    <th style="width: 300px;">@Html.LabelFor(model => model.Award.AwardName)</th>
+                    <th style="width: 250px;">@Html.LabelFor(model => model.Award.AwardName)</th>
+                    <th style="width: 150px;">@Html.LabelFor(model => model.Award.Image)</th>
                     <th>@Html.LabelFor(model => model.Award.BgColor)</th>
                     <th>@Html.LabelFor(model => model.Award.TextColor)</th>
                     <th>@Html.LabelFor(model => model.Award.Percent)</th>
                     <th>@Html.LabelFor(model => model.Award.Quantity)</th>
-                    <th style="width: 150px;"></th>
+                    <th style="width: 120px;"></th>
                 </tr>
                 @if (Model.TotalAward <= 0)
                 {
                     for (var i = 0; i < 12; i++)
                     {
                         <tr>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="AwardName_insert" value="" class="form_control" />
                             </td>
-                            <td class="form_text">
+                            <td class="form-text" valign="top">
+                                <p class="btn btn-success fileinput-button">
+                                    <span>Chọn ảnh...</span>
+                                    <input type="file" class="fileupload" name="files[]" accept="image/*" multiple="" />
+                                </p>
+                                <ul id="ListImages" class="ListImages">
+                                    <li>
+                                        <input type="hidden" name="Pictures_insert" value="" />
+                                        <a href="javascript:;" class="delfile">
+                                            <img src="/content/admin/icon-delete.png" alt="" style="vertical-align:middle" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="form_text" valign="top">
                                 <input type="text" name="BgColor_insert" value=""
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="TextColor_insert" value=""
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Percent_insert" value="" class="form_control" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Percent_insert" value="" class="form_control" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Quantity_insert" value="" class="form_control quantity" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Quantity_insert" value="" class="form_control quantity" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
                                 <input name="Limited_insert" type="hidden" value="false" />
                                 Không giới hạn
@@ -71,24 +100,51 @@
                     {
                         <tr>
                             <input type="hidden" name="Award_id" value="@item.Id" />
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="AwardName_update" value="@item.AwardName" class="form_control" />
                             </td>
-                            <td class="form_text">
+                            <td class="form-text" valign="top">
+                                <p class="btn btn-success fileinput-button">
+                                    <span>Chọn ảnh...</span>
+                                    <input type="file" class="fileupload" name="files[]" accept="image/*" multiple="" />
+                                </p>
+                                <ul id="ListImages" class="ListImages">
+                                    @if (item.Image != "")
+                                    {
+                                        <li>
+                                            <img src="@Path.Combine("/images/awards/", item.Image)?w=80&h=80&mode=crop" alt="" class="img-award" />
+                                            <input type="hidden" name="Pictures_update" value="@item.Image" />
+                                            <a href="javascript:;" class="delfile" style="display: block;">
+                                                <img src="/content/admin/icon-delete.png" alt="" style="vertical-align:middle" />
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <input type="hidden" name="Pictures_update" value="" />
+                                            <a href="javascript:;" class="delfile">
+                                                <img src="/content/admin/icon-delete.png" alt="" style="vertical-align:middle" />
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td class="form_text" valign="top">
                                 <input type="text" name="BgColor_update" value="@item.BgColor"
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="TextColor_update" value="@item.TextColor"
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Percent_update" value="@item.Percent" class="form_control" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Percent_update" value="@item.Percent" class="form_control" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Quantity_update" value="@item.Quantity" class="form_control quantity" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Quantity_update" value="@item.Quantity" class="form_control quantity" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 @Html.CheckBoxFor(model => item.Limited, new { @class = "check-update" }) Không giới hạn
                             </td>
                         </tr>
@@ -96,24 +152,38 @@
                     for (var a = 0; a < awardCount; a++)
                     {
                         <tr>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="AwardName_insert" value="" class="form_control" />
                             </td>
-                            <td class="form_text">
+                            <td class="form-text" valign="top">
+                                <p class="btn btn-success fileinput-button">
+                                    <span>Chọn ảnh...</span>
+                                    <input type="file" class="fileupload" name="files[]" accept="image/*" multiple="" />
+                                </p>
+                                <ul id="ListImages" class="ListImages">
+                                    <li>
+                                        <input type="hidden" name="Pictures_insert" value="" />
+                                        <a href="javascript:;" class="delfile">
+                                            <img src="/content/admin/icon-delete.png" alt="" style="vertical-align:middle" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td class="form_text" valign="top">
                                 <input type="text" name="BgColor_insert" value=""
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input type="text" name="TextColor_insert" value=""
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Percent_insert" value="" class="form_control" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Percent_insert" value="" class="form_control" />
                             </td>
-                            <td class="form_text">
-                                <input type="text" name="Quantity_insert" value="" class="form_control quantity" />
+                            <td class="form_text" valign="top">
+                                <input type="number" name="Quantity_insert" value="" class="form_control quantity" />
                             </td>
-                            <td class="form_text">
+                            <td class="form_text" valign="top">
                                 <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
                                 <input name="Limited_insert" type="hidden" value="false" />
                                 Không giới hạn
@@ -133,6 +203,64 @@
 
 @section scripts{
     <script>
+        $(function () {
+            $(".ListImages").sortable();
+            $(".ListImages").disableSelection();
+        });
+        var i = 1;
+        $('.fileupload').each(function () {
+            var item = $(this).parents('tr').find('.ListImages li');
+            $(this).fileupload({
+                add: function (e, data) {
+                    var uploadErrors = [];
+                    var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
+                    if (data.originalFiles[0]["type"].length && !acceptFileTypes.test(data.originalFiles[0]["type"])) {
+                        uploadErrors.push("Chỉ chấp nhận định dạng jpeg, jpg, png, gif");
+                    }
+                    if (data.originalFiles[0]["size"] > 4000000) {
+                        uploadErrors.push("Dung lượng ảnh lớn hơn 4MB");
+                    }
+                    var totalImg = item.find('img').length;
+                    if (totalImg >= 2) {
+                        uploadErrors.push("Chỉ chọn tối đa 1 ảnh");
+                    }
+                    if (uploadErrors.length > 0) {
+                        alert(uploadErrors.join("\n"));
+                        return false;
+                    } else {
+                        data.submit();
+                    }
+                    return true;
+                },
+                url: "/SpinWheel/Upload?folder=awards&r=" + Math.random(),
+                dataType: "json",
+                done: function (e, data) {
+                    $.each(data.result.files, function (index, file) {
+                        item.find('input').val(file.name);
+                        item.prepend('<img src="/images/awards/' + file.name + '?w=80&h=80" class="img-award"/>');
+                        item.find('.delfile').css('display', 'block');
+                    });
+                },
+                start: function () {
+                    $("#progress .progress-bar").css("width", "0");
+                    $("#progress").show();
+                },
+                progressall: function (e, data) {
+                    var progress = parseInt(data.loaded / data.total * 100, 10);
+                    $("#progress .progress-bar").css("width", progress + "%");
+                }
+            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+
+        $('.delfile').click(function () {
+            if (confirm('Bạn có chắc xóa ảnh này?')) {
+                $(this).parent().find('input').val("");
+                $(this).parent().find('.img-award').fadeOut().remove();
+                $(this).fadeOut().css("display", "none");
+            }
+        });
+
+
         $('.check').each(function () {
             var quantity = $(this).parents('tr').find(".quantity");
             var parent = $(this).parents('td');
@@ -185,6 +313,6 @@
             let url = window.location.href.split('=');
             let eventId = $(this).val();
             window.location.href = url[0] + "=" + eventId;
-        })
+        });
     </script>
 }
