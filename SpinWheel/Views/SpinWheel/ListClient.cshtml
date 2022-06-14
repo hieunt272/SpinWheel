@@ -50,6 +50,7 @@
             @foreach (var item in Model.ListClientAwards)
             {
                 <tr data-id="@item.Client.Id">
+                    <input type="hidden" name="awardId" value="@item.AwardId" />
                     <td>@i</td>
                     <td>@item.Client.Fullname</td>
                     <td>@item.Client.Mobile</td>
@@ -73,15 +74,17 @@
 {
     <script type="text/javascript">
         function deleteClient(id) {
+            var item = $("tr[data-id='" + id + "']");
+            var awardId = item.find("input[name=awardId]").val();
             if (confirm("Bạn có chắc chắn xóa người trúng giải này không?")) {
-                $.post("/SpinWheel/DeleteClient", { clientId: id }, function (data) {
+                $.post("/SpinWheel/DeleteClient", { clientId: id, awardId: awardId }, function (data) {
                     if (data) {
                         $.toast({
                             text: 'Xóa người trúng giải thành công',
                             position: 'bottom-right',
                             icon: 'success',
                         })
-                        $("tr[data-id='" + id + "']").fadeOut();
+                        item.fadeOut();
                     }
                     else {
                         $.toast({

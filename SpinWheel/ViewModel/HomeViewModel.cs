@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace SpinWheel.ViewModel
 {
@@ -20,6 +21,9 @@ namespace SpinWheel.ViewModel
         //public IEnumerable<Award> Awards { get; set; }
         public Event Event { get; set; }
         public Client Client { get; set; }
+        [Display(Name = "Số điện thoại"), RegularExpression(@"^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$", ErrorMessage = "Số điện thoại không đúng định dạng!"),
+         StringLength(20, ErrorMessage = "Tối đa 20 ký tự"), UIHint("TextBox")]
+        public string Mobile { get; set; }
     }
 
     public class ProductDetailViewModel

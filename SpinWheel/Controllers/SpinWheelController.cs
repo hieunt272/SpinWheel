@@ -446,12 +446,20 @@ namespace SpinWheel.Controllers
             };
             return View(model);
         }
-        public bool DeleteClient(int clientId = 0)
+        public bool DeleteClient(int clientId = 0, int awardId = 0)
         {
+            //var awardId = Convert.ToInt32(fc["awardId"]);
+            var award = _unitOfWork.AwardRepository.GetById(awardId);
+            var totalWin = award.ListClientAwards.Where(a => a.AwardId == awardId).Count();
+
             var client = _unitOfWork.ClientRepository.GetById(clientId);
             if (client == null)
             {
                 return false;
+            }
+            else
+            {
+                award.TotalWin = totalWin - 1;
             }
             _unitOfWork.ClientRepository.Delete(clientId);
             _unitOfWork.Save();

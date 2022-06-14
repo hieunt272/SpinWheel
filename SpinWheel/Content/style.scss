@@ -1084,6 +1084,12 @@ a, a:hover {
         visibility: visible;
         transform: translateY(0);
     }
+
+    .field-validation-error,
+    .field-validation-valid {
+        bottom: 16px;
+        left: 60%;
+    }
 }
 
 .card-header {
@@ -1091,12 +1097,43 @@ a, a:hover {
     background: #CD2E2E;
     font-weight: 600;
     font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        color: $white;
+        font-weight: 500;
+        font-size: .875rem;
+    }
 }
 
 #fullname,
-#phone {
+#Client_Mobile {
     font-weight: 600;
     margin-left: 10px;
+    border: none;
+    border-bottom: 1px solid transparent;
+    outline: none;
+
+    &:focus {
+        border-bottom: 1px solid #000;
+    }
+}
+
+#Client_Mobile {
+    width: 165px;
+}
+
+.btn-spin {
+    color: $white;
+    background: $mainColor;
+    border: none;
+    width: 100%;
+    border-radius: 0 0 5px 5px;
+    display: block;
+    padding: 5px;
+    text-transform: uppercase;
 }
 
 .mainbox {
@@ -1153,31 +1190,48 @@ a, a:hover {
 }
 
 #info-form {
+    .input-box {
+        position: relative;
+        input:valid ~ .text-input,
+        input:focus ~ .text-input {
+            color: $mainColor2;
+            transform: translateY(-20px);
+            font-size: .875rem;
+        }
+    }
+
     .form-control {
         width: 90%;
-        padding: 10px 0;
+        height: 28px;
+        padding: 8px 0;
         font-size: 16px;
         color: #fff;
-        margin-bottom: 30px;
+        margin-bottom: 35px;
         border: none;
         border-bottom: 1px solid #fff;
         outline: none;
         background: transparent;
         border-radius: 0;
 
-        &::placeholder {
-            color: $white;
-        }
-
         &:focus {
             box-shadow: none;
         }
     }
 
+    .text-input {
+        position: absolute;
+        left: 18px;
+        bottom: 0;
+        color: $white;
+        padding: 5px;
+        pointer-events: none;
+        transition: .5s;
+    }
+
     .field-validation-error,
     .field-validation-valid {
-        bottom: 35%;
-        left: 40px;
+        bottom: -22px;
+        left: 24px;
         color: $white;
     }
 }
@@ -1188,8 +1242,8 @@ a, a:hover {
     margin: 50px auto;
     width: 500px;
     height: 580px;
-    box-shadow: 0 0 200px 1300px rgba(0, 0, 0, .35);
     z-index: 1;
+    filter: drop-shadow(0 0 10px #000);
     visibility: hidden;
     opacity: 0;
     transform: translateY(20px);
@@ -1215,6 +1269,7 @@ a, a:hover {
     height: 100px;
     object-fit: contain;
     padding: 3px;
+
     &[src=""] {
         display: none;
     }
@@ -1272,7 +1327,7 @@ a, a:hover {
 }
 
 .swal2-icon-warning {
-    width: 500px !important;
+    width: 350px !important;
 
     .swal2-title {
         font-size: 1.5rem !important;

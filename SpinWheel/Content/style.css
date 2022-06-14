@@ -967,18 +967,53 @@ a, a:hover {
   visibility: visible;
   transform: translateY(0);
 }
+.card-info .field-validation-error,
+.card-info .field-validation-valid {
+  bottom: 16px;
+  left: 60%;
+}
 
 .card-header {
   color: #fff;
   background: #CD2E2E;
   font-weight: 600;
   font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card-header a {
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.875rem;
 }
 
 #fullname,
-#phone {
+#Client_Mobile {
   font-weight: 600;
   margin-left: 10px;
+  border: none;
+  border-bottom: 1px solid transparent;
+  outline: none;
+}
+#fullname:focus,
+#Client_Mobile:focus {
+  border-bottom: 1px solid #000;
+}
+
+#Client_Mobile {
+  width: 165px;
+}
+
+.btn-spin {
+  color: #fff;
+  background: #007AB6;
+  border: none;
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  display: block;
+  padding: 5px;
+  text-transform: uppercase;
 }
 
 .mainbox {
@@ -1037,28 +1072,44 @@ a, a:hover {
   transform: translateY(79px);
 }
 
+#info-form .input-box {
+  position: relative;
+}
+#info-form .input-box input:valid ~ .text-input,
+#info-form .input-box input:focus ~ .text-input {
+  color: #5DC2B1;
+  transform: translateY(-20px);
+  font-size: 0.875rem;
+}
 #info-form .form-control {
   width: 90%;
-  padding: 10px 0;
+  height: 28px;
+  padding: 8px 0;
   font-size: 16px;
   color: #fff;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   border: none;
   border-bottom: 1px solid #fff;
   outline: none;
   background: transparent;
   border-radius: 0;
 }
-#info-form .form-control::placeholder {
-  color: #fff;
-}
 #info-form .form-control:focus {
   box-shadow: none;
 }
+#info-form .text-input {
+  position: absolute;
+  left: 18px;
+  bottom: 0;
+  color: #fff;
+  padding: 5px;
+  pointer-events: none;
+  transition: 0.5s;
+}
 #info-form .field-validation-error,
 #info-form .field-validation-valid {
-  bottom: 35%;
-  left: 40px;
+  bottom: -22px;
+  left: 24px;
   color: #fff;
 }
 
@@ -1068,8 +1119,8 @@ a, a:hover {
   margin: 50px auto;
   width: 500px;
   height: 580px;
-  box-shadow: 0 0 200px 1300px rgba(0, 0, 0, 0.35);
   z-index: 1;
+  filter: drop-shadow(0 0 10px #000);
   visibility: hidden;
   opacity: 0;
   transform: translateY(20px);
@@ -1153,7 +1204,7 @@ a, a:hover {
 }
 
 .swal2-icon-warning {
-  width: 500px !important;
+  width: 350px !important;
 }
 .swal2-icon-warning .swal2-title {
   font-size: 1.5rem !important;

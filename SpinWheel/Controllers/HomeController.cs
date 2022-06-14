@@ -224,7 +224,16 @@ namespace SpinWheel.Controllers
             var award = _unitOfWork.AwardRepository.GetById(awardId);
             model.Mobile = phone;
             model.Fullname = fullName;
-            award.TotalWin += 1;
+            var totalWin = award.ListClientAwards.Where(a => a.AwardId == awardId).Count();
+            if (totalWin == 0)
+            {
+                award.TotalWin += 1;
+            }
+            else
+            {
+                award.TotalWin = totalWin + 1;
+            }
+
             _unitOfWork.ClientRepository.Insert(model);
             var listClientAward = new ListClientAward
             {
@@ -282,7 +291,7 @@ namespace SpinWheel.Controllers
         {
             var isPost = 1;
             var now = DateTime.Now;
-            var client = _unitOfWork.ClientRepository.Get(p => p.Mobile == phone && p.ListClientAwards.Any(a => a.Award.EventId == eventId)).FirstOrDefault();
+            var client = _unitOfWork.ClientRepository.Get(p => p.Mobile == phone && p.ListClientAwards.Any(a => a.Award.EventId == eventId), o => o.OrderByDescending(a => a.CheckDate)).FirstOrDefault();
 
             // so sánh ngày quay gần nhất với now
             if (client != null)

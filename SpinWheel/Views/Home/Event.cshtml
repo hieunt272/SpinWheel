@@ -3,15 +3,23 @@
 @Html.HiddenFor(model => model.Event.Url)
 <div class="wrapper row m-0">
     <div class="col-lg-6 col-12">
-        <div class="card-info">
+        <form class="card-info">
+            @Html.ValidationSummary(true)
+            @Html.AntiForgeryToken()
             <div class="card-header">
-                XÁC NHẬN THÔNG TIN
+                <span>XÁC NHẬN THÔNG TIN</span>
+                <a href="javascript:;" onclick="updateInfo()">Cập nhật</a>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Họ tên: <span id="fullname"></span></li>
-                <li class="list-group-item">Số điện thoại: <span id="phone"></span></li>
+                <li class="list-group-item">Họ tên: <input type="text" id="fullname" value="" readonly /></li>
+                <li class="list-group-item">
+                    Số điện thoại:
+                    @Html.TextBoxFor(a => Model.Client.Mobile, new { @readonly = "" })
+                    @Html.ValidationMessageFor(a => Model.Client.Mobile)
+                </li>
             </ul>
-        </div>
+            <button type="submit" class="btn-spin">Quay</button>
+        </form>
 
         <div class="winner">
             <div class="award-text"></div>
@@ -51,9 +59,15 @@
                     @Html.ValidationSummary(true)
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="eventId" value="@Model.Event.Id" />
-                    <input type="text" class="form-control mx-auto" name="fullname" placeholder="Họ và tên" />
-                    @Html.TextBoxFor(a => Model.Client.Mobile, new { @class = "form-control my-3 mx-auto", @placeholder = "Số điện thoại" })
-                    @Html.ValidationMessageFor(a => Model.Client.Mobile)
+                    <div class="input-box">
+                        <input type="text" class="form-control mx-auto" name="fullname" required="required" />
+                        <span class="text-input">Họ và tên</span>
+                    </div>
+                    <div class="input-box">
+                        @Html.TextBoxFor(a => Model.Mobile, new { @class = "form-control my-3 mx-auto info-mobile", @required = "required" })
+                        @Html.ValidationMessageFor(a => Model.Mobile)
+                        <span class="text-input">Số điện thoại</span>
+                    </div>
                     <button type="submit" class="btn btn-confirm">Xác nhận</button>
                     <button type="button" class="btn btn-close" onclick="closeModal()">Đóng</button>
                 </form>
@@ -65,8 +79,8 @@
 @section scripts{
     <script>
         var gifts = [];
-
         var url = $("#Event_Url").val();
+
         $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
             $.each(data, function (key, val) {
                 var percent = winwheelPercentToDegrees(val.percent);
@@ -152,6 +166,7 @@
                 document
                     .querySelector(".border-spin")
                     .setAttribute("disabled", false);
+                btnSpin.fadeOut(1000);
             } else if (status == 3) {
                 document
                     .querySelector(".border-spin")
@@ -166,11 +181,29 @@
         }
         StatusButton(1);
 
+        var confirmPhone = $("#Client_Mobile");
+        var checkPhone = /^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$/;
+        var btnSpin = $('.btn-spin');
+
+        $('.card-info').on("submit", function (e) {
+            e.preventDefault();
+            if (confirmPhone.valid() == false) {
+                clickingsound.play();
+            }
+            else {
+                if (wheelSpinning == false) {
+                    StatusButton(1);
+                    theWheel.startAnimation();
+                    wheelSpinning = true;
+                    StatusButton(2);
+                }
+            }
+        });
+
         $("#info-form").on("submit", function (e) {
             e.preventDefault();
             var fullName = $("[name=fullname]").val();
-            var phone = $("#Client_Mobile").val();
-            var checkPhone = /^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$/;
+            var phone = $(".info-mobile").val();
             if (fullName == "" || phone == "") {
                 clickingsound.play();
                 Swal.fire({
@@ -181,9 +214,8 @@
             else if (phone.match(checkPhone)) {
                 $("#Modal").modal('hide');
                 $(".card-info").addClass("active");
-                $("#fullname").text(fullName);
-                $("#phone").text(phone);
-
+                $("#fullname").val(fullName);
+                $("#Client_Mobile").val(phone);
                 confirmInfo.play();
             }
             else {
@@ -191,10 +223,17 @@
             }
         });
 
+        function updateInfo() {
+            $("#fullname").removeAttr("readonly");
+            $("#fullname").focus();
+            $("#Client_Mobile").removeAttr("readonly");
+        }
+
         function startSpin() {
-            var phone = $("#Client_Mobile").val();
+            var phone = $(".info-mobile").val();
             var fullName = $("[name=fullname]").val();
             var eventId = $("[name=eventId]").val();
+
             var isPost = true;
 
             if (fullName == "" || phone == "") {
@@ -253,14 +292,14 @@
                 $('.winner').addClass('active');
                 if (winningSegment.image == "") {
                     $('.award-text').html(winningSegment.text);
-                }else {
+                } else {
                     $('.award-text').html(winningSegment.text);
                     $('.award-img').attr({
                         src: "images/awards/" + winningSegment.image,
                         alt: winningSegment.text,
                     });
                 }
-                var fullName = $("[name=fullname]").val();
+                var fullName = $("#fullname").val();
                 var phone = $("#Client_Mobile").val();
                 $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text, awardId: winningSegment.id }, function (data) {
                 })
