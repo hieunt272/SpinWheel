@@ -269,17 +269,35 @@ namespace SpinWheel.Controllers
             };
             return View(model);
         }
+        //[Route("vong-quay/{url:regex(^(?!.*(user|admin|vcms|uploader|article|banner|contact|productvcms)).*$)}")]
+        //public ActionResult Test(string url)
+        //{
+        //    var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+        //    if (events == null)
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+        //    var model = new EventViewModel
+        //    {
+        //        Event = events,
+
+        //    };
+        //    return View(model);
+        //}
+        public JsonResult GetBgEvent(string url)
+        {
+            var e = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+            return Json(new { bgPc = e.BgPC, bgMobile = e.BgMobile }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult GetAwardData(string url)
         {
             var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
-            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id).Select(a => new
+            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id, o => o.OrderByDescending(a => a.Sort)).Select(a => new
             {
                 percent = a.Percent,
                 name = a.AwardName,
                 bgColor = a.BgColor,
                 txtColor = a.TextColor,
-                bgPc = a.Event.BgPC,
-                bgMobile = a.Event.BgMobile,
                 quantity = a.Quantity,
                 totalWin = a.TotalWin,
                 id = a.Id,
@@ -302,6 +320,27 @@ namespace SpinWheel.Controllers
                 }
             }
             return Json(isPost, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetAward(string url)
+        {
+            var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id);
+            List<int> myList = new List<int>();
+            foreach (var item in awards)
+            {
+                for (var i = 0; i < item.Percent; i++) {
+                    myList.Add(item.Id);
+                }
+            }
+
+            int[] myArr = myList.ToArray();
+            Random random= new Random();
+            int index = random.Next(0, myArr.Length);
+            var id = myArr[index];
+
+            var award = awards.FirstOrDefault(a => a.Id == id);
+
+            return Json(new { awardId = award.Id, sort = award.Sort, name = award.AwardName, quantity = award.Quantity, image = award.Image, totalWin = award.TotalWin }, JsonRequestBehavior.AllowGet); ;
         }
 
         protected override void Dispose(bool disposing)

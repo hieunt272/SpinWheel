@@ -1037,7 +1037,7 @@ a, a:hover {
   top: 0;
   left: 0;
   border-radius: 50%;
-  box-shadow: inset 0px 0px 40px 34px #00000042;
+  box-shadow: inset 0px 0px 40px 34px rgba(0, 0, 0, 0.2588235294);
 }
 
 .border-spin {
@@ -1507,7 +1507,7 @@ a, a:hover {
 }
 
 .limiter .title {
-  padding: 15px;
+  padding: 30px 15px 15px;
   background: #fff;
 }
 .limiter .title::before {
@@ -1666,22 +1666,18 @@ a, a:hover {
   .introduce {
     padding: 100px 0 220px;
   }
-
   .contact::before {
     width: 550px;
     height: 780px;
   }
-
   .contact-img {
     width: 850px;
     height: 450px;
   }
-
   #canvas {
     width: 500px !important;
     height: 500px !important;
   }
-
   .border-spin {
     width: 620px;
     height: 620px;
@@ -1691,31 +1687,25 @@ a, a:hover {
   .introduce {
     padding: 70px 0 130px;
   }
-
   .partner-item {
     width: 100px;
     height: 100px;
   }
-
   .contact-img {
     width: 700px;
     height: 370px;
   }
-
   .key-word {
     padding-right: 60px;
   }
-
   .article-item img {
     height: 195px;
   }
-
   .winner {
     margin: 10px auto 0;
     width: 400px;
     height: 430px;
   }
-
   .btn-continue {
     bottom: 25px;
     width: 280px;
@@ -1725,29 +1715,24 @@ a, a:hover {
 }
 @media (max-width: 840px) {
   #canvas,
-.spin {
+  .spin {
     left: 50%;
   }
-
   .btn-header {
     padding: 12px 10px 10px 10px;
   }
-
   .box-content {
     flex-wrap: wrap;
   }
-
   .why-1 .row {
     margin: 0 -15px;
   }
   .why-1 .col-lg-4 {
     padding: 0 15px;
   }
-
   .header-top {
     display: none;
   }
-
   .header {
     position: fixed;
     top: 60px;
@@ -1770,7 +1755,6 @@ a, a:hover {
   .header .container {
     padding: 0;
   }
-
   .nav {
     flex-direction: column;
     padding: 0;
@@ -1787,7 +1771,6 @@ a, a:hover {
   .nav > li > a:hover {
     color: #FFC107;
   }
-
   .drop {
     position: relative;
     top: 0;
@@ -1795,7 +1778,6 @@ a, a:hover {
     overflow: visible;
     width: 100%;
   }
-
   .sub-nav {
     transform: none;
     background: #fff;
@@ -1808,7 +1790,6 @@ a, a:hover {
     padding: 10px 32px;
     display: inline-block;
   }
-
   .header-mobile {
     display: block;
     background: #fff;
@@ -1821,7 +1802,6 @@ a, a:hover {
   .header-mobile .logo {
     margin-right: 20px;
   }
-
   .hamburger {
     display: flex;
     justify-content: center;
@@ -1863,35 +1843,28 @@ a, a:hover {
   .hamburger.active .bar:nth-child(3) {
     transform: translateX(60px);
   }
-
   .introduce {
     padding: 70px 0 150px;
   }
-
   .media-list {
     justify-content: center;
   }
   .media-list .media {
     min-width: 195px;
   }
-
   .img-intro {
     margin: 0 auto 20px;
   }
-
   .title-intro,
-.sub-title {
+  .sub-title {
     text-align: center;
   }
-
   .btn-intro {
     text-align: center;
   }
-
   .customer {
     margin-top: -105px;
   }
-
   .why-1::before {
     width: 350px;
     height: 90%;
@@ -1900,7 +1873,6 @@ a, a:hover {
     width: 400px;
     height: 100%;
   }
-
   .why-2::before {
     height: 68%;
   }
@@ -1908,24 +1880,20 @@ a, a:hover {
     height: 76%;
     bottom: 35%;
   }
-
   .news::before {
     top: 45%;
     left: 10px;
   }
-
   .content-left {
     padding-top: 50px;
     margin: 0 auto;
   }
-
   .article-large {
     margin-bottom: 50px;
   }
   .article-large img {
     height: 390px;
   }
-
   .contact::before {
     width: 500px;
     height: 700px;
@@ -1933,34 +1901,24 @@ a, a:hover {
   .contact::after {
     bottom: 5%;
   }
-
   .box-contact {
     justify-content: center;
   }
-
   #contact-form {
     width: 600px;
   }
-
   .contact-img {
     display: none;
   }
-
   .service-item {
     margin-bottom: 30px;
   }
-
   .footer-info {
     margin-bottom: 50px;
-  }
-
-  .limiter .title {
-    padding-top: 30px;
   }
   .limiter .input-group {
     justify-content: center;
   }
-
   .product img {
     width: 100%;
     height: auto;
@@ -1970,35 +1928,28 @@ a, a:hover {
   body {
     font-size: 0.875rem;
   }
-
   .title {
     font-size: 1.25rem;
   }
-
   .header-mobile .btn-header {
     display: none;
   }
-
   .img-intro {
     width: 100%;
     height: 250px;
   }
-
   .title-intro {
     font-size: 1.25rem;
   }
   .title-intro p {
     font-size: 1rem;
   }
-
   .media-list .media {
     min-width: 170px;
   }
-
   .partner-list {
     grid-template-columns: auto auto auto;
   }
-
   .why-1::before {
     width: 150px;
     height: 15%;
@@ -2009,13 +1960,11 @@ a, a:hover {
     height: 16%;
     top: 5%;
   }
-
   .tutorial::before {
     width: 200px;
     height: 190px;
     top: -35px;
   }
-
   .why-2::before {
     width: 150px;
     height: 52%;
@@ -2025,16 +1974,13 @@ a, a:hover {
     height: 34%;
     bottom: 71%;
   }
-
   .why-img {
     width: 100%;
     height: 230px;
   }
-
   .why-item-2 {
     font-size: 1rem;
   }
-
   .contact::before {
     width: 200px;
     height: 270px;
@@ -2043,30 +1989,24 @@ a, a:hover {
     width: 200px;
     height: 400px;
   }
-
   #contact-form {
     margin-top: 30px;
   }
   #contact-form button {
     text-align: center;
   }
-
   .article-large img {
     height: 190px;
   }
-
   .article-item img {
     height: 260px;
   }
-
   .article-name {
     font-size: 1.125rem;
   }
-
   .quote-top .price {
     font-size: 1.25rem;
   }
-
   .limiter form input {
     width: 50%;
   }

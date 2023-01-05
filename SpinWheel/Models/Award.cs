@@ -18,9 +18,9 @@ namespace SpinWheel.Models
         [Display(Name = "Màu chữ"), Required(ErrorMessage = "Hãy chọn màu chữ"), UIHint("TextBox")]
         public string TextColor { get; set; }
         [Display(Name = "Số lượng"), UIHint("TextBox")]
-        public string Quantity { get; set; }
+        public int? Quantity { get; set; }
         [Display(Name = "Tỷ lệ trúng (%)"), UIHint("TextBox")]
-        public string Percent { get; set; }
+        public int? Percent { get; set; }
         [Display(Name = "Tổng số trúng giải"), UIHint("TextBox")]
         public int TotalWin { get; set; }
         [Display(Name = "Không giới hạn")]

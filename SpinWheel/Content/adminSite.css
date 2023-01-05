@@ -529,6 +529,9 @@ input[type=submit]:focus {
   transform: scale(0.95);
   border-color: #004767;
 }
+.btn-disable {
+  pointer-events: none;
+}
 input.quick-link {
   height: 35px;
   border-color: #079AA6;

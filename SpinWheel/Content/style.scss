@@ -1682,7 +1682,7 @@ a, a:hover {
 
 .limiter {
     .title {
-        padding: 15px;
+        padding: 30px 15px 15px;
         background: $white;
 
         &::before {
@@ -2186,10 +2186,6 @@ a, a:hover {
     }
 
     .limiter {
-        .title {
-            padding-top: 30px;
-        }
-
         .input-group {
             justify-content: center;
         }

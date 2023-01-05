@@ -63,73 +63,44 @@ namespace SpinWheel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var isPost = true;
-                var file = Request.Files["BgPC"];
-                if (file != null && file.ContentLength > 0)
+                for (var i = 0; i < Request.Files.Count; i++)
                 {
-                    if (file.ContentType != "image/jpeg" & file.ContentType != "image/png" && file.ContentType != "image/gif")
-                    {
-                        ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                    }
-                    else
-                    {
-                        if (file.ContentLength > 4000 * 1024)
-                        {
-                            ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                        }
-                        else
-                        {
-                            var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
-                            HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
-                            var imgFileName = DateTime.Now.ToFileTimeUtc() + Path.GetExtension(file.FileName);
+                    if (Request.Files[i] == null || Request.Files[i].ContentLength <= 0) continue;
+                    if (!HtmlHelpers.CheckFileExt(Request.Files[i].FileName, "jpg|jpeg|png|gif")) continue;
+                    if (Request.Files[i].ContentLength > 1024 * 1024 * 4) continue;
 
-                            model.BgPC = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
-                        }
+                    var imgFileName = HtmlHelpers.ConvertToUnSign(null, Path.GetFileNameWithoutExtension(Request.Files[i].FileName)) +
+                        "-" + DateTime.Now.Millisecond + Path.GetExtension(Request.Files[i].FileName);
+                    var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
+                    HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
+
+                    var imgFile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
+
+                    var newImage = Image.FromStream(Request.Files[i].InputStream);
+                    var fixSizeImage = HtmlHelpers.FixedSize(newImage, 1000, 1000, false);
+                    HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+
+                    if (Request.Files.Keys[i] == "BgPC")
+                    {
+                        model.BgPC = imgFile;
+                    }
+                    else if (Request.Files.Keys[i] == "BgMobile")
+                    {
+                        model.BgMobile = imgFile;
                     }
                 }
 
-                var file1 = Request.Files["BgMobile"];
-                if (file1 != null && file1.ContentLength > 0)
+                model.UserId = userId;
+                model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName) + "-" + userId;
+                var countUrl = _unitOfWork.EventRepository.GetQuery(a => a.Url == model.Url).Count();
+                if (countUrl > 1)
                 {
-                    if (file1.ContentType != "image/jpeg" & file1.ContentType != "image/png" && file1.ContentType != "image/gif")
-                    {
-                        ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                    }
-                    else
-                    {
-                        if (file1.ContentLength > 4000 * 1024)
-                        {
-                            ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                        }
-                        else
-                        {
-                            var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
-                            HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
-                            var imgFileName = DateTime.Now.ToFileTimeUtc() + Path.GetExtension(file1.FileName);
-
-                            model.BgMobile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-
-                            var newImage = Image.FromStream(file1.InputStream);
-                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
-                        }
-                    }
+                    model.Url += "-" + DateTime.Now.Millisecond;
                 }
+                _unitOfWork.EventRepository.Insert(model);
+                _unitOfWork.Save();
 
-                if (isPost)
-                {
-                    model.UserId = userId;
-                    model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName) + "-" + userId;
-                    var countUrl = _unitOfWork.EventRepository.GetQuery(a => a.Url == model.Url).Count();
-                    if (countUrl > 1)
-                    {
-                        model.Url += "-" + DateTime.Now.Millisecond;
-                    }
-                    _unitOfWork.EventRepository.Insert(model);
-                    _unitOfWork.Save();
-
-                    return RedirectToAction("Event", new { result = "success" });
-                }
+                return RedirectToAction("Event", new { result = "success" });
             }
             return View(model);
         }
@@ -147,88 +118,58 @@ namespace SpinWheel.Controllers
         {
             if (ModelState.IsValid)
             {
-                var isPost = true;
+                for (var i = 0; i < Request.Files.Count; i++)
+                {
+                    if (Request.Files[i] == null || Request.Files[i].ContentLength <= 0) continue;
+                    if (!HtmlHelpers.CheckFileExt(Request.Files[i].FileName, "jpg|jpeg|png|gif")) continue;
+                    if (Request.Files[i].ContentLength > 1024 * 1024 * 4) continue;
+
+                    var imgFileName = HtmlHelpers.ConvertToUnSign(null, Path.GetFileNameWithoutExtension(Request.Files[i].FileName)) +
+                        "-" + DateTime.Now.Millisecond + Path.GetExtension(Request.Files[i].FileName);
+                    var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
+                    HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
+
+                    var imgFile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
+
+                    var newImage = Image.FromStream(Request.Files[i].InputStream);
+                    var fixSizeImage = HtmlHelpers.FixedSize(newImage, 1000, 1000, false);
+                    HtmlHelpers.SaveJpeg(Server.MapPath(Path.Combine(imgPath, imgFileName)), fixSizeImage, 90);
+
+                    if (Request.Files.Keys[i] == "BgPC")
+                    {
+                        model.BgPC = imgFile;
+                    }
+                    else if (Request.Files.Keys[i] == "BgMobile")
+                    {
+                        model.BgMobile = imgFile;
+                    }
+                }
+
                 var file = Request.Files["BgPC"];
-                if (file != null && file.ContentLength > 0)
-                {
-                    if (file.ContentType != "image/jpeg" & file.ContentType != "image/png" && file.ContentType != "image/gif")
-                    {
-                        ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                    }
-                    else
-                    {
-                        if (file.ContentLength > 4000 * 1024)
-                        {
-                            ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                        }
-                        else
-                        {
-                            var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
-                            HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
-                            var imgFileName = DateTime.Now.ToFileTimeUtc() + Path.GetExtension(file.FileName);
+                var file2 = Request.Files["BgMobile"];
 
-                            if (System.IO.File.Exists(Server.MapPath("/images/events/" + model.BgPC)))
-                            {
-                                System.IO.File.Delete(Server.MapPath("/images/events/" + model.BgPC));
-                            }
-                            model.BgPC = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
-                        }
-                    }
-                }
-                else
+                if (file != null && file.ContentLength == 0)
                 {
-                    model.BgPC = fc["CurrentFile"];
+                    model.BgPC = fc["CurrentFile"] == "" ? null : fc["CurrentFile"];
                 }
-                var file1 = Request.Files["BgMobile"];
-                if (file1 != null && file1.ContentLength > 0)
+                if (file2 != null && file2.ContentLength == 0)
                 {
-                    if (file1.ContentType != "image/jpeg" & file1.ContentType != "image/png" && file1.ContentType != "image/gif")
-                    {
-                        ModelState.AddModelError("", @"Chỉ chấp nhận định dạng jpg, png, gif, jpeg");
-                    }
-                    else
-                    {
-                        if (file1.ContentLength > 4000 * 1024)
-                        {
-                            ModelState.AddModelError("", @"Dung lượng lớn hơn 4MB. Hãy thử lại");
-                        }
-                        else
-                        {
-                            var imgPath = "/images/events/" + DateTime.Now.ToString("yyyy/MM/dd");
-                            HtmlHelpers.CreateFolder(Server.MapPath(imgPath));
-                            var imgFileName = DateTime.Now.ToFileTimeUtc() + Path.GetExtension(file1.FileName);
-
-                            if (System.IO.File.Exists(Server.MapPath("/images/events/" + model.BgMobile)))
-                            {
-                                System.IO.File.Delete(Server.MapPath("/images/events/" + model.BgMobile));
-                            }
-                            model.BgMobile = DateTime.Now.ToString("yyyy/MM/dd") + "/" + imgFileName;
-                            file.SaveAs(Server.MapPath(Path.Combine(imgPath, imgFileName)));
-                        }
-                    }
-                }
-                else
-                {
-                    model.BgMobile = fc["CurrentFile1"];
+                    model.BgMobile = fc["CurrentFile1"] == "" ? null : fc["CurrentFile1"];
                 }
 
-                if (isPost)
+                model.UserId = userId;
+                model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName);
+                _unitOfWork.EventRepository.Update(model);
+                _unitOfWork.Save();
+
+                var count = _unitOfWork.EventRepository.GetQuery(a => a.Url == model.Url).Count();
+                if (count > 1)
                 {
-                    model.UserId = userId;
-                    model.Url = HtmlHelpers.ConvertToUnSign(null, model.Url ?? model.EventName);
-                    _unitOfWork.EventRepository.Update(model);
+                    model.Url += "-" + model.Id;
                     _unitOfWork.Save();
-
-                    var count = _unitOfWork.EventRepository.GetQuery(a => a.Url == model.Url).Count();
-                    if (count > 1)
-                    {
-                        model.Url += "-" + model.Id;
-                        _unitOfWork.Save();
-                    }
-
-                    return RedirectToAction("Event", new { result = "update" });
                 }
+
+                return RedirectToAction("Event", new { result = "update" });
             }
             return View(model);
         }
@@ -300,7 +241,7 @@ namespace SpinWheel.Controllers
             };
             return View(model);
         }
-        [HttpPost, ValidateInput(false)]
+        [HttpPost]
         public ActionResult Award(InsertAwardViewModel model, FormCollection fc)
         {
             if (ModelState.IsValid)
@@ -338,10 +279,10 @@ namespace SpinWheel.Controllers
                                 AwardName = awardName[i],
                                 BgColor = bgColor[i],
                                 TextColor = textColor[i],
-                                Percent = percent[i],
-                                Quantity = quantity[i],
+                                Percent = Convert.ToInt32(percent[i]),
+                                Quantity = Convert.ToInt32(quantity[i]),
                                 Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i,
+                                Sort = i + 1,
                                 Image = image[i],
                             };
                             _unitOfWork.AwardRepository.Insert(award);
@@ -361,16 +302,16 @@ namespace SpinWheel.Controllers
                             award.AwardName = awardNameUpdate[i];
                             award.BgColor = bgColorUpdate[i];
                             award.TextColor = textColorUpdate[i];
-                            award.Percent = percentUpdate[i];
-                            award.Quantity = quantityUpdate[i];
+                            award.Percent = Convert.ToInt32(percentUpdate[i]);
+                            award.Quantity = Convert.ToInt32(quantityUpdate[i]);
                             award.Limited = Convert.ToBoolean(limitedUpdate[i]);
-                            award.Sort = i;
+                            award.Sort = i + 1;
                             award.Image = imageUpdate[i];
                             _unitOfWork.Save();
                         }
                     }
                     for (var i = 0; i < awardCount; i++)
-                    {
+                     {
                         if (!string.IsNullOrEmpty(awardName[i]))
                         {
                             var award = new Award
@@ -379,18 +320,30 @@ namespace SpinWheel.Controllers
                                 AwardName = awardName[i],
                                 BgColor = bgColor[i],
                                 TextColor = textColor[i],
-                                Percent = percent[i],
-                                Quantity = quantity[i],
+                                Percent = Convert.ToInt32(percent[i]),
+                                Quantity = Convert.ToInt32(quantity[i]),
                                 Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i,
+                                Sort = i + 1,
                                 Image = image[i],
                             };
                             _unitOfWork.AwardRepository.Insert(award);
                         }
                     }
                 }
-                _unitOfWork.Save();
-                return RedirectToAction("ListAward", new { result = "success", eventId = Convert.ToInt32(fc["EventId"]) });
+                var tp = awards.Sum(a => a.Percent);
+
+                if (tp > 100)
+                {   
+                    ModelState.AddModelError("", @"Tổng tỷ lệ trúng lớn hơn 100%");
+                    model.Events = Events.Where(a => a.UserId == userId);
+                    model.Awards = awards;
+                    model.TotalAward = awards.Count();
+                }
+                else
+                {
+                    _unitOfWork.Save();
+                    return RedirectToAction("ListAward", new { result = "success", eventId = Convert.ToInt32(fc["EventId"]) });
+                }
             }
             return View(model);
         }

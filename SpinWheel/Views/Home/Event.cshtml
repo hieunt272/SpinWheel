@@ -80,49 +80,36 @@
     <script>
         var gifts = [];
         var url = $("#Event_Url").val();
+        var awardSort;
+        var awardName;
+        var awardQuantity;
+        var awardImage;
+        var awardTW;
+        var awardId;
 
         $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
             $.each(data, function (key, val) {
-                var percent = winwheelPercentToDegrees(val.percent);
-                if (percent === 0) {
-                    theWheel.addSegment({
-                        'text': val.name,
-                        'fillStyle': val.bgColor,
-                        'textFillStyle': val.txtColor,
-                        'textFontSize': 20,
-                        'textMargin': 25,
-                        'quantity': val.quantity,
-                        'totalwin': val.totalWin,
-                        'id': val.id,
-                        'image': val.image,
-                    }, 1);
-                }
-                else {
-                    theWheel.addSegment({
-                        'text': val.name,
-                        'fillStyle': val.bgColor,
-                        'textFillStyle': val.txtColor,
-                        'textAlignment': 'center',
-                        'textMargin': 20,
-                        'size': percent,
-                        'quantity': val.quantity,
-                        'totalwin': val.totalWin,
-                        'id': val.id,
-                        'image': val.image,
-                    }, 1);
-                }
+                theWheel.addSegment({
+                    'text': val.name,
+                    'fillStyle': val.bgColor,
+                    'textFillStyle': val.txtColor,
+                    'textAlignment': 'center',
+                    'textMargin': 20,
+                    'quantity': val.quantity,
+                    'totalwin': val.totalWin,
+                    'id': val.id,
+                    'image': val.image,
+                }, 1);
             });
         });
         function ChangeBackground(x) {
-            $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
-                $.each(data, function (key, val) {
-                    if (x.matches) {
-                        $(".wrapper").css("background", "url(images/events/" + val.bgMobile + ") no-repeat top center / 100% 100%");
-                    }
-                    else {
-                        $(".wrapper").css("background", "url(images/events/" + val.bgPc + ") no-repeat top center / 100% 100%");
-                    }
-                });
+            $.getJSON("/Home/GetBgEvent", { url: url }, function (data) {
+                if (x.matches) {
+                    $(".wrapper").css("background", "url(images/events/" + data.bgMobile + ") no-repeat top center / 100% 100%");
+                }
+                else {
+                    $(".wrapper").css("background", "url(images/events/" + data.bgPc + ") no-repeat top center / 100% 100%");
+                }
             });
         }
         var x = window.matchMedia("(max-width: 840px)");
@@ -247,10 +234,26 @@
                 $.getJSON("/Home/GetClientData", { phone: phone, eventId: eventId }, function (data) {
                     if (data == 1) {
                         if (wheelSpinning == false) {
-                            StatusButton(1);
-                            theWheel.startAnimation();
-                            wheelSpinning = true;
-                            StatusButton(2);
+                            $.getJSON("/Home/GetAward", { url: url }, function (data) {
+                                let segmentNumber = data.sort;
+                                awardId = data.awardId;
+                                awardSort = data.sort;
+                                awardName = data.name;
+                                awardQuantity = data.quantity;
+                                awardImage = data.image;
+                                awardTW = data.totalWin;
+
+                                if (segmentNumber) {
+                                    // Get random angle inside specified segment of the wheel.
+                                    let stopAt = theWheel.getRandomForSegment(segmentNumber);
+
+                                    // Important thing is to set the stopAngle of the animation before stating the spin.
+                                    theWheel.animation.stopAngle = stopAt;
+
+                                    // Start the spin animation here.
+                                    theWheel.startAnimation();
+                                }
+                            });
                         }
                     }
                     else {
@@ -271,14 +274,12 @@
         }
 
         function alertPrize() {
-            let winningSegment = theWheel.getIndicatedSegment();
-            const quantity = parseInt(winningSegment.quantity);
-            const totalWin = parseInt(winningSegment.totalwin);
+            //let winningSegment = theWheel.getIndicatedSegment();
 
-            if (quantity <= totalWin) {
+            if (awardQuantity <= awardTW) {
                 clickingsound.play();
                 Swal.fire({
-                    title: "Số lượng giải <span>" + winningSegment.text + "</span> đã hết",
+                    title: "Số lượng giải <span>" + awardName + "</span> đã hết",
                     text: "Bạn có 1 lượt quay mới",
                     icon: "warning",
                     confirmButtonText: "Xác nhận",
@@ -290,18 +291,18 @@
             else {
                 winner.play();
                 $('.winner').addClass('active');
-                if (winningSegment.image == "") {
-                    $('.award-text').html(winningSegment.text);
+                if (awardImage == "") {
+                    $('.award-text').html(awardName);
                 } else {
-                    $('.award-text').html(winningSegment.text);
+                    $('.award-text').html(awardName);
                     $('.award-img').attr({
-                        src: "images/awards/" + winningSegment.image,
-                        alt: winningSegment.text,
+                        src: "images/awards/" + awardImage,
+                        alt: awardName,
                     });
                 }
                 var fullName = $("#fullname").val();
                 var phone = $("#Client_Mobile").val();
-                $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: winningSegment.text, awardId: winningSegment.id }, function (data) {
+                $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: awardName, awardId: awardId }, function (data) {
                 })
 
                 StatusButton(3);

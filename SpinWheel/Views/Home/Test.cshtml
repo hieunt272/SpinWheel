@@ -1,0 +1,158 @@
+﻿@model SpinWheel.ViewModel.EventViewModel
+
+@Html.HiddenFor(model => model.Event.Url)
+<div class="wrapper row m-0">
+    <div class="col-lg-6 col-12">
+        <div class="winner">
+            <div class="award-text"></div>
+            <img src="" alt="" class="award-img" />
+            <div class="btn-continue" onclick="Continue()">
+                TIẾP TỤC QUAY
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-12">
+        <div class="mainbox">
+            <canvas id="canvas"
+                    width="600"
+                    height="600"
+                    data-responsiveMinWidth="180"
+                    data-responsiveScaleHeight="true"
+                    data-responsiveMargin="50">
+                <p style="color: white">
+                    Sorry, your browser doesn't support canvas.
+                    Please try another.
+                </p>
+            </canvas>
+            <div class="border-spin"></div>
+            <div class="start-spin" onclick="startSpin()">
+                <span>QUAY</span>
+            </div>
+        </div>
+        <div class="winner">
+            <div class="award-text"></div>
+            <img src="" alt="" class="award-img" />
+            <div class="btn-continue" onclick="Continue()">
+                TIẾP TỤC QUAY
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var gifts = [];
+        var url = $("#Event_Url").val();
+
+        $.getJSON("/Home/GetAwardData", { url: url }, function (data) {
+            $.each(data, function (key, val) {
+                theWheel.addSegment({
+                    'text': val.name,
+                    'fillStyle': val.bgColor,
+                    'textFillStyle': val.txtColor,
+                    'textAlignment': 'center',
+                    'textMargin': 20,
+                    'quantity': val.quantity,
+                    'totalwin': val.totalWin,
+                    'id': val.id,
+                    'image': val.image,
+                }, 1);
+            });
+        });
+        function ChangeBackground(x) {
+            $.getJSON("/Home/GetBgEvent", { url: url }, function (data) {
+                if (x.matches) {
+                    $(".wrapper").css("background", "url(/images/events/" + data.bgMobile + ") no-repeat top center / 100% 100%");
+                }
+                else {
+                    $(".wrapper").css("background", "url(/images/events/" + data.bgPc + ") no-repeat top center / 100% 100%");
+                }
+            });
+        }
+        var x = window.matchMedia("(max-width: 840px)");
+        ChangeBackground(x);
+        x.addListener(ChangeBackground);
+
+        const theWheel = new Winwheel({
+            numSegments: gifts.length,
+            segments: gifts,
+            outerRadius: 300,
+            innerRadius: 40,
+            textFontSize: 18,
+            responsive: true,
+            animation: {
+                type: "spinToStop",
+                duration: 10,
+                spins: 12,
+                //callbackSound: playSound,
+                callbackFinished: alertPrize,
+            }
+        });
+
+        //let tick = new Audio("./content/sound/tick.mp3");
+        //let clickingsound = new Audio("./content/sound/clickingsound.mp3");
+        //let confirmInfo = new Audio("./content/sound/foundMa.mp3");
+        //let winner = new Audio("./content/sound/fanfare-winner.mp3");
+
+        //function playSound() {
+        //    tick.pause();
+        //    tick.currentTime = 0;
+        //    tick.play();
+        //}
+
+        let wheelSpinning = false;
+
+        function StatusButton(status) {
+            if (status == 1) {
+                document
+                    .querySelector(".border-spin")
+                    .removeAttribute("disabled");
+            } else if (status == 2) {
+                document
+                    .querySelector(".border-spin")
+                    .setAttribute("disabled", false);
+            } else if (status == 3) {
+                document
+                    .querySelector(".border-spin")
+                    .removeAttribute("disabled");
+
+                theWheel.stopAnimation(false);
+                theWheel.rotationAngle = 0;
+                theWheel.draw();
+
+                wheelSpinning = false;
+            }
+        }
+        StatusButton(1);
+
+        var awardSort;
+        var awardName;
+
+        function startSpin() {
+            if (wheelSpinning == false) {
+                $.getJSON("/Home/GetAward", { url: url }, function (data) {
+                    let segmentNumber = data.sort;
+                    awardSort = data.sort;
+                    awardName = data.name;
+                    if (segmentNumber) {
+                        // Get random angle inside specified segment of the wheel.
+                        let stopAt = theWheel.getRandomForSegment(segmentNumber);
+
+                        // Important thing is to set the stopAngle of the animation before stating the spin.
+                        theWheel.animation.stopAngle = stopAt;
+
+                        // Start the spin animation here.
+                        theWheel.startAnimation();
+                    }
+                });
+            }
+        }
+
+        function alertPrize() {
+            $('.winner').addClass('active');
+            $('.award-text').html(awardName);
+
+            StatusButton(3);
+        }
+    </script>
+}
