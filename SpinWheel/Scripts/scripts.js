@@ -39,7 +39,16 @@ $('.btn-scroll').click(function (event) {
     $('html, body').animate({ scrollTop: 0 }, 300);
 });
 
-$('.hamburger').click(function () {
+$('.hamburger').click(function() {
     $(this).toggleClass('active');
     $('.header').toggleClass('active');
-})
+});
+
+var gifts = [];
+var url = $("#Event_Url").val();
+var awardSort;
+var awardName;
+var awardQuantity;
+var awardImage;
+var awardTW;
+var awardId;

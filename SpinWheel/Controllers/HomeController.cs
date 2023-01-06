@@ -5,7 +5,6 @@ using SpinWheel.Models;
 using SpinWheel.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Configuration;
@@ -215,16 +214,21 @@ namespace SpinWheel.Controllers
         }
 
         [HttpPost]
-        public JsonResult InfoForm(Client model, FormCollection fc)
+        public JsonResult InfoForm(FormCollection fc)
         {
             var fullName = fc["fullname"];
             var phone = fc["phone"];
 
             var awardId = Convert.ToInt32(fc["awardId"]);
             var award = _unitOfWork.AwardRepository.GetById(awardId);
-            model.Mobile = phone;
-            model.Fullname = fullName;
-            var totalWin = award.ListClientAwards.Where(a => a.AwardId == awardId).Count();
+
+            var model = new Client
+            {
+                Mobile = phone,
+                Fullname = fullName
+            };
+
+            var totalWin = award.ListClientAwards.Count(a => a.AwardId == awardId);
             if (totalWin == 0)
             {
                 award.TotalWin += 1;
@@ -265,7 +269,7 @@ namespace SpinWheel.Controllers
             }
             var model = new EventViewModel
             {
-                Event = events,
+                Event = events
             };
             return View(model);
         }
@@ -286,22 +290,31 @@ namespace SpinWheel.Controllers
         //}
         public JsonResult GetBgEvent(string url)
         {
-            var e = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
-            return Json(new { bgPc = e.BgPC, bgMobile = e.BgMobile }, JsonRequestBehavior.AllowGet);
+            var ev = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+            if (ev == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { bgPc = ev.BgPC, bgMobile = ev.BgMobile ?? ev.BgPC }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetAwardData(string url)
         {
-            var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
-            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id, o => o.OrderByDescending(a => a.Sort)).Select(a => new
+            var ev = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+            if (ev == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == ev.Id, o => o.OrderBy(a => a.Sort)).Select(a => new
             {
                 percent = a.Percent,
                 name = a.AwardName,
                 bgColor = a.BgColor,
                 txtColor = a.TextColor,
                 quantity = a.Quantity,
+                sort = a.Sort,
                 totalWin = a.TotalWin,
                 id = a.Id,
-                image = a.Image,
+                image = a.Image
             });
             return Json(awards, JsonRequestBehavior.AllowGet);
         }
@@ -311,7 +324,7 @@ namespace SpinWheel.Controllers
             var now = DateTime.Now;
             var client = _unitOfWork.ClientRepository.Get(p => p.Mobile == phone && p.ListClientAwards.Any(a => a.Award.EventId == eventId), o => o.OrderByDescending(a => a.CheckDate)).FirstOrDefault();
 
-            // so sánh ngày quay gần nhất với now
+            //so sánh ngày quay gần nhất với now
             if (client != null)
             {
                 if (DateTime.Compare(client.CheckDate, now) <= 0 && client.CheckDate.Day == now.Day)
@@ -323,24 +336,26 @@ namespace SpinWheel.Controllers
         }
         public JsonResult GetAward(string url)
         {
-            var events = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
-            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == events.Id);
-            List<int> myList = new List<int>();
+            var ev = _unitOfWork.EventRepository.GetQuery(a => a.Active && a.Url == url).FirstOrDefault();
+            if (ev == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == ev.Id, q => q.OrderBy(a => a.Sort)).ToList();
+            var myList = new List<int>();
             foreach (var item in awards)
             {
-                for (var i = 0; i < item.Percent; i++) {
+                for (var i = 0; i < item.Percent; i++)
+                {
                     myList.Add(item.Id);
                 }
             }
+            var random = new Random().Next(0, myList.Count);
+            var id = myList[random];
 
-            int[] myArr = myList.ToArray();
-            Random random= new Random();
-            int index = random.Next(0, myArr.Length);
-            var id = myArr[index];
+            var award = awards.Single(a => a.Id == id);
 
-            var award = awards.FirstOrDefault(a => a.Id == id);
-
-            return Json(new { awardId = award.Id, sort = award.Sort, name = award.AwardName, quantity = award.Quantity, image = award.Image, totalWin = award.TotalWin }, JsonRequestBehavior.AllowGet); ;
+            return Json(new { awardId = award.Id, sort = award.Sort, name = award.AwardName, quantity = award.Quantity, image = award.Image, totalWin = award.TotalWin }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

@@ -1,22 +1,22 @@
-﻿using SpinWheel.DAL;
+﻿using Helpers;
+using PagedList;
+using SpinWheel.DAL;
+using SpinWheel.Filters;
 using SpinWheel.Models;
 using SpinWheel.ViewModel;
-using Helpers;
-using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing.Text;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web.Mvc;
-using SpinWheel.Filters;
-using System.Data.Entity;
-using System.Globalization;
 using System.Web;
 using System.Web.Hosting;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Drawing.Imaging;
+using System.Web.Mvc;
 
 namespace SpinWheel.Controllers
 {
@@ -311,7 +311,7 @@ namespace SpinWheel.Controllers
                         }
                     }
                     for (var i = 0; i < awardCount; i++)
-                     {
+                    {
                         if (!string.IsNullOrEmpty(awardName[i]))
                         {
                             var award = new Award
@@ -333,7 +333,7 @@ namespace SpinWheel.Controllers
                 var tp = awards.Sum(a => a.Percent);
 
                 if (tp > 100)
-                {   
+                {
                     ModelState.AddModelError("", @"Tổng tỷ lệ trúng lớn hơn 100%");
                     model.Events = Events.Where(a => a.UserId == userId);
                     model.Awards = awards;

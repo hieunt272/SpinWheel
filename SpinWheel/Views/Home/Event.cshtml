@@ -1,7 +1,26 @@
 ﻿@model SpinWheel.ViewModel.EventViewModel
+@{
+    ViewBag.Title = Model.Event.EventName;
+    ViewBag.Description = Model.Event.EventName;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Event", new { url = Model.Event.Url });
 
-@Html.HiddenFor(model => model.Event.Url)
-<div class="wrapper row m-0">
+    string bg = null;
+    if (Request.Browser.IsMobileDevice)
+    {
+        if (Model.Event.BgPC != null || Model.Event.BgMobile != null)
+        {
+            bg = "style=background-image:url(" + Path.Combine("/images/events/", Model.Event.BgMobile ?? Model.Event.BgPC) + ")";
+        }
+    }
+    else
+    {
+        if (Model.Event.BgPC != null)
+        {
+            bg = "style=background-image:url(" + Path.Combine("/images/events/", Model.Event.BgPC) + ")";
+        }
+    }
+}
+<div class="wrapper row m-0" @bg>
     <div class="col-lg-6 col-12">
         <form class="card-info">
             @Html.ValidationSummary(true)
@@ -18,12 +37,12 @@
                     @Html.ValidationMessageFor(a => Model.Client.Mobile)
                 </li>
             </ul>
-            <button type="submit" class="btn-spin">Quay</button>
+            @*<button type="submit" class="btn-spin">Quay</button>*@
         </form>
 
         <div class="winner">
             <div class="award-text"></div>
-            <img src="" alt="" class="award-img" />
+            <img src="" alt="Giải thưởng" class="award-img" />
             <div class="btn-continue" onclick="Continue()">
                 TIẾP TỤC QUAY
             </div>
@@ -79,7 +98,7 @@
 @section scripts{
     <script>
         var gifts = [];
-        var url = $("#Event_Url").val();
+        var url = '@Model.Event.Url';
         var awardSort;
         var awardName;
         var awardQuantity;
@@ -95,26 +114,13 @@
                     'textFillStyle': val.txtColor,
                     'textAlignment': 'center',
                     'textMargin': 20,
-                    'quantity': val.quantity,
+                    'quantity': val.sort,
                     'totalwin': val.totalWin,
                     'id': val.id,
-                    'image': val.image,
+                    'image': val.image
                 }, 1);
             });
         });
-        function ChangeBackground(x) {
-            $.getJSON("/Home/GetBgEvent", { url: url }, function (data) {
-                if (x.matches) {
-                    $(".wrapper").css("background", "url(images/events/" + data.bgMobile + ") no-repeat top center / 100% 100%");
-                }
-                else {
-                    $(".wrapper").css("background", "url(images/events/" + data.bgPc + ") no-repeat top center / 100% 100%");
-                }
-            });
-        }
-        var x = window.matchMedia("(max-width: 840px)");
-        ChangeBackground(x);
-        x.addListener(ChangeBackground);
 
         const theWheel = new Winwheel({
             numSegments: gifts.length,
@@ -128,7 +134,7 @@
                 duration: 10,
                 spins: 12,
                 callbackSound: playSound,
-                callbackFinished: alertPrize,
+                callbackFinished: alertPrize
             }
         });
         let tick = new Audio("./content/sound/tick.mp3");
@@ -145,16 +151,16 @@
         let wheelSpinning = false;
 
         function StatusButton(status) {
-            if (status == 1) {
+            if (status === 1) {
                 document
                     .querySelector(".border-spin")
                     .removeAttribute("disabled");
-            } else if (status == 2) {
+            } else if (status === 2) {
                 document
                     .querySelector(".border-spin")
                     .setAttribute("disabled", false);
-                btnSpin.fadeOut(1000);
-            } else if (status == 3) {
+                //btnSpin.fadeOut(1000);
+            } else if (status === 3) {
                 document
                     .querySelector(".border-spin")
                     .removeAttribute("disabled");
@@ -168,34 +174,34 @@
         }
         StatusButton(1);
 
-        var confirmPhone = $("#Client_Mobile");
+        //var confirmPhone = $("#Client_Mobile");
         var checkPhone = /^\(?(09|03|07|08|05)\)?[-. ]?([0-9]{8})$/;
-        var btnSpin = $('.btn-spin');
+        //var btnSpin = $('.btn-spin');
 
-        $('.card-info').on("submit", function (e) {
-            e.preventDefault();
-            if (confirmPhone.valid() == false) {
-                clickingsound.play();
-            }
-            else {
-                if (wheelSpinning == false) {
-                    StatusButton(1);
-                    theWheel.startAnimation();
-                    wheelSpinning = true;
-                    StatusButton(2);
-                }
-            }
-        });
+        //$('.card-info').on("submit", function (e) {
+        //    e.preventDefault();
+        //    if (!confirmPhone.valid()) {
+        //        clickingsound.play();
+        //    }
+        //    else {
+        //        if (!wheelSpinning) {
+        //            StatusButton(1);
+        //            theWheel.startAnimation();
+        //            wheelSpinning = true;
+        //            StatusButton(2);
+        //        }
+        //    }
+        //});
 
         $("#info-form").on("submit", function (e) {
             e.preventDefault();
-            var fullName = $("[name=fullname]").val();
-            var phone = $(".info-mobile").val();
-            if (fullName == "" || phone == "") {
+            const fullName = $("[name=fullname]").val();
+            const phone = $(".info-mobile").val();
+            if (fullName === "" || phone === "") {
                 clickingsound.play();
                 Swal.fire({
                     icon: "warning",
-                    text: "Vui lòng nhập đủ thông tin",
+                    text: "Vui lòng nhập đủ thông tin"
                 });
             }
             else if (phone.match(checkPhone)) {
@@ -217,59 +223,63 @@
         }
 
         function startSpin() {
-            var phone = $(".info-mobile").val();
-            var fullName = $("[name=fullname]").val();
-            var eventId = $("[name=eventId]").val();
+            const phone = $(".info-mobile").val();
+            const fullName = $("[name=fullname]").val();
+            const eventId = $("[name=eventId]").val();
 
             var isPost = true;
 
-            if (fullName == "" || phone == "") {
+            if (fullName === "" || phone === "") {
                 $('#Modal').modal('show');
             }
 
-            if (phone == "") {
+            if (phone === "") {
                 isPost = false;
             }
             if (isPost) {
-                $.getJSON("/Home/GetClientData", { phone: phone, eventId: eventId }, function (data) {
-                    if (data == 1) {
-                        if (wheelSpinning == false) {
-                            $.getJSON("/Home/GetAward", { url: url }, function (data) {
-                                let segmentNumber = data.sort;
-                                awardId = data.awardId;
-                                awardSort = data.sort;
-                                awardName = data.name;
-                                awardQuantity = data.quantity;
-                                awardImage = data.image;
-                                awardTW = data.totalWin;
+                $.getJSON("/Home/GetClientData",
+                    { phone: phone, eventId: eventId },
+                    function (data) {
+                        if (data === 1) {
+                            if (!wheelSpinning) {
 
-                                if (segmentNumber) {
-                                    // Get random angle inside specified segment of the wheel.
-                                    let stopAt = theWheel.getRandomForSegment(segmentNumber);
+                                $.getJSON("/Home/GetAward",
+                                    { url: url },
+                                    function (data) {
+                                        const segmentNumber = data.sort;
+                                        awardId = data.awardId;
+                                        awardSort = data.sort;
+                                        awardName = data.name;
+                                        awardQuantity = data.quantity;
+                                        awardImage = data.image;
+                                        awardTW = data.totalWin;
 
-                                    // Important thing is to set the stopAngle of the animation before stating the spin.
-                                    theWheel.animation.stopAngle = stopAt;
+                                        if (segmentNumber) {
+                                            // Get random angle inside specified segment of the wheel.
+                                            const stopAt = theWheel.getRandomForSegment(segmentNumber);
 
-                                    // Start the spin animation here.
-                                    theWheel.startAnimation();
+                                            // Important thing is to set the stopAngle of the animation before stating the spin.
+                                            theWheel.animation.stopAngle = stopAt;
+
+                                            // Start the spin animation here.
+                                            theWheel.startAnimation();
+                                        }
+                                    });
+                            }
+                        } else {
+                            clickingsound.play();
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Số lượt quay trong ngày đã hết!!',
+                                confirmButtonText: "Nhập lại thông tin",
+                                confirmButtonColor: "#3085d6"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
                                 }
                             });
                         }
-                    }
-                    else {
-                        clickingsound.play();
-                        Swal.fire({
-                            icon: 'error',
-                            text: 'Số lượt quay trong ngày đã hết!!',
-                            confirmButtonText: "Nhập lại thông tin",
-                            confirmButtonColor: "#3085d6",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                        });
-                    }
-                });
+                    });
             }
         }
 
@@ -283,7 +293,7 @@
                     text: "Bạn có 1 lượt quay mới",
                     icon: "warning",
                     confirmButtonText: "Xác nhận",
-                    confirmButtonColor: "#218838",
+                    confirmButtonColor: "#218838"
                 }).then((result) => {
                     StatusButton(3);
                 });
@@ -291,19 +301,18 @@
             else {
                 winner.play();
                 $('.winner').addClass('active');
-                if (awardImage == "") {
+                if (awardImage === "") {
                     $('.award-text').html(awardName);
                 } else {
                     $('.award-text').html(awardName);
                     $('.award-img').attr({
                         src: "images/awards/" + awardImage,
-                        alt: awardName,
+                        alt: awardName
                     });
                 }
-                var fullName = $("#fullname").val();
-                var phone = $("#Client_Mobile").val();
-                $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: awardName, awardId: awardId }, function (data) {
-                })
+                const fullName = $("#fullname").val();
+                const phone = $("#Client_Mobile").val();
+                $.post("/Home/InfoForm", { phone: phone, fullName: fullName, prize: awardName, awardId: awardId }, function (data) { });
 
                 StatusButton(3);
             }
@@ -317,7 +326,7 @@
                 confirmButtonColor: "#3085d6",
                 showCancelButton: true,
                 cancelButtonColor: '#d33',
-                cancelButtonText: "Đóng",
+                cancelButtonText: "Đóng"
             }).then((result) => {
                 if (result.isConfirmed) {
                     location.reload();
