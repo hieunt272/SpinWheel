@@ -29,6 +29,7 @@ namespace SpinWheel
                       "~/Scripts/sweetalert2.min.js",
                       "~/Scripts/TweenMax.min.js",
                       "~/Scripts/Winwheel.min.js",
+                      "~/Scripts/aos.js",
                       //"~/Scripts/jquery-migrate.js",
                       "~/Scripts/scripts.js"
                       ));

@@ -29,6 +29,8 @@ namespace SpinWheel.Models
         Start,
         [Display(Name = "Standard")]
         Standard,
+        [Display(Name = "Advanced")]
+        Advanced,
         [Display(Name = "Custom")]
         Custom
     }

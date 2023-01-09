@@ -12,15 +12,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 order-lg-0 order-1">
-                <div class="title-intro">
+                <div class="title-intro" data-aos="fade-up" data-aos-duration="700">
                     tạo phần mềm quay số
                     <p>nhanh chóng & chuyên nghiệp</p>
                 </div>
-                <div class="sub-title">
+                <div class="sub-title" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
                     Apps are built based on highly
                 </div>
                 <div class="media-list">
-                    <div class="media">
+                    <div class="media" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="400">
                         <div class="media-img">
                             <img src="~/Content/images/img-main/icon-intro.png" />
                         </div>
@@ -29,7 +29,7 @@
                             chất lượng
                         </div>
                     </div>
-                    <div class="media">
+                    <div class="media" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="500">
                         <div class="media-img">
                             <img src="~/Content/images/img-main/icon-intro (1).png" />
                         </div>
@@ -38,7 +38,7 @@
                             về quay số
                         </div>
                     </div>
-                    <div class="media">
+                    <div class="media" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="600">
                         <div class="media-img">
                             <img src="~/Content/images/img-main/icon-intro (2).png" />
                         </div>
@@ -47,7 +47,7 @@
                             can thiệp
                         </div>
                     </div>
-                    <div class="media">
+                    <div class="media" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="700">
                         <div class="media-img">
                             <img src="~/Content/images/img-main/icon-intro (3).png" />
                         </div>
@@ -76,15 +76,16 @@
 </section>
 @if (Model.Banners.Any(b => b.GroupId == 1))
 {
+    var delay = 200;
     <section class="customer">
         <div class="container">
-            <div class="title">
+            <div class="title" data-aos="fade-up" data-aos-duration="700">
                 KHÁCH HÀNG TIÊU BIỂU
             </div>
             <div class="partner-list">
                 @foreach (var item in Model.Banners.Where(b => b.GroupId == 1))
                 {
-                    <div class="partner-item">
+                    <div class="partner-item" data-aos="flip-left" data-aos-duration="700" data-aos-delay="@delay">
                         <a href="@item.Url">
                             @if (item.Image != null)
                             {
@@ -92,6 +93,7 @@
                             }
                         </a>
                     </div>
+                    delay += 100;
                 }
             </div>
         </div>
@@ -100,9 +102,10 @@
 
 @if (Model.Banners.Any(b => b.GroupId == 2))
 {
+    var delay = 200;
     <section class="why-1">
         <div class="container">
-            <div class="title">
+            <div class="title" data-aos="fade-up" data-aos-duration="700">
                 TẠI SAO BẠN NÊN SỬ DỤNG PHẦN MỀM <br>
                 QUAY SỐ NGẪU NHIÊN Vico SPIN
             </div>
@@ -110,7 +113,7 @@
                 @foreach (var item in Model.Banners.Where(b => b.GroupId == 2))
                 {
                     <div class="col-lg-4 col-md-4">
-                        <div class="why-item">
+                        <div class="why-item" data-aos="fade-up" data-aos-duration="700" data-aos-delay="@delay">
                             @if (item.Image != null)
                             {
                                 <img src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
@@ -128,6 +131,7 @@
                             </div>
                         </div>
                     </div>
+                    delay += 100;
                 }
             </div>
             @if (Model.Products.Any())
@@ -146,12 +150,12 @@
 }
 <section class="tutorial bg-second">
     <div class="container">
-        <div class="title">
+        <div class="title" data-aos="fade-up" data-aos-duration="700">
             DỄ DÀNG QUAY SỐ TRÚNG THƯỞNG
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex justify-content-center">
-                <div class="tutorial-item">
+                <div class="tutorial-item" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="200">
                     <div class="step-number">
                         01
                     </div>
@@ -167,7 +171,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 d-flex justify-content-center">
-                <div class="tutorial-item __step-2">
+                <div class="tutorial-item __step-2" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="300">
                     <div class="step-number">
                         02
                     </div>
@@ -183,7 +187,7 @@
                 </div>
             </div>
             <div class="col-lg-4 col-md-6 d-flex justify-content-center">
-                <div class="tutorial-item __step-3">
+                <div class="tutorial-item __step-3" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="400">
                     <div class="step-number">
                         03
                     </div>
@@ -203,38 +207,38 @@
 </section>
 <section class="why-2">
     <div class="container">
-        <div class="title">
+        <div class="title" data-aos="fade-up" data-aos-duration="700">
             TẠI SAO NÊN SỬ DỤNG<br>
             Spin.vicogroup.VN
         </div>
         <div class="box-content">
             <img src="~/Content/images/img-main/img-why.png" class="why-img" />
             <div class="content-left">
-                <div class="why-item-2">
+                <div class="why-item-2" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
                     <div class="why-img-2">
                         <img src="~/Content/images/img-main/icon-why-2.png" />
                     </div>
                     Domain ngắn gọn dẽ nhớ
                 </div>
-                <div class="why-item-2">
+                <div class="why-item-2" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
                     <div class="why-img-2">
                         <img src="~/Content/images/img-main/icon-why-2 (1).png" />
                     </div>
                     Giao diện thân thiện với người dùng
                 </div>
-                <div class="why-item-2">
+                <div class="why-item-2" data-aos="fade-up" data-aos-duration="700" data-aos-delay="400">
                     <div class="why-img-2">
                         <img src="~/Content/images/img-main/icon-why-2 (2).png" />
                     </div>
                     Hoàn toàn miễn phí
                 </div>
-                <div class="why-item-2">
+                <div class="why-item-2" data-aos="fade-up" data-aos-duration="700" data-aos-delay="500">
                     <div class="why-img-2">
                         <img src="~/Content/images/img-main/icon-why-2 (3).png" />
                     </div>
                     Uy tín và ổn định
                 </div>
-                <div class="why-item-2">
+                <div class="why-item-2" data-aos="fade-up" data-aos-duration="700" data-aos-delay="600">
                     <div class="why-img-2">
                         <img src="~/Content/images/img-main/icon-why-2 (4).png" />
                     </div>
@@ -247,14 +251,14 @@
 @if (Model.Articles.Any())
 {
     var article = Model.Articles.FirstOrDefault();
-    <section class="news">
+    <section class="news overflow-hidden">
         <div class="container">
             <div class="title">
                 tin tức nổi bật
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="article-large">
+                    <div class="article-large" data-aos="fade-right" data-aos-duration="700">
                         @if (article.Image != null)
                         {
                             <div class="article-img">
@@ -282,11 +286,12 @@
                 <div class="col-lg-6">
                     @if (Model.Articles.Count() > 1)
                     {
+                        var delay = 200;
                         <div class="row">
                             @foreach (var item in Model.Articles.Skip(1))
                             {
                                 <div class="col-lg-12">
-                                    <div class="article-home">
+                                    <div class="article-home" data-aos="fade-left" data-aos-duration="700" data-aos-delay="@delay">
                                         @if (item.Image != null)
                                         {
                                             <div class="article-img">
@@ -308,6 +313,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                delay += 100;
                             }
                         </div>
                     }

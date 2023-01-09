@@ -33,6 +33,7 @@ namespace SpinWheel.Models
     public enum TypeUser
     {
         Normal,
+        Standard,
         Premium,
         Unlimited,
     }

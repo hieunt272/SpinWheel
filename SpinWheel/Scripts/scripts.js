@@ -1,4 +1,9 @@
-﻿$("#contact-form").on("submit", function (e) {
+﻿AOS.init({
+    once: true,
+});
+
+
+$("#contact-form").on("submit", function (e) {
     e.preventDefault();
     $.post("/Home/Contact", $(this).serialize(), function (data) {
         if (data.status) {

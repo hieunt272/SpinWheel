@@ -81,10 +81,10 @@
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Percent_insert" value="" class="form_control" />
+                                <input type="number" name="Percent_insert" value="0" class="form_control" min="0" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Quantity_insert" value="" class="form_control quantity" />
+                                <input type="number" name="Quantity_insert" value="0" class="form_control quantity" min="0" />
                             </td>
                             <td class="form_text" valign="top">
                                 <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
@@ -139,10 +139,10 @@
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Percent_update" value="@item.Percent" class="form_control" />
+                                <input type="number" name="Percent_update" value="@item.Percent" class="form_control" min="0" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Quantity_update" value="@item.Quantity" class="form_control quantity" />
+                                <input type="number" name="Quantity_update" value="@item.Quantity" class="form_control quantity" min="0" />
                             </td>
                             <td class="form_text" valign="top">
                                 @Html.CheckBoxFor(model => item.Limited, new { @class = "check-update" }) Không giới hạn
@@ -178,10 +178,10 @@
                                        data-jscolor="{required:true, closeButton:true, closeText:'Đóng', backgroundColor:'#333', buttonColor:'#FFF' }" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Percent_insert" value="" class="form_control" />
+                                <input type="number" name="Percent_insert" value="0" class="form_control" min="0" />
                             </td>
                             <td class="form_text" valign="top">
-                                <input type="number" name="Quantity_insert" value="" class="form_control quantity" />
+                                <input type="number" name="Quantity_insert" value="0" class="form_control quantity" min="0" />
                             </td>
                             <td class="form_text" valign="top">
                                 <input class="check" data-val="true" data-val-required="The Không giới hạn field is required." id="Limited_insert" name="Limited_insert" type="checkbox" value="true" />
@@ -308,6 +308,8 @@
                 $(this).parents('td').find("input[name='item.Limited'][type=hidden]").remove();
             }
         });
+
+
 
         $('.event-select').change(function () {
             let url = window.location.href.split('=');

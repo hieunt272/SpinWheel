@@ -17,6 +17,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 
 namespace SpinWheel.Controllers
 {
@@ -38,23 +39,37 @@ namespace SpinWheel.Controllers
         {
             ViewBag.Result = result;
             var events = new Event { Sort = 1, Active = true };
-            var isExist = false;
+            var isExist = true;
             var user = _unitOfWork.UserRepository.GetById(userId);
             var evt = _unitOfWork.EventRepository.GetQuery(p => p.UserId == userId).Count();
-            if (user.TypeUser == TypeUser.Normal)
+
+            switch (user.TypeUser)
             {
-                if (evt < 1)
-                {
-                    isExist = true;
-                }
+                case TypeUser.Normal:
+                    if (evt >= 1) { isExist = false; }
+                    break;
+                case TypeUser.Standard:
+                    if (evt >= 5) { isExist = false; }
+                    break;
+                case TypeUser.Premium:
+                    if (evt >= 50) { isExist = false; }
+                    break;
             }
-            if (user.TypeUser == TypeUser.Premium)
-            {
-                if (evt <= 5)
-                {
-                    isExist = true;
-                }
-            }
+
+            //if (user.TypeUser == TypeUser.Normal)
+            //{
+            //    if (evt < 1)
+            //    {
+            //        isExist = true;
+            //    }
+            //}
+            //if (user.TypeUser == TypeUser.Premium)
+            //{
+            //    if (evt <= 5)
+            //    {
+            //        isExist = true;
+            //    }
+            //}
             ViewBag.CheckTypeUser = isExist;
             return View(events);
         }
@@ -324,7 +339,7 @@ namespace SpinWheel.Controllers
                                 Quantity = Convert.ToInt32(quantity[i]),
                                 Limited = Convert.ToBoolean(limited[i]),
                                 Sort = i + 1,
-                                Image = image[i],
+                                Image = image[i]
                             };
                             _unitOfWork.AwardRepository.Insert(award);
                         }

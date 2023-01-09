@@ -208,7 +208,7 @@ namespace SpinWheel.Controllers
         {
             var model = new QuoteViewModel
             {
-                Quotes = _unitOfWork.QuoteRepository.GetQuery(a => a.Active)
+                Quotes = _unitOfWork.QuoteRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort))
             };
             return View(model);
         }
@@ -304,7 +304,7 @@ namespace SpinWheel.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == ev.Id, o => o.OrderBy(a => a.Sort)).Select(a => new
+            var awards = _unitOfWork.AwardRepository.GetQuery(a => a.EventId == ev.Id, o => o.OrderByDescending(a => a.Sort)).Select(a => new
             {
                 percent = a.Percent,
                 name = a.AwardName,
