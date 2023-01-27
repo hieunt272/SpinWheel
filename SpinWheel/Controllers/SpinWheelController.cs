@@ -17,7 +17,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 
 namespace SpinWheel.Controllers
 {
@@ -278,48 +277,55 @@ namespace SpinWheel.Controllers
                 var limitedUpdate = fc.GetValues("item.Limited");
                 var imageUpdate = fc.GetValues("Pictures_update");
 
-                var events = Convert.ToInt32(fc["EventId"]);
-                var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == events);
-                var awardCount = 12 - awards.Count();
+                var eventId = Convert.ToInt32(fc["EventId"]);
+                var awards = _unitOfWork.AwardRepository.Get(a => a.EventId == eventId).ToList();
+                var awardCount = 12 - awards.Count;
 
-                if (awards.Count() <= 0)
+                if (!awards.Any())
                 {
                     for (var i = 0; i < 12; i++)
                     {
-                        if (!string.IsNullOrEmpty(awardName[i]))
+                        if (string.IsNullOrEmpty(awardName[i])) continue;
+                        var award = new Award
                         {
-                            var award = new Award
-                            {
-                                EventId = Convert.ToInt32(fc["EventId"]),
-                                AwardName = awardName[i],
-                                BgColor = bgColor[i],
-                                TextColor = textColor[i],
-                                Percent = Convert.ToInt32(percent[i]),
-                                Quantity = Convert.ToInt32(quantity[i]),
-                                Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i + 1,
-                                Image = image[i],
-                            };
-                            _unitOfWork.AwardRepository.Insert(award);
+                            EventId = eventId,
+                            AwardName = awardName[i],
+                            BgColor = bgColor[i],
+                            TextColor = textColor[i],
+                            Sort = i + 1,
+                            Image = image[i]
+                        };
+                        if (quantity[i] != "")
+                        {
+                            award.Quantity = Convert.ToInt32(quantity[i]);
                         }
+                        if (limited[i] != "")
+                        {
+                            award.Limited = Convert.ToBoolean(limited[i]);
+                        }
+                        if (percent[i] != "")
+                        {
+                            award.Percent = Convert.ToInt32(percent[i]);
+                        }
+                        _unitOfWork.AwardRepository.Insert(award);
                     }
                 }
                 else
                 {
-                    for (var i = 0; i < awards.Count(); i++)
+                    for (var i = 0; i < awards.Count; i++)
                     {
                         if (!string.IsNullOrEmpty(awardNameUpdate[i]))
                         {
                             var _awardId = Convert.ToInt32(awardId[i]);
                             var award = _unitOfWork.AwardRepository.GetById(_awardId);
 
-                            award.EventId = Convert.ToInt32(fc["EventId"]);
+                            award.EventId = eventId;
                             award.AwardName = awardNameUpdate[i];
                             award.BgColor = bgColorUpdate[i];
                             award.TextColor = textColorUpdate[i];
-                            award.Percent = Convert.ToInt32(percentUpdate[i]);
-                            award.Quantity = Convert.ToInt32(quantityUpdate[i]);
-                            award.Limited = Convert.ToBoolean(limitedUpdate[i]);
+                            award.Percent = percentUpdate[i] == "" ? (int?)null : Convert.ToInt32(percentUpdate[i]);
+                            award.Quantity = quantityUpdate[i] == "" ? (int?)null : Convert.ToInt32(quantityUpdate[i]);
+                            award.Limited = limitedUpdate[i] != "" && Convert.ToBoolean(limitedUpdate[i]);
                             award.Sort = i + 1;
                             award.Image = imageUpdate[i];
                             _unitOfWork.Save();
@@ -327,22 +333,32 @@ namespace SpinWheel.Controllers
                     }
                     for (var i = 0; i < awardCount; i++)
                     {
-                        if (!string.IsNullOrEmpty(awardName[i]))
+                        if (string.IsNullOrEmpty(awardName[i])) continue;
+
+                        var award = new Award
                         {
-                            var award = new Award
-                            {
-                                EventId = Convert.ToInt32(fc["EventId"]),
-                                AwardName = awardName[i],
-                                BgColor = bgColor[i],
-                                TextColor = textColor[i],
-                                Percent = Convert.ToInt32(percent[i]),
-                                Quantity = Convert.ToInt32(quantity[i]),
-                                Limited = Convert.ToBoolean(limited[i]),
-                                Sort = i + 1,
-                                Image = image[i]
-                            };
-                            _unitOfWork.AwardRepository.Insert(award);
+                            EventId = eventId,
+                            AwardName = awardName[i],
+                            BgColor = bgColor[i],
+                            TextColor = textColor[i],
+                            Sort = i + 1,
+                            Image = image[i]
+                        };
+
+                        if (quantity[i] != "")
+                        {
+                            award.Quantity = Convert.ToInt32(quantity[i]);
                         }
+                        if (limited[i] != "")
+                        {
+                            award.Limited = Convert.ToBoolean(limited[i]);
+                        }
+                        if (percent[i] != "")
+                        {
+                            award.Percent = Convert.ToInt32(percent[i]);
+                        }
+
+                        _unitOfWork.AwardRepository.Insert(award);
                     }
                 }
                 var tp = awards.Sum(a => a.Percent);
